@@ -358,7 +358,6 @@ values
   ('Halo con Kettlebell', 'Hombros', ARRAY['Core', 'Cuello'], 'Kettlebell', 'Circunduccion sobre la cabeza', 'Principiante', 'Pasar la kettlebell en circulos alrededor de la cabeza.'),
   ('Sumo Deadlift con Kettlebell', 'Gluteos', ARRAY['Isquiotibiales', 'Aductores'], 'Kettlebell', 'Bisagra de cadera amplia', 'Principiante', 'Postura sumo, kettlebell entre los pies.'),
   ('Sentadilla con Banda', 'Cuadriceps', ARRAY['Gluteos'], 'Bandas Elasticas', 'Sentadilla', 'Principiante', 'Banda sobre los hombros o bajo los pies.'),
-  ('Hip Thrust con Banda', 'Gluteos', ARRAY['Isquiotibiales'], 'Bandas Elasticas', 'Extension de cadera', 'Principiante', 'Banda sobre la cadera.'),
   ('Peso Muerto con Banda', 'Espalda Baja', ARRAY['Gluteos', 'Isquiotibiales'], 'Bandas Elasticas', 'Bisagra de cadera', 'Principiante', 'Banda bajo los pies, agarrar al nivel de las caderas.'),
   ('Curl de Biceps con Banda', 'Biceps', ARRAY['Braquial'], 'Bandas Elasticas', 'Flexion de codo', 'Principiante', 'Banda bajo los pies, curl completo.'),
   ('Press de Hombros con Banda', 'Hombros', ARRAY['Triceps'], 'Bandas Elasticas', 'Empuje vertical', 'Principiante', 'Banda bajo los pies, press sobre la cabeza.'),

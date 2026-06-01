@@ -11,6 +11,7 @@ import {
   DIFFICULTIES_ES,
   DIFFICULTY_COLORS,
 } from "@/lib/domain/exercises"
+import { searchExercises } from "@/lib/domain/exercise-search"
 import { Input } from "@/components/ui/input"
 import {
   Dialog,
@@ -272,12 +273,9 @@ export function ExercisePicker({ value, onPick }: Props) {
     setFilters((prev) => ({ ...EMPTY_FILTERS, search: prev.search }))
 
   const filtered = React.useMemo(() => {
-    return exercises.filter((ex) => {
-      if (
-        filters.search &&
-        !ex.name.toLowerCase().includes(filters.search.toLowerCase())
-      )
-        return false
+    // Fuzzy search + sinónimos sobre el texto; filtros duros por categoría
+    const bySearch = searchExercises(exercises, filters.search)
+    return bySearch.filter((ex) => {
       if (filters.muscleGroup && ex.primary_muscle_group !== filters.muscleGroup)
         return false
       if (filters.equipment && ex.equipment !== filters.equipment) return false
