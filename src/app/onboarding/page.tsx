@@ -13,7 +13,7 @@ export default async function OnboardingPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  const profile = user ? await getProfile(supabase, user.id) : null
+  const profile = user ? await getProfile(supabase, user.id).catch(() => null) : null
 
   return <OnboardingWizard initialFullName={profile?.full_name ?? ""} />
 }

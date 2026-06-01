@@ -14,9 +14,13 @@ export default async function AppLayout({
   children: React.ReactNode
 }) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch {
+    redirect("/login")
+  }
   if (!user) redirect("/login")
 
   const profile = await getProfile(supabase, user.id).catch(() => null)
