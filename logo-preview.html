@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EPHA — Logo Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #080808;
+    --gold-light: #F5D87A;
+    --gold-deep: #D4A830;
+    --ocre: #8A7340;
+    --tagline: #6A5530;
+    --verse: #3A2E10;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+    padding: 60px 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─────────────── LOGO PRINCIPAL ─────────────── */
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+
+  /* effatá — coronación espiritual */
+  .effata {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--ocre);
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;          /* compensa el último tracking */
+    margin-bottom: 0.6em;
+  }
+
+  /* Ornamento superior: línea · punto · línea */
+  .ornament-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    margin-bottom: 1.1rem;
+  }
+  .ornament-top .line {
+    height: 1px;
+    flex: 1;
+  }
+  .ornament-top .line.left  { background: linear-gradient(to right, transparent, var(--gold-deep)); }
+  .ornament-top .line.right { background: linear-gradient(to left,  transparent, var(--gold-deep)); }
+  .ornament-top .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    margin: 0 10px;
+    box-shadow: 0 0 6px var(--gold-light);
+  }
+
+  /* EPHA — wordmark dominante */
+  .wordmark {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 7rem;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;         /* centra ópticamente con el tracking */
+    background: linear-gradient(
+      to bottom,
+      #FFFFFF 0%,
+      #FFF8DC 25%,
+      #F5D87A 65%,
+      #D4A830 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Halo dorado suave emanando del nombre */
+    filter:
+      drop-shadow(0 0 18px rgba(245, 216, 122, 0.40))
+      drop-shadow(0 0 45px rgba(245, 216, 122, 0.18));
+  }
+
+  /* Ornamento inferior: línea · 3 puntos · línea */
+  .ornament-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    margin-top: 1.4rem;
+  }
+  .ornament-bottom .line { height: 1px; flex: 1; }
+  .ornament-bottom .line.left  { background: linear-gradient(to right, transparent, var(--gold-deep)); }
+  .ornament-bottom .line.right { background: linear-gradient(to left,  transparent, var(--gold-deep)); }
+  .ornament-bottom .dots {
+    display: flex; align-items: center; gap: 9px; margin: 0 14px;
+  }
+  .ornament-bottom .dots span {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold-deep);
+  }
+  .ornament-bottom .dots span.mid {
+    width: 6px; height: 6px;
+    background: var(--gold-light);
+    box-shadow: 0 0 7px var(--gold-light);
+  }
+
+  /* Tagline + versículo */
+  .tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 200;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.55em;
+    text-indent: 0.55em;
+    color: var(--tagline);
+    margin-top: 1.6rem;
+  }
+  .verse {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--verse);
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─────────────── VARIANTES ─────────────── */
+  .variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #1a1a1a;
+    padding-top: 60px;
+    width: 100%;
+    max-width: 900px;
+  }
+  .variant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .variant .caption {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: #555;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .gradient-text {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    background: linear-gradient(to bottom, #FFFFFF 0%, #FFF8DC 25%, #F5D87A 65%, #D4A830 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Wordmark mediano */
+  .wm-md { font-size: 3rem; filter: drop-shadow(0 0 10px rgba(245,216,122,0.35)); }
+
+  /* Isotipo cuadrado (favicon / app icon) */
+  .iso {
+    width: 120px; height: 120px;
+    border-radius: 26px;
+    background: radial-gradient(circle at 50% 35%, #161106 0%, #080808 70%);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #1c1606;
+    box-shadow: 0 0 30px rgba(245,216,122,0.08);
+  }
+  .iso .gradient-text { font-size: 3.6rem; letter-spacing: 0; text-indent: 0; filter: drop-shadow(0 0 12px rgba(245,216,122,0.45)); }
+
+  /* Versión chica monocroma dorada */
+  .wm-flat {
+    font-family: 'Cinzel', serif; font-weight: 900;
+    font-size: 2rem; letter-spacing: 0.22em; text-indent: 0.22em;
+    color: var(--gold-light);
+  }
+
+  .note {
+    font-family: 'DM Sans', sans-serif;
+    color: #666; font-size: 0.8rem; text-align: center;
+    max-width: 600px; line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .wordmark { font-size: 4rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- LOGO COMPLETO -->
+  <div class="logo">
+    <div class="effata">effatá</div>
+
+    <div class="ornament-top">
+      <div class="line left"></div>
+      <div class="dot"></div>
+      <div class="line right"></div>
+    </div>
+
+    <div class="wordmark">EPHA</div>
+
+    <div class="ornament-bottom">
+      <div class="line left"></div>
+      <div class="dots"><span></span><span class="mid"></span><span></span></div>
+      <div class="line right"></div>
+    </div>
+
+    <div class="tagline">Open your limits</div>
+    <div class="verse">Marcos 7:34</div>
+  </div>
+
+  <!-- VARIANTES DE USO -->
+  <div class="variants">
+    <div class="variant">
+      <div class="gradient-text wm-md">EPHA</div>
+      <div class="caption">Wordmark mediano</div>
+    </div>
+
+    <div class="variant">
+      <div class="iso"><div class="gradient-text">E</div></div>
+      <div class="caption">App icon / favicon</div>
+    </div>
+
+    <div class="variant">
+      <div class="wm-flat">EPHA</div>
+      <div class="caption">Versión plana (dorado sólido)</div>
+    </div>
+  </div>
+
+  <p class="note">
+    Recreación del brief en HTML/CSS. Cinzel Black para EPHA, Cormorant Garamond italic para «effatá» y versículo, DM Sans light para el tagline.
+    Gradiente vertical blanco → crema → dorado → ámbar + halo dorado. Decime qué ajustar (tamaño, glow, espaciado, ornamentos) y lo corrijo acá antes de tocar la app.
+  </p>
+
+</body>
+</html>

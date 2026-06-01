@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "logo-preview",
+      "runtimeExecutable": "C:\\Users\\felds\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+      "runtimeArgs": ["-m", "http.server", "8088"],
+      "port": 8088
+    }
+  ]
+}
