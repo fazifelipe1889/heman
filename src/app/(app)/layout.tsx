@@ -19,7 +19,7 @@ export default async function AppLayout({
   } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const profile = await getProfile(supabase, user.id)
+  const profile = await getProfile(supabase, user.id).catch(() => null)
   if (!profile?.onboarding_completed) redirect("/onboarding")
 
   return (

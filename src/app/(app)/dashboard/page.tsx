@@ -61,9 +61,9 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser()
 
   const [quotePrefs, activeSub, coachProfile] = await Promise.all([
-    user ? getQuotePreferences(supabase, user.id) : null,
-    user ? getUserActiveSubscription(supabase, user.id) : null,
-    user ? getCoachProfile(supabase, user.id) : null,
+    user ? getQuotePreferences(supabase, user.id).catch(() => null) : null,
+    user ? getUserActiveSubscription(supabase, user.id).catch(() => null) : null,
+    user ? getCoachProfile(supabase, user.id).catch(() => null) : null,
   ])
 
   // Precomputar si hay frases disponibles para las categorías activas

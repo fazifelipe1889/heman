@@ -54,9 +54,15 @@ export async function updateSession(request: NextRequest) {
   })
 
   // IMPORTANTE: no ejecutar lógica entre createServerClient y getUser().
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // try-catch: si getUser() falla por red, dejamos pasar y el server component
+  // se encarga de su propio guard (redirect al login si no hay sesión).
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch {
+    return supabaseResponse
+  }
 
   const { pathname } = request.nextUrl
   const isProtected = PROTECTED_PREFIXES.some(
