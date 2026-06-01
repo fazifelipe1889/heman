@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { MessageCircle, Video, Dumbbell, Pill, LineChart } from "lucide-react"
+import { MessageCircle, Video, Dumbbell, Pill, LineChart, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -89,6 +89,7 @@ export function PlanForm({ programId, plan }: Props) {
       name: plan?.name ?? "",
       description: plan?.description ?? "",
       price: plan ? plan.price_cents / 100 : undefined,
+      priceUsd: plan?.price_usd_cents != null ? plan.price_usd_cents / 100 : undefined,
       durationDays: plan?.duration_days ?? 30,
       chatEnabled: existingPerks?.chat.enabled ?? false,
       videoCallsCount: existingPerks?.video_calls.count ?? 0,
@@ -98,6 +99,7 @@ export function PlanForm({ programId, plan }: Props) {
       supplementsEnabled: existingPerks?.supplements.enabled ?? false,
       progressSharingEnabled: existingPerks?.progress_sharing.enabled ?? false,
       isVisible: plan?.is_visible ?? true,
+      isFeatured: plan?.is_featured ?? false,
     },
   })
 
@@ -138,6 +140,12 @@ export function PlanForm({ programId, plan }: Props) {
                 <NumberField name="price" label="Precio (ARS)" min={0} />
                 <NumberField name="durationDays" label="Duración (días)" min={1} />
               </div>
+              <NumberField
+                name="priceUsd"
+                label="Precio en USD (opcional)"
+                placeholder="Para mostrar doble moneda"
+                min={0}
+              />
             </CardContent>
           </Card>
 
@@ -204,9 +212,16 @@ export function PlanForm({ programId, plan }: Props) {
             />
           </div>
 
-          {/* Visibilidad */}
+          {/* Destacado + Visibilidad */}
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="flex flex-col gap-2 pt-6">
+              <PerkRow
+                icon={Star}
+                title="Destacar este plan"
+                description="Se resalta como recomendado en la landing"
+                enabled={w.isFeatured ?? false}
+                onToggle={() => toggle("isFeatured")}
+              />
               <PerkRow
                 icon={Dumbbell}
                 title="Visible en la asesoría"

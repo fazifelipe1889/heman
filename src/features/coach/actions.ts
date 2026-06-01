@@ -16,6 +16,9 @@ import {
   createCoachingPlan,
   updateCoachingPlan,
   deleteCoachingPlan,
+  createCoachTransformation,
+  updateCoachTransformation,
+  deleteCoachTransformation,
   updateCoachNotes,
 } from "@/lib/db/coaching"
 import type { PerkContainer, CoachingProgramStatus } from "@/lib/domain/coaching"
@@ -25,10 +28,12 @@ import {
   coachProfileSchema,
   programSchema,
   planSchema,
+  transformationSchema,
   coachNotesSchema,
   type CoachProfileValues,
   type ProgramValues,
   type PlanValues,
+  type TransformationValues,
   type CoachNotesValues,
 } from "./schema"
 
@@ -54,6 +59,18 @@ function buildPerks(v: PlanValues): PerkContainer {
     supplements: { enabled: v.supplementsEnabled },
     progress_sharing: { enabled: v.progressSharingEnabled },
   }
+}
+
+/** Bullets de "qué incluye": limpia vacíos. */
+function buildIncludes(v: ProgramValues): string[] {
+  return v.includes.map((i) => i.value.trim()).filter(Boolean)
+}
+
+/** FAQ: descarta pares incompletos. */
+function buildFaq(v: ProgramValues): { question: string; answer: string }[] {
+  return v.faq
+    .map((f) => ({ question: f.question.trim(), answer: f.answer.trim() }))
+    .filter((f) => f.question && f.answer)
 }
 
 function buildSocials(v: CoachProfileValues): Record<string, string> {
@@ -163,6 +180,8 @@ export async function createProgramAction(
       level: v.level || null,
       cover_url: v.coverUrl || null,
       intro_video_url: v.introVideoUrl || null,
+      includes: buildIncludes(v) as Json,
+      faq: buildFaq(v) as Json,
     })
   } catch {
     return { error: "No se pudo crear la asesoría. ¿El slug ya existe?" }
@@ -192,6 +211,8 @@ export async function updateProgramAction(
       level: v.level || null,
       cover_url: v.coverUrl || null,
       intro_video_url: v.introVideoUrl || null,
+      includes: buildIncludes(v) as Json,
+      faq: buildFaq(v) as Json,
     })
   } catch {
     return { error: "No se pudo actualizar la asesoría." }
@@ -244,6 +265,7 @@ export async function createPlanAction(
       name: v.name,
       description: v.description || null,
       price_cents: Math.round(v.price * 100),
+      price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
       duration_days: v.durationDays,
       perks: buildPerks(v) as Json,
       routine_template_id: v.routineEnabled ? v.routineTemplateId ?? null : null,
@@ -251,6 +273,7 @@ export async function createPlanAction(
         ? v.supplementTemplateId ?? null
         : null,
       is_visible: v.isVisible,
+      is_featured: v.isFeatured,
     })
   } catch {
     return { error: "No se pudo crear el plan." }
@@ -276,6 +299,7 @@ export async function updatePlanAction(
       name: v.name,
       description: v.description || null,
       price_cents: Math.round(v.price * 100),
+      price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
       duration_days: v.durationDays,
       perks: buildPerks(v) as Json,
       routine_template_id: v.routineEnabled ? v.routineTemplateId ?? null : null,
@@ -283,6 +307,7 @@ export async function updatePlanAction(
         ? v.supplementTemplateId ?? null
         : null,
       is_visible: v.isVisible,
+      is_featured: v.isFeatured,
     })
   } catch {
     return { error: "No se pudo actualizar el plan." }
@@ -301,6 +326,79 @@ export async function deletePlanAction(
     await deleteCoachingPlan(supabase, planId)
   } catch {
     return { error: "No se pudo eliminar el plan." }
+  }
+  revalidatePath(`/coach/programs/${programId}`)
+  return {}
+}
+
+// ---------------------------------------------------------------------------
+// Transformaciones (prueba social)
+// ---------------------------------------------------------------------------
+
+export async function createTransformationAction(
+  programId: string,
+  values: TransformationValues
+): Promise<ActionResult> {
+  const parsed = transformationSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los datos de la transformación." }
+
+  const { supabase, coach } = await requireCoach()
+  const v = parsed.data
+
+  try {
+    await createCoachTransformation(supabase, {
+      coach_id: coach.id,
+      program_id: programId,
+      client_name: v.clientName,
+      before_url: v.beforeUrl || null,
+      after_url: v.afterUrl || null,
+      metric: v.metric || null,
+      testimonial: v.testimonial || null,
+    })
+  } catch {
+    return { error: "No se pudo crear la transformación." }
+  }
+
+  revalidatePath(`/coach/programs/${programId}`)
+  return {}
+}
+
+export async function updateTransformationAction(
+  id: string,
+  programId: string,
+  values: TransformationValues
+): Promise<ActionResult> {
+  const parsed = transformationSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los datos de la transformación." }
+
+  const { supabase } = await requireCoach()
+  const v = parsed.data
+
+  try {
+    await updateCoachTransformation(supabase, id, {
+      client_name: v.clientName,
+      before_url: v.beforeUrl || null,
+      after_url: v.afterUrl || null,
+      metric: v.metric || null,
+      testimonial: v.testimonial || null,
+    })
+  } catch {
+    return { error: "No se pudo actualizar la transformación." }
+  }
+
+  revalidatePath(`/coach/programs/${programId}`)
+  return {}
+}
+
+export async function deleteTransformationAction(
+  id: string,
+  programId: string
+): Promise<ActionResult> {
+  const { supabase } = await requireCoach()
+  try {
+    await deleteCoachTransformation(supabase, id)
+  } catch {
+    return { error: "No se pudo eliminar la transformación." }
   }
   revalidatePath(`/coach/programs/${programId}`)
   return {}

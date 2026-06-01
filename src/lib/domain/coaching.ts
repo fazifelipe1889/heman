@@ -449,6 +449,37 @@ export function readPerks(json: unknown): PerkContainer {
   return (json ?? DEFAULT_PERKS) as PerkContainer
 }
 
+/** Ítem de pregunta frecuente. */
+export type FaqItem = { question: string; answer: string }
+
+/**
+ * Lee el FAQ del JSONB del programa (array de {question, answer}).
+ * Tolera formas viejas/corruptas devolviendo solo ítems válidos.
+ */
+export function readFaq(json: unknown): FaqItem[] {
+  if (!Array.isArray(json)) return []
+  return json.filter(
+    (x): x is FaqItem =>
+      !!x &&
+      typeof x === "object" &&
+      typeof (x as FaqItem).question === "string" &&
+      typeof (x as FaqItem).answer === "string"
+  )
+}
+
+/**
+ * Lee los bullets de "qué incluye" del JSONB del programa.
+ * Acepta tanto un array de strings como `{ bullets: string[] }`.
+ */
+export function readIncludes(json: unknown): string[] {
+  const arr = Array.isArray(json)
+    ? json
+    : json && typeof json === "object" && Array.isArray((json as { bullets?: unknown }).bullets)
+      ? (json as { bullets: unknown[] }).bullets
+      : []
+  return arr.filter((x): x is string => typeof x === "string" && x.trim().length > 0)
+}
+
 /**
  * Formatea un monto en centavos a la moneda indicada (es-AR).
  * Ej: formatMoney(1250000, "ARS") → "$ 12.500"
@@ -464,6 +495,153 @@ export function formatMoney(cents: number, currency = DEFAULT_CURRENCY): string 
     }).format(amount)
   } catch {
     return `$ ${Math.round(amount).toLocaleString("es-AR")}`
+  }
+}
+
+// =============================================================================
+// QUIZ DE RECOMENDACIÓN (matching comprador → plan ideal)
+// =============================================================================
+
+export const QUIZ_GOALS = [
+  "ganar_musculo",
+  "perder_grasa",
+  "recomposicion",
+  "fuerza",
+  "rendimiento",
+] as const
+export type QuizGoal = (typeof QUIZ_GOALS)[number]
+
+export const QUIZ_EXPERIENCES = ["principiante", "intermedio", "avanzado"] as const
+export type QuizExperience = (typeof QUIZ_EXPERIENCES)[number]
+
+/** Nivel de acompañamiento deseado: eje principal que diferencia los tiers. */
+export const QUIZ_SUPPORTS = ["autonomo", "seguimiento", "cercano"] as const
+export type QuizSupport = (typeof QUIZ_SUPPORTS)[number]
+
+export const QUIZ_DAYS = ["2-3", "4-5", "6+"] as const
+export type QuizDays = (typeof QUIZ_DAYS)[number]
+
+export type QuizAnswers = {
+  goal: QuizGoal
+  experience: QuizExperience
+  support: QuizSupport
+  days: QuizDays
+}
+
+/**
+ * Intensidad de acompañamiento de un plan, derivada de sus perks.
+ * Es el proxy que ordena los tiers de "más autónomo" a "más cercano".
+ */
+export function planSupportIntensity(perks: PerkContainer): number {
+  return (
+    (perks.chat.enabled ? 2 : 0) +
+    Math.min(perks.video_calls.count, 4) * 2 +
+    (perks.routine.enabled ? 1 : 0) +
+    Math.min(perks.routine.reconfigs_included, 6) +
+    (perks.supplements.enabled ? 1 : 0) +
+    (perks.progress_sharing.enabled ? 1 : 0)
+  )
+}
+
+/**
+ * A partir de las respuestas del quiz, recomienda el plan más adecuado entre
+ * los de un programa. Puro: no toca BD ni React.
+ *
+ * Estrategia: los planes se ordenan por intensidad de acompañamiento (y precio
+ * como desempate). El nivel de acompañamiento deseado define un objetivo en ese
+ * rango (autónomo→tier más bajo, cercano→tier más alto), ajustado levemente por
+ * la experiencia (un avanzado tiende a querer más feedback).
+ */
+export function recommendPlan(
+  plans: { id: string; price_cents: number; perks: unknown }[],
+  answers: QuizAnswers,
+): { planId: string; reason: string } | null {
+  if (plans.length === 0) return null
+
+  const ranked = plans
+    .map((p) => ({
+      id: p.id,
+      price: p.price_cents,
+      perks: readPerks(p.perks),
+      intensity: planSupportIntensity(readPerks(p.perks)),
+    }))
+    .sort((a, b) => a.intensity - b.intensity || a.price - b.price)
+
+  if (ranked.length === 1) {
+    return { planId: ranked[0].id, reason: buildReason(ranked[0].perks, answers) }
+  }
+
+  // Objetivo en [0,1] según acompañamiento deseado.
+  const supportTarget: Record<QuizSupport, number> = {
+    autonomo: 0,
+    seguimiento: 0.5,
+    cercano: 1,
+  }
+  // Ajuste por experiencia.
+  const expNudge: Record<QuizExperience, number> = {
+    principiante: -0.1,
+    intermedio: 0,
+    avanzado: 0.15,
+  }
+
+  const target = Math.min(
+    1,
+    Math.max(0, supportTarget[answers.support] + expNudge[answers.experience]),
+  )
+  const index = Math.round(target * (ranked.length - 1))
+  const chosen = ranked[index]
+
+  return { planId: chosen.id, reason: buildReason(chosen.perks, answers) }
+}
+
+const GOAL_LABELS: Record<QuizGoal, string> = {
+  ganar_musculo: "ganar masa muscular",
+  perder_grasa: "perder grasa",
+  recomposicion: "recomponer tu físico",
+  fuerza: "ganar fuerza",
+  rendimiento: "mejorar tu rendimiento",
+}
+
+const SUPPORT_LABELS: Record<QuizSupport, string> = {
+  autonomo: "entrenar a tu ritmo",
+  seguimiento: "tener seguimiento regular",
+  cercano: "un acompañamiento cercano",
+}
+
+function buildReason(perks: PerkContainer, answers: QuizAnswers): string {
+  const highlights: string[] = []
+  if (perks.chat.enabled) highlights.push("chat directo")
+  if (perks.video_calls.count > 0) highlights.push("videollamadas")
+  if (perks.progress_sharing.enabled) highlights.push("seguimiento de tu progreso")
+
+  const tail =
+    highlights.length > 0
+      ? ` Incluye ${highlights.join(", ")}.`
+      : ""
+
+  return `Como tu objetivo es ${GOAL_LABELS[answers.goal]} y buscás ${SUPPORT_LABELS[answers.support]}, este es el plan ideal para vos.${tail}`
+}
+
+/**
+ * Convierte una URL de YouTube (watch, youtu.be, shorts o embed) a su forma
+ * embebible. Devuelve null si no se reconoce como YouTube.
+ */
+export function getYouTubeEmbedUrl(url: string | null | undefined): string | null {
+  if (!url) return null
+  try {
+    const u = new URL(url)
+    const host = u.hostname.replace(/^www\./, "")
+    let id: string | null = null
+    if (host === "youtu.be") {
+      id = u.pathname.slice(1)
+    } else if (host === "youtube.com" || host === "m.youtube.com") {
+      if (u.pathname === "/watch") id = u.searchParams.get("v")
+      else if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2]
+      else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2]
+    }
+    return id ? `https://www.youtube.com/embed/${id}` : null
+  } catch {
+    return null
   }
 }
 

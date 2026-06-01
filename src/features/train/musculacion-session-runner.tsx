@@ -51,7 +51,7 @@ function buildExRows(routine: RoutineDetail): WorkoutExRow[] {
       targetReps: ex.target_reps,
       targetWeight: ex.target_weight,
       targetRir: ex.target_rir,
-      actualWeight: ex.target_weight ?? undefined,
+      actualWeight: undefined,
       actualReps: undefined,
       actualRir: undefined,
       completed: false,
@@ -436,6 +436,7 @@ export function MusculacionSessionRunner({ routine }: { routine: RoutineDetail }
                     placeholder={s.targetWeight != null ? String(s.targetWeight) : "—"}
                     value={s.actualWeight ?? ""}
                     className="h-11 text-center text-sm font-bold font-workout tabular-nums"
+                    onFocus={(e) => e.target.select()}
                     onChange={(e) =>
                       updateSet(selectedExIndex, setI, {
                         actualWeight:

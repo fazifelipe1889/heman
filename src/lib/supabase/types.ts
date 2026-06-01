@@ -739,6 +739,8 @@ export type Database = {
           routine_template_id: string | null
           supplement_template_id: string | null
           is_visible: boolean
+          is_featured: boolean
+          price_usd_cents: number | null
           position: number
           created_at: string
           updated_at: string
@@ -758,6 +760,8 @@ export type Database = {
           routine_template_id?: string | null
           supplement_template_id?: string | null
           is_visible?: boolean
+          is_featured?: boolean
+          price_usd_cents?: number | null
           position?: number
         }
         Update: Partial<Database["public"]["Tables"]["coaching_plan"]["Insert"]>
@@ -1034,6 +1038,49 @@ export type Database = {
           }
         ]
       }
+      coaching_transformation: {
+        Row: {
+          id: string
+          coach_id: string
+          program_id: string | null
+          client_name: string
+          before_url: string | null
+          after_url: string | null
+          metric: string | null
+          testimonial: string | null
+          position: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          coach_id: string
+          program_id?: string | null
+          client_name: string
+          before_url?: string | null
+          after_url?: string | null
+          metric?: string | null
+          testimonial?: string | null
+          position?: number
+        }
+        Update: Partial<Database["public"]["Tables"]["coaching_transformation"]["Insert"]>
+        Relationships: [
+          {
+            foreignKeyName: "coaching_transformation_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToMany: false
+            referencedRelation: "coach_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coaching_transformation_program_id_fkey"
+            columns: ["program_id"]
+            isOneToMany: false
+            referencedRelation: "coaching_program"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -1127,3 +1174,7 @@ export type CoachingReview =
   Database["public"]["Tables"]["coaching_review"]["Row"]
 export type CoachingReviewInsert =
   Database["public"]["Tables"]["coaching_review"]["Insert"]
+export type CoachingTransformation =
+  Database["public"]["Tables"]["coaching_transformation"]["Row"]
+export type CoachingTransformationInsert =
+  Database["public"]["Tables"]["coaching_transformation"]["Insert"]

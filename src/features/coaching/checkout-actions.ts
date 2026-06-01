@@ -13,14 +13,15 @@ export type CheckoutResult = { error?: string }
 /**
  * Activación MANUAL de una suscripción (DEV / sin pasarela real).
  *
- * Simula un pago aprobado y dispara el provisioning. Se reemplazará por el
- * webhook de MercadoPago cuando se integre la pasarela. Gated detrás del botón
- * "confirmar" del checkout; cualquier usuario logueado puede activarse, por eso
- * es solo para pruebas end-to-end.
+ * Solo disponible fuera de producción. Se reemplazará por el webhook de
+ * MercadoPago cuando se integre la pasarela.
  */
 export async function activateSubscriptionManuallyAction(
   planId: string
 ): Promise<CheckoutResult> {
+  if (process.env.NODE_ENV === "production") {
+    return { error: "El pago manual no está disponible en producción." }
+  }
   const { supabase, user } = await requireUser()
 
   const plan = await getCoachingPlan(supabase, planId)

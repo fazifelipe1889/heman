@@ -48,6 +48,14 @@ export const programSchema = z.object({
   level: z.enum(COACHING_LEVELS).optional(),
   coverUrl: z.string().url("URL inválida").optional().or(z.literal("")),
   introVideoUrl: z.string().url("URL inválida").optional().or(z.literal("")),
+  // Listas dinámicas (objetos para useFieldArray; las actions filtran vacíos).
+  includes: z.array(z.object({ value: z.string().max(120) })),
+  faq: z.array(
+    z.object({
+      question: z.string().max(200),
+      answer: z.string().max(1000),
+    })
+  ),
 })
 
 export type ProgramValues = z.infer<typeof programSchema>
@@ -60,6 +68,8 @@ export const planSchema = z.object({
   description: z.string().max(500).optional(),
   // En la UI el precio se ingresa en la moneda (pesos), no en centavos.
   price: z.number("Ingresá un precio").min(0, "No puede ser negativo").max(100_000_000),
+  // Precio opcional en USD (doble moneda). undefined = no se muestra.
+  priceUsd: z.number().min(0).max(1_000_000).optional(),
   durationDays: z
     .number("Ingresá la duración")
     .int()
@@ -76,9 +86,23 @@ export const planSchema = z.object({
   supplementTemplateId: z.string().uuid().optional(),
   progressSharingEnabled: z.boolean(),
   isVisible: z.boolean(),
+  isFeatured: z.boolean(),
 })
 
 export type PlanValues = z.infer<typeof planSchema>
+
+// ---------------------------------------------------------------------------
+// Transformación (prueba social: caso antes/después)
+// ---------------------------------------------------------------------------
+export const transformationSchema = z.object({
+  clientName: z.string().min(1, "Ingresá el nombre del cliente").max(100),
+  beforeUrl: z.string().url("URL inválida").optional().or(z.literal("")),
+  afterUrl: z.string().url("URL inválida").optional().or(z.literal("")),
+  metric: z.string().max(120).optional(),
+  testimonial: z.string().max(600).optional(),
+})
+
+export type TransformationValues = z.infer<typeof transformationSchema>
 
 // ---------------------------------------------------------------------------
 // Notas privadas del coach sobre un cliente

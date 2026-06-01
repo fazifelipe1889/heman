@@ -30,6 +30,8 @@ import type {
   CoachingPayment,
   CoachingReview,
   CoachingReviewInsert,
+  CoachingTransformation,
+  CoachingTransformationInsert,
 } from "@/lib/supabase/types"
 import type {
   CoachStatus,
@@ -60,6 +62,7 @@ export type ProgramLandingDetail = CoachingProgram & {
   coach: CoachProfile
   plans: CoachingPlan[]
   reviews: CoachingReview[]
+  transformations: CoachingTransformation[]
 }
 
 /** Suscripción con datos del coach/programa para el panel del usuario. */
@@ -347,6 +350,78 @@ export async function deleteCoachingPlan(
 }
 
 // =============================================================================
+// TRANSFORMACIONES (prueba social: casos antes/después)
+// =============================================================================
+
+/** Transformaciones de un coach (gestión en el panel). */
+export async function listCoachTransformations(
+  supabase: Client,
+  coachId: string
+): Promise<CoachingTransformation[]> {
+  const { data, error } = await supabase
+    .from("coaching_transformation")
+    .select("*")
+    .eq("coach_id", coachId)
+    .order("position", { ascending: true })
+    .order("created_at", { ascending: false })
+  if (error) throw error
+  return data ?? []
+}
+
+/** Una transformación por id. */
+export async function getCoachTransformation(
+  supabase: Client,
+  id: string
+): Promise<CoachingTransformation | null> {
+  const { data, error } = await supabase
+    .from("coaching_transformation")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle()
+  if (error) throw error
+  return data
+}
+
+/** Crea una transformación. */
+export async function createCoachTransformation(
+  supabase: Client,
+  input: CoachingTransformationInsert
+): Promise<string> {
+  const { data, error } = await supabase
+    .from("coaching_transformation")
+    .insert(input)
+    .select("id")
+    .single()
+  if (error) throw error
+  return data.id
+}
+
+/** Actualiza una transformación. */
+export async function updateCoachTransformation(
+  supabase: Client,
+  id: string,
+  patch: Database["public"]["Tables"]["coaching_transformation"]["Update"]
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_transformation")
+    .update(patch)
+    .eq("id", id)
+  if (error) throw error
+}
+
+/** Elimina una transformación. */
+export async function deleteCoachTransformation(
+  supabase: Client,
+  id: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_transformation")
+    .delete()
+    .eq("id", id)
+  if (error) throw error
+}
+
+// =============================================================================
 // TEMPLATES (rutinas y suplementación reutilizables del coach)
 // =============================================================================
 
@@ -488,7 +563,7 @@ export async function getProgramLanding(
   if (error) throw error
   if (!program) return null
 
-  const [plansRes, reviewsRes] = await Promise.all([
+  const [plansRes, reviewsRes, transformationsRes] = await Promise.all([
     supabase
       .from("coaching_plan")
       .select("*")
@@ -502,15 +577,29 @@ export async function getProgramLanding(
       .eq("program_id", program.id)
       .order("created_at", { ascending: false })
       .limit(20),
+    // Transformaciones específicas de esta asesoría + las generales del coach.
+    supabase
+      .from("coaching_transformation")
+      .select("*")
+      .eq("coach_id", coach.id)
+      .or(`program_id.eq.${program.id},program_id.is.null`)
+      .order("position", { ascending: true })
+      .limit(20),
   ])
   if (plansRes.error) throw plansRes.error
   if (reviewsRes.error) throw reviewsRes.error
+  // Las transformaciones son prueba social opcional: si la tabla aún no fue
+  // migrada (0019) o la query falla, degradamos sin romper la landing pública.
+  const transformations = transformationsRes.error
+    ? []
+    : transformationsRes.data ?? []
 
   return {
     ...program,
     coach,
     plans: plansRes.data ?? [],
     reviews: reviewsRes.data ?? [],
+    transformations,
   }
 }
 

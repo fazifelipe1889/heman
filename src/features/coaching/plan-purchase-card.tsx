@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { Check, MessageCircle, Video, Dumbbell, Pill, LineChart } from "lucide-react"
+import { Check, MessageCircle, Video, Dumbbell, Pill, LineChart, Sparkles } from "lucide-react"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { formatMoney, readPerks } from "@/lib/domain/coaching"
 import type { CoachingPlan } from "@/lib/supabase/types"
 
@@ -33,23 +34,41 @@ export function PlanPurchaseCard({
   handle,
   slug,
   highlight,
+  recommended,
 }: {
   plan: CoachingPlan
   handle: string
   slug: string
   highlight?: boolean
+  /** Resaltado por el quiz como el plan ideal para el visitante. */
+  recommended?: boolean
 }) {
   const lines = perkLines(plan)
+  const ring = recommended || highlight
 
   return (
-    <Card className={highlight ? "ring-2 ring-primary" : undefined}>
+    <Card
+      id={`plan-${plan.id}`}
+      className={cn("scroll-mt-20", ring && "ring-2 ring-primary")}
+    >
       <CardContent className="flex flex-col gap-4 py-5">
+        {recommended && (
+          <span className="flex items-center gap-1.5 self-start rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground">
+            <Sparkles className="size-3.5" />
+            Recomendado para vos
+          </span>
+        )}
         <div className="flex flex-col gap-1">
           <span className="font-semibold">{plan.name}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-2xl font-bold tracking-tight">
               {formatMoney(plan.price_cents, plan.currency)}
             </span>
+            {plan.price_usd_cents != null && (
+              <span className="text-sm text-muted-foreground">
+                / {formatMoney(plan.price_usd_cents, "USD")}
+              </span>
+            )}
             <span className="text-sm text-muted-foreground">
               · {plan.duration_days} días
             </span>
@@ -77,7 +96,7 @@ export function PlanPurchaseCard({
         <Button
           size="lg"
           className="h-11 w-full"
-          variant={highlight ? "default" : "outline"}
+          variant={ring ? "default" : "outline"}
           render={
             <Link href={`/c/${handle}/${slug}/checkout?plan=${plan.id}`} />
           }

@@ -32,7 +32,7 @@ export default async function SettingsPage() {
       <Card className="divide-y divide-border overflow-hidden p-0">
         {/* Editar datos personales */}
         <Link
-          href="/onboarding"
+          href="/settings/profile"
           className="flex items-center gap-4 px-4 py-4 transition-colors hover:bg-muted/50"
         >
           <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted">
