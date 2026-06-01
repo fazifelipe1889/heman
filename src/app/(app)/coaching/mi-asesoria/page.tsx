@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { ChatPanel } from "@/features/coaching/chat-panel"
 import { ReviewForm } from "@/features/coaching/review-form"
+import { CancelSubscription } from "@/features/coaching/cancel-subscription"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = { title: "Mi asesoría — EPHA" }
@@ -200,6 +201,14 @@ export default async function MiAsesoriaPage() {
             </CardContent>
           </Card>
         )}
+      </div>
+
+      {/* Cancelar asesoría */}
+      <div className="border-t pt-2">
+        <CancelSubscription
+          subscriptionId={active.id}
+          coachName={active.coach.display_name}
+        />
       </div>
     </div>
   )

@@ -89,16 +89,26 @@ export function CoachProfileForm({ coach }: Props) {
           <Card>
             <CardContent className="flex flex-col gap-4 pt-6">
               <p className="text-sm font-medium">Imágenes (opcional)</p>
-              <TextField
-                name="avatarUrl"
-                label="URL de avatar"
-                placeholder="https://…"
-              />
-              <TextField
-                name="coverUrl"
-                label="URL de portada"
-                placeholder="https://…"
-              />
+              <div className="flex flex-col gap-1.5">
+                <TextField
+                  name="avatarUrl"
+                  label="URL de foto de perfil"
+                  placeholder="https://…"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Cuadrada (1:1). Recomendado: 400×400 px.
+                </p>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <TextField
+                  name="coverUrl"
+                  label="URL de portada"
+                  placeholder="https://…"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Apaisada (3:1). Recomendado: 1200×400 px.
+                </p>
+              </div>
             </CardContent>
           </Card>
 

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server"
 import { getProfile } from "@/lib/db/profiles"
 import { WorkoutBanner } from "@/features/train/workout-banner"
 import { EphaLogoButton } from "@/components/epha-logo-button"
+import { BackButton } from "@/components/back-button"
 
 export default async function AppLayout({
   children,
@@ -24,7 +25,10 @@ export default async function AppLayout({
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background/95 px-4 backdrop-blur">
-        <EphaLogoButton href="/dashboard" aria_label="Ir al dashboard" />
+        <div className="flex items-center gap-1">
+          <BackButton rootPath="/dashboard" />
+          <EphaLogoButton href="/dashboard" aria_label="Ir al dashboard" />
+        </div>
         <Link
           href="/settings"
           className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"

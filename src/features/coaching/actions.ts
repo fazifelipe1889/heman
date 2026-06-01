@@ -9,6 +9,7 @@ import {
   markThreadRead,
   getSubscriptionReview,
   createReview,
+  cancelUserSubscription,
 } from "@/lib/db/coaching"
 import { sendMessageSchema, reviewSchema, type SendMessageValues, type ReviewValues } from "./schema"
 
@@ -75,6 +76,35 @@ export async function markThreadReadAction(
   } catch {
     return { error: "No se pudo marcar como leído." }
   }
+  return {}
+}
+
+// ---------------------------------------------------------------------------
+// Suscripción
+// ---------------------------------------------------------------------------
+
+/** Cancela la asesoría activa del usuario (libera el cupo para contratar otra). */
+export async function cancelSubscriptionAction(
+  subscriptionId: string
+): Promise<ActionResult> {
+  const { supabase, user } = await requireUser()
+
+  const sub = await getSubscriptionDetail(supabase, subscriptionId)
+  if (!sub || sub.user_id !== user.id) {
+    return { error: "Suscripción no encontrada." }
+  }
+  if (sub.status !== "active") {
+    return { error: "Esta asesoría no está activa." }
+  }
+
+  try {
+    await cancelUserSubscription(supabase, subscriptionId, user.id)
+  } catch {
+    return { error: "No se pudo cancelar la asesoría." }
+  }
+
+  revalidatePath("/coaching/mi-asesoria")
+  revalidatePath(`/coach/clients/${subscriptionId}`)
   return {}
 }
 

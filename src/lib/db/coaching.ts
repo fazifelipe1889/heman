@@ -612,7 +612,9 @@ export async function getUserActiveSubscription(
   supabase: Client,
   userId: string
 ): Promise<SubscriptionWithContext | null> {
-  const { data, error } = await supabase
+  // limit(1) en lugar de maybeSingle(): si por datos viejos hubiera más de una
+  // suscripción activa, tomamos la de vencimiento más lejano en vez de romper.
+  const { data: rows, error } = await supabase
     .from("coaching_subscription")
     .select(
       `*,
@@ -623,8 +625,9 @@ export async function getUserActiveSubscription(
     .eq("user_id", userId)
     .eq("status", "active")
     .order("ends_at", { ascending: false })
-    .maybeSingle()
+    .limit(1)
   if (error) throw error
+  const data = rows?.[0]
   if (!data) return null
   return {
     ...(data as unknown as CoachingSubscription),
@@ -632,6 +635,24 @@ export async function getUserActiveSubscription(
     program: data.program as SubscriptionWithContext["program"],
     plan: data.plan as SubscriptionWithContext["plan"],
   }
+}
+
+/**
+ * Cancela una suscripción activa del usuario (marca status='cancelled').
+ * Valida pertenencia vía RLS (policy de UPDATE solo permite auth.uid() = user_id).
+ */
+export async function cancelUserSubscription(
+  supabase: Client,
+  subscriptionId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_subscription")
+    .update({ status: "cancelled" })
+    .eq("id", subscriptionId)
+    .eq("user_id", userId)
+    .eq("status", "active")
+  if (error) throw error
 }
 
 /** Historial de suscripciones del usuario. */

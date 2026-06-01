@@ -128,16 +128,26 @@ export function ProgramForm({ program }: Props) {
                   options={COACHING_LEVEL_OPTIONS}
                 />
               </div>
-              <TextField
-                name="coverUrl"
-                label="URL de portada (opcional)"
-                placeholder="https://…"
-              />
-              <TextField
-                name="introVideoUrl"
-                label="URL de video intro (opcional)"
-                placeholder="https://…"
-              />
+              <div className="flex flex-col gap-1.5">
+                <TextField
+                  name="coverUrl"
+                  label="URL de portada (opcional)"
+                  placeholder="https://…"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Apaisada (2:1). Recomendado: 1200×600 px.
+                </p>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <TextField
+                  name="introVideoUrl"
+                  label="URL de video intro (opcional)"
+                  placeholder="https://…"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enlace de YouTube. La miniatura la toma del propio video (16:9).
+                </p>
+              </div>
             </CardContent>
           </Card>
 

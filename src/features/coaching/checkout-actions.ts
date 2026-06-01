@@ -31,15 +31,18 @@ export async function activateSubscriptionManuallyAction(
     return { error: "No podés contratar tu propia asesoría." }
   }
 
-  // ¿Ya tiene una suscripción activa a este plan?
+  // Una sola asesoría activa por usuario: si ya hay una (de cualquier plan),
+  // hay que cancelarla antes de contratar otra.
   const { count } = await supabase
     .from("coaching_subscription")
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id)
-    .eq("plan_id", planId)
     .eq("status", "active")
   if ((count ?? 0) > 0) {
-    return { error: "Ya tenés una suscripción activa a este plan." }
+    return {
+      error:
+        "Ya tenés una asesoría activa. Cancelala desde «Mi asesoría» antes de contratar otra.",
+    }
   }
 
   // Provisioning con cliente privilegiado (bypassa RLS).
