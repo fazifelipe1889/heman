@@ -1,6 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowLeft, BadgeCheck, MessageCircle, Star } from "lucide-react"
+import {
+  ArrowLeft,
+  BadgeCheck,
+  MessageCircle,
+  Star,
+  ClipboardList,
+  Dumbbell,
+} from "lucide-react"
 
 import { requireUser } from "@/lib/auth/guards"
 import {
@@ -8,8 +15,19 @@ import {
   listUserSubscriptions,
   listMessages,
   getSubscriptionReview,
+  getProgramContent,
+  getIntakeAnswers,
+  getSubscriptionRoutine,
 } from "@/lib/db/coaching"
-import { readPerks, isPerkEnabled, getInitials } from "@/lib/domain/coaching"
+import {
+  readPerks,
+  isPerkEnabled,
+  getInitials,
+  readContentBlocks,
+  readIntakeForm,
+  readIntakeAnswers,
+  readRoutineTemplatePayload,
+} from "@/lib/domain/coaching"
 import { SUBSCRIPTION_STATUS_LABELS } from "@/lib/domain/labels"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +35,9 @@ import { buttonVariants } from "@/components/ui/button"
 import { ChatPanel } from "@/features/coaching/chat-panel"
 import { ReviewForm } from "@/features/coaching/review-form"
 import { CancelSubscription } from "@/features/coaching/cancel-subscription"
+import { ProductContent } from "@/features/coaching/product-content"
+import { IntakeForm } from "@/features/coaching/intake-form"
+import { AdaptiveRoutinePicker } from "@/features/coaching/adaptive-routine-picker"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = { title: "Mi asesoría — EPHA" }
@@ -120,6 +141,24 @@ export default async function MiAsesoriaPage() {
 
   const messages = chatEnabled ? await listMessages(supabase, active.id) : []
 
+  // Material entregable + formulario al cliente.
+  const [delivery, answersRaw] = await Promise.all([
+    getProgramContent(supabase, active.program_id).catch(() => null),
+    getIntakeAnswers(supabase, active.id).catch(() => null),
+  ])
+  const contentBlocks = readContentBlocks(delivery?.content)
+  const intakeFields = readIntakeForm(delivery?.intake_form)
+  const intakeAnswers = readIntakeAnswers(answersRaw)
+
+  // Rutina de la asesoría (personalizada = snapshot listo; adaptativa = elegir).
+  const routineEnabled = isPerkEnabled(perks, "routine")
+  const routineCtx = routineEnabled
+    ? await getSubscriptionRoutine(supabase, active.plan.id, active.routine_id).catch(
+        () => null
+      )
+    : null
+  const routinePayload = readRoutineTemplatePayload(routineCtx?.template?.payload)
+
   const perkList = [
     chatEnabled && "Chat con el coach",
     perks.video_calls.count > 0 && `${perks.video_calls.count} videollamadas`,
@@ -180,6 +219,75 @@ export default async function MiAsesoriaPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Material entregable */}
+      <ProductContent
+        content={contentBlocks}
+        nutritionNotes={delivery?.nutrition_notes ?? null}
+      />
+
+      {/* Formulario al cliente */}
+      {intakeFields.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <ClipboardList className="size-5" /> Tus datos
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {active.coach.display_name} necesita estos datos para armar tu plan.
+          </p>
+          <Card>
+            <CardContent className="py-4">
+              <IntakeForm
+                subscriptionId={active.id}
+                fields={intakeFields}
+                initialAnswers={intakeAnswers}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Tu rutina */}
+      {routineEnabled && (
+        <div className="flex flex-col gap-2">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <Dumbbell className="size-5" /> Tu rutina
+          </h2>
+          {routinePayload?.mode === "adaptive" && active.routine_id ? (
+            <>
+              <p className="text-sm text-muted-foreground">
+                Tu coach definió el volumen. Elegí los ejercicios para cada músculo.
+              </p>
+              <AdaptiveRoutinePicker
+                routineId={active.routine_id}
+                groups={routinePayload.groups}
+                initialExercises={routineCtx?.existingExercises ?? []}
+              />
+            </>
+          ) : active.routine_id ? (
+            <Card>
+              <CardContent className="flex flex-col gap-3 py-4">
+                <p className="text-sm text-muted-foreground">
+                  Tu coach armó una rutina a medida para vos.
+                </p>
+                <Link
+                  href={`/routines/${active.routine_id}`}
+                  className={cn(buttonVariants({ variant: "outline" }), "self-start")}
+                >
+                  <Dumbbell className="size-4" /> Ver mi rutina
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="flex items-center gap-2 py-4 text-sm text-muted-foreground">
+                <Dumbbell className="size-4" />
+                Tu coach está preparando tu rutina.
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
 
       {/* Chat */}
       <div className="flex flex-col gap-2">

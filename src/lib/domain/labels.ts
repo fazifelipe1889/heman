@@ -22,6 +22,8 @@ import type {
   CoachingProgramStatus,
   SubscriptionStatus,
   PaymentStatus,
+  ProductType,
+  IntakeFieldType,
 } from "./coaching"
 
 export const EXERCISE_KIND_LABELS: Record<ExerciseKind, string> = {
@@ -114,6 +116,18 @@ export const COACHING_CATEGORY_LABELS: Record<CoachingCategory, string> = {
   mixto: "Mixto",
 }
 
+export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
+  asesoria: "Asesoría",
+  plan: "Plan",
+}
+
+/** Descripción corta del tipo de producto (para el selector "+ Crear"). */
+export const PRODUCT_TYPE_DESCRIPTIONS: Record<ProductType, string> = {
+  asesoria:
+    "Servicio personalizado: armás rutina, suplementación y nutrición a medida para cada cliente.",
+  plan: "Producto estático: el cliente compra información y una guía tuya ya armada.",
+}
+
 export const COACH_STATUS_LABELS: Record<CoachStatus, string> = {
   pending_review: "En revisión",
   active: "Activo",
@@ -154,3 +168,13 @@ export const COACHING_LEVEL_OPTIONS = [
   { value: "Intermedio", label: "Intermedio" },
   { value: "Avanzado", label: "Avanzado" },
 ]
+
+export const INTAKE_FIELD_TYPE_LABELS: Record<IntakeFieldType, string> = {
+  text: "Texto corto",
+  textarea: "Texto largo",
+  number: "Número",
+}
+
+export const INTAKE_FIELD_TYPE_OPTIONS = (
+  Object.keys(INTAKE_FIELD_TYPE_LABELS) as IntakeFieldType[]
+).map((value) => ({ value, label: INTAKE_FIELD_TYPE_LABELS[value] }))

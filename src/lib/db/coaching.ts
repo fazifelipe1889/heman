@@ -13,10 +13,13 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 
 import type {
   Database,
+  Json,
   CoachProfile,
   CoachProfileInsert,
   CoachingProgram,
   CoachingProgramInsert,
+  CoachingProgramContent,
+  CoachingProgramContentInsert,
   CoachRoutineTemplate,
   CoachRoutineTemplateInsert,
   CoachSupplementTemplate,
@@ -350,6 +353,286 @@ export async function deleteCoachingPlan(
 }
 
 // =============================================================================
+// TEMPLATES DE RUTINA DEL COACH (coach_routine_template)
+// =============================================================================
+
+/**
+ * Crea o actualiza un template de rutina del coach.
+ * Si se pasa `existingId` actualiza ese template; si no, crea uno nuevo.
+ * Devuelve el id del template.
+ */
+export async function upsertRoutineTemplate(
+  supabase: Client,
+  coachId: string,
+  name: string,
+  description: string | null,
+  payload: Json,
+  existingId?: string | null
+): Promise<string> {
+  if (existingId) {
+    const { error } = await supabase
+      .from("coach_routine_template")
+      .update({ name, description, payload })
+      .eq("id", existingId)
+      .eq("coach_id", coachId)
+    if (error) throw error
+    return existingId
+  }
+  const { data, error } = await supabase
+    .from("coach_routine_template")
+    .insert({ coach_id: coachId, name, description, payload })
+    .select("id")
+    .single()
+  if (error) throw error
+  return data.id
+}
+
+/** Lee un template de rutina por id (coach o suscriptor autorizados vía RLS). */
+export async function getRoutineTemplate(
+  supabase: Client,
+  templateId: string
+): Promise<CoachRoutineTemplate | null> {
+  const { data, error } = await supabase
+    .from("coach_routine_template")
+    .select("*")
+    .eq("id", templateId)
+    .maybeSingle()
+  if (error) throw error
+  return data
+}
+
+/** Lista los templates de un coach. */
+export async function listCoachRoutineTemplates(
+  supabase: Client,
+  coachId: string
+): Promise<CoachRoutineTemplate[]> {
+  const { data, error } = await supabase
+    .from("coach_routine_template")
+    .select("*")
+    .eq("coach_id", coachId)
+    .order("created_at", { ascending: false })
+  if (error) throw error
+  return data ?? []
+}
+
+/**
+ * Guarda los ejercicios elegidos por el cliente en su rutina adaptativa.
+ * Borra los ejercicios existentes y los reemplaza (el usuario es dueño de su rutina).
+ */
+export async function saveAdaptiveExercises(
+  supabase: Client,
+  routineId: string,
+  exercises: {
+    exerciseName: string
+    exerciseRef: string | null
+    sets: number
+    notes: string | null
+  }[]
+): Promise<void> {
+  // Borrar los existentes primero.
+  const { error: delErr } = await supabase
+    .from("routine_exercises")
+    .delete()
+    .eq("routine_id", routineId)
+  if (delErr) throw delErr
+
+  if (exercises.length === 0) return
+
+  const rows = exercises.map((ex, i) => ({
+    routine_id: routineId,
+    exercise_name: ex.exerciseName,
+    exercise_ref: ex.exerciseRef,
+    sets: ex.sets,
+    position: i,
+    notes: ex.notes,
+  }))
+
+  const { error } = await supabase.from("routine_exercises").insert(rows)
+  if (error) throw error
+}
+
+export type RoutineExerciseRow = {
+  id: string
+  exercise_name: string
+  exercise_ref: string | null
+  sets: number
+  position: number
+  notes: string | null
+}
+
+/** Lee los ejercicios de una rutina del cliente. */
+export async function listRoutineExercises(
+  supabase: Client,
+  routineId: string
+): Promise<RoutineExerciseRow[]> {
+  const { data, error } = await supabase
+    .from("routine_exercises")
+    .select("id, exercise_name, exercise_ref, sets, position, notes")
+    .eq("routine_id", routineId)
+    .order("position")
+  if (error) throw error
+  return data ?? []
+}
+
+/**
+ * Contexto de rutina para una suscripción del cliente: el template (modo
+ * personalizado/adaptativo) + los ejercicios ya elegidos (si los hay).
+ */
+export async function getSubscriptionRoutine(
+  supabase: Client,
+  planId: string,
+  routineId: string | null
+): Promise<{
+  template: CoachRoutineTemplate | null
+  existingExercises: RoutineExerciseRow[]
+}> {
+  const { data: plan } = await supabase
+    .from("coaching_plan")
+    .select("routine_template_id")
+    .eq("id", planId)
+    .maybeSingle()
+  const template = plan?.routine_template_id
+    ? await getRoutineTemplate(supabase, plan.routine_template_id).catch(() => null)
+    : null
+  const existingExercises = routineId
+    ? await listRoutineExercises(supabase, routineId).catch(() => [])
+    : []
+  return { template, existingExercises }
+}
+
+// =============================================================================
+// CONTENIDO ENTREGABLE + FORMULARIO (coaching_program_content)
+// =============================================================================
+
+/**
+ * Contenido entregable de un producto (bloques + formulario + nutrición).
+ * RLS: el dueño y los suscriptores pueden leerlo.
+ */
+export async function getProgramContent(
+  supabase: Client,
+  programId: string
+): Promise<CoachingProgramContent | null> {
+  const { data, error } = await supabase
+    .from("coaching_program_content")
+    .select("*")
+    .eq("program_id", programId)
+    .maybeSingle()
+  if (error) throw error
+  return data
+}
+
+/** Crea/actualiza el contenido de un producto (upsert por program_id). */
+export async function upsertProgramContent(
+  supabase: Client,
+  input: CoachingProgramContentInsert
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_program_content")
+    .upsert(
+      { ...input, updated_at: new Date().toISOString() },
+      { onConflict: "program_id" }
+    )
+  if (error) throw error
+}
+
+/** Respuestas del formulario que cargó el cliente en su suscripción. */
+export async function getIntakeAnswers(
+  supabase: Client,
+  subscriptionId: string
+): Promise<unknown> {
+  const { data, error } = await supabase
+    .from("coaching_subscription")
+    .select("intake_answers")
+    .eq("id", subscriptionId)
+    .maybeSingle()
+  if (error) throw error
+  return data?.intake_answers ?? null
+}
+
+/** Guarda las respuestas del formulario (el cliente actualiza su suscripción). */
+export async function saveIntakeAnswers(
+  supabase: Client,
+  subscriptionId: string,
+  userId: string,
+  answers: Json
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_subscription")
+    .update({ intake_answers: answers })
+    .eq("id", subscriptionId)
+    .eq("user_id", userId)
+  if (error) throw error
+}
+
+// =============================================================================
+// PRODUCTOS (modelo plano: coaching_program 1:1 coaching_plan)
+// =============================================================================
+
+/** Un producto = el program (vitrina) + su único plan comprable + contenido. */
+export type ProductWithPlan = {
+  program: CoachingProgram
+  plan: CoachingPlan | null
+  content: CoachingProgramContent | null
+  routineTemplate: CoachRoutineTemplate | null
+}
+
+/** Producto por id de program (para el editor del coach). */
+export async function getCoachProductWithPlan(
+  supabase: Client,
+  programId: string
+): Promise<ProductWithPlan | null> {
+  const program = await getCoachingProgram(supabase, programId)
+  if (!program) return null
+  const [plans, content] = await Promise.all([
+    listProgramPlans(supabase, programId),
+    getProgramContent(supabase, programId).catch(() => null),
+  ])
+  const plan = plans[0] ?? null
+  const routineTemplate = plan?.routine_template_id
+    ? await getRoutineTemplate(supabase, plan.routine_template_id).catch(() => null)
+    : null
+  return { program, plan, content, routineTemplate }
+}
+
+/**
+ * Crea un producto: el program y su único plan en una sola operación.
+ * Si la creación del plan falla, borra el program para no dejar huérfanos.
+ */
+export async function createProduct(
+  supabase: Client,
+  program: CoachingProgramInsert,
+  plan: Omit<CoachingPlanInsert, "program_id">
+): Promise<string> {
+  const programId = await createCoachingProgram(supabase, program)
+  try {
+    await createCoachingPlan(supabase, { ...plan, program_id: programId })
+  } catch (e) {
+    await deleteCoachingProgram(supabase, programId).catch(() => {})
+    throw e
+  }
+  return programId
+}
+
+/**
+ * Actualiza un producto: el program y su plan. Si el program no tenía plan
+ * (datos legados), lo crea.
+ */
+export async function updateProduct(
+  supabase: Client,
+  programId: string,
+  programPatch: Database["public"]["Tables"]["coaching_program"]["Update"],
+  plan: Omit<CoachingPlanInsert, "program_id">,
+  existingPlanId: string | null
+): Promise<void> {
+  await updateCoachingProgram(supabase, programId, programPatch)
+  if (existingPlanId) {
+    await updateCoachingPlan(supabase, existingPlanId, plan)
+  } else {
+    await createCoachingPlan(supabase, { ...plan, program_id: programId })
+  }
+}
+
+// =============================================================================
 // TRANSFORMACIONES (prueba social: casos antes/después)
 // =============================================================================
 
@@ -540,6 +823,72 @@ export async function listMarketplacePrograms(
       price_from_cents: priceFrom,
     }
   })
+}
+
+/** Coach del catálogo coach-first, con precio "desde" y nº de productos. */
+export type MarketplaceCoach = Pick<
+  CoachProfile,
+  | "id"
+  | "handle"
+  | "display_name"
+  | "headline"
+  | "bio"
+  | "avatar_url"
+  | "cover_url"
+  | "location"
+  | "rating_avg"
+  | "rating_count"
+  | "is_verified"
+  | "active_clients"
+> & { price_from_cents: number | null; product_count: number }
+
+/**
+ * Lista los coaches activos para el marketplace coach-first, con el precio
+ * "desde" y la cantidad de productos publicados (agregados de sus programas).
+ * Usa select("*") para no romper si la migración 0022 (location) aún no se aplicó.
+ */
+export async function listMarketplaceCoaches(
+  supabase: Client,
+  filters: { search?: string } = {}
+): Promise<MarketplaceCoach[]> {
+  let query = supabase.from("coach_profiles").select("*").eq("status", "active")
+  if (filters.search) query = query.ilike("display_name", `%${filters.search}%`)
+  const { data: coaches, error } = await query.order("rating_avg", {
+    ascending: false,
+  })
+  if (error) throw error
+  const list = coaches ?? []
+  if (list.length === 0) return []
+
+  // Agregar productos publicados por coach para "desde $" y el conteo.
+  const programs = await listMarketplacePrograms(supabase)
+  const agg = new Map<string, { min: number | null; count: number }>()
+  for (const p of programs) {
+    const cur = agg.get(p.coach_id) ?? { min: null, count: 0 }
+    cur.count += 1
+    if (p.price_from_cents != null) {
+      cur.min =
+        cur.min == null ? p.price_from_cents : Math.min(cur.min, p.price_from_cents)
+    }
+    agg.set(p.coach_id, cur)
+  }
+
+  return list.map((c) => ({
+    id: c.id,
+    handle: c.handle,
+    display_name: c.display_name,
+    headline: c.headline,
+    bio: c.bio,
+    avatar_url: c.avatar_url,
+    cover_url: c.cover_url,
+    location: c.location ?? null,
+    rating_avg: c.rating_avg,
+    rating_count: c.rating_count,
+    is_verified: c.is_verified,
+    active_clients: c.active_clients,
+    price_from_cents: agg.get(c.id)?.min ?? null,
+    product_count: agg.get(c.id)?.count ?? 0,
+  }))
 }
 
 /**
@@ -944,6 +1293,24 @@ export async function listProgramReviews(
     .order("created_at", { ascending: false })
   if (error) throw error
   return data ?? []
+}
+
+/**
+ * Reseñas publicadas de un coach (todas sus asesorías/planes) para la vitrina.
+ * Tolerante a 0023 no aplicada: si falta is_published, la reseña se incluye.
+ */
+export async function listCoachReviews(
+  supabase: Client,
+  coachId: string
+): Promise<CoachingReview[]> {
+  const { data, error } = await supabase
+    .from("coaching_review")
+    .select("*")
+    .eq("coach_id", coachId)
+    .order("created_at", { ascending: false })
+    .limit(30)
+  if (error) throw error
+  return (data ?? []).filter((r) => r.is_published !== false)
 }
 
 /** Reseña existente para una suscripción (para evitar duplicados). */

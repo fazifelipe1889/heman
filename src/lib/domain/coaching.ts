@@ -49,6 +49,117 @@ export const COACHING_LEVELS = [
 ] as const
 export type CoachingLevel = (typeof COACHING_LEVELS)[number]
 
+/**
+ * Tipo de producto que publica el coach (modelo "producto plano"):
+ * - asesoria: servicio personalizado (el coach arma rutina/suplementación/
+ *   nutrición a medida para el cliente).
+ * - plan: producto estático (el cliente compra información + una guía).
+ */
+export const PRODUCT_TYPES = ["asesoria", "plan"] as const
+export type ProductType = (typeof PRODUCT_TYPES)[number]
+
+/** Tipos de bloque de material entregable. Solo "text" es funcional por ahora. */
+export const CONTENT_BLOCK_TYPES = [
+  "text",
+  "audio",
+  "image",
+  "document",
+  "video",
+] as const
+export type ContentBlockType = (typeof CONTENT_BLOCK_TYPES)[number]
+export type ContentBlock = {
+  type: ContentBlockType
+  title?: string
+  body?: string
+  url?: string
+}
+
+/** Tipos de campo del formulario que el coach le pide al cliente. */
+export const INTAKE_FIELD_TYPES = ["text", "textarea", "number"] as const
+export type IntakeFieldType = (typeof INTAKE_FIELD_TYPES)[number]
+export type IntakeField = {
+  id: string
+  label: string
+  type: IntakeFieldType
+  required: boolean
+}
+
+/** Respuestas del cliente, indexadas por id de campo. */
+export type IntakeAnswers = Record<string, string>
+
+// =============================================================================
+// RUTINAS EN ASESORÍAS (template del coach → snapshot automático al comprar)
+// =============================================================================
+
+/** Modos de rutina que puede definir el coach en su producto. */
+export const ROUTINE_MODES = ["personalized", "adaptive"] as const
+export type RoutineMode = (typeof ROUTINE_MODES)[number]
+
+/**
+ * Template de rutina PERSONALIZADA: el coach arma los ejercicios exactos.
+ * Se clona literalmente en la rutina del cliente al comprar.
+ */
+export type PersonalizedTemplateExercise = {
+  exerciseName: string
+  exerciseRef?: string | null
+  sets: number
+  targetReps?: string | null
+  targetWeight?: number | null
+  targetRir?: number | null
+  restSeconds?: number | null
+  notes?: string | null
+}
+export type PersonalizedTemplatePayload = {
+  mode: "personalized"
+  exercises: PersonalizedTemplateExercise[]
+}
+
+/**
+ * Template de rutina ADAPTATIVA: el coach define volumen por grupo muscular;
+ * el cliente elige los ejercicios concretos después de comprar.
+ */
+export type AdaptiveTemplateGroup = {
+  muscleGroup: string
+  exerciseCount: number
+  sets: number
+  notes?: string
+}
+export type AdaptiveTemplatePayload = {
+  mode: "adaptive"
+  groups: AdaptiveTemplateGroup[]
+}
+
+export type RoutineTemplatePayload =
+  | PersonalizedTemplatePayload
+  | AdaptiveTemplatePayload
+
+/**
+ * Lee el payload del template de rutina desde JSONB. Valida la forma mínima.
+ */
+export function readRoutineTemplatePayload(
+  json: unknown
+): RoutineTemplatePayload | null {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return null
+  const obj = json as Record<string, unknown>
+  if (obj.mode === "personalized" && Array.isArray(obj.exercises)) {
+    return json as PersonalizedTemplatePayload
+  }
+  if (obj.mode === "adaptive" && Array.isArray(obj.groups)) {
+    return json as AdaptiveTemplatePayload
+  }
+  return null
+}
+
+/** Selección de ejercicios del cliente en una rutina adaptativa. */
+export type AdaptiveSelection = {
+  /** Índice del grupo en `AdaptiveTemplatePayload.groups`. */
+  groupIndex: number
+  exercises: {
+    exerciseName: string
+    exerciseRef: string
+  }[]
+}
+
 export const BILLING_TYPES = ["one_time", "recurring"] as const
 export type BillingType = (typeof BILLING_TYPES)[number]
 
@@ -175,7 +286,10 @@ export const CoachProfileInsertSchema = z.object({
   bio: z.string().max(1000).optional(),
   avatar_url: z.string().url().optional(),
   cover_url: z.string().url().optional(),
+  location: z.string().max(120).optional(),
+  public_email: z.string().email().optional(),
   socials: z.record(z.string(), z.string()).default({}),
+  faq: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
   payout_provider: z.string().optional(),
   payout_ref: z.record(z.string(), z.unknown()).default({}),
 })
@@ -202,7 +316,9 @@ export const CoachingProgramInsertSchema = z.object({
   coach_id: z.string().uuid(),
   slug: z.string().min(1).max(100).regex(/^[a-z0-9_-]+$/i),
   title: z.string().min(1).max(200),
+  product_type: z.enum(PRODUCT_TYPES).default("asesoria"),
   tagline: z.string().max(300).optional(),
+  short_description: z.string().max(400).optional(),
   description: z.string().max(2000).optional(),
   category: z.enum(COACHING_CATEGORIES),
   cover_url: z.string().url().optional(),
@@ -397,6 +513,7 @@ export const CoachingReviewInsertSchema = z.object({
   user_id: z.string().uuid(),
   rating: z.number().int().min(1).max(5),
   comment: z.string().max(2000).optional(),
+  image_url: z.string().url().optional(),
 })
 
 export const CoachingReviewSchema = CoachingReviewInsertSchema.extend({
@@ -478,6 +595,43 @@ export function readIncludes(json: unknown): string[] {
       ? (json as { bullets: unknown[] }).bullets
       : []
   return arr.filter((x): x is string => typeof x === "string" && x.trim().length > 0)
+}
+
+/**
+ * Lee los bloques de material entregable del JSONB. Tolera formas inválidas.
+ */
+export function readContentBlocks(json: unknown): ContentBlock[] {
+  if (!Array.isArray(json)) return []
+  return json.filter(
+    (x): x is ContentBlock =>
+      !!x &&
+      typeof x === "object" &&
+      typeof (x as ContentBlock).type === "string"
+  )
+}
+
+/**
+ * Lee la definición del formulario al cliente del JSONB. Tolera formas inválidas.
+ */
+export function readIntakeForm(json: unknown): IntakeField[] {
+  if (!Array.isArray(json)) return []
+  return json.filter(
+    (x): x is IntakeField =>
+      !!x &&
+      typeof x === "object" &&
+      typeof (x as IntakeField).id === "string" &&
+      typeof (x as IntakeField).label === "string"
+  )
+}
+
+/** Lee las respuestas del cliente (Record<fieldId, string>). */
+export function readIntakeAnswers(json: unknown): IntakeAnswers {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return {}
+  const out: IntakeAnswers = {}
+  for (const [k, v] of Object.entries(json as Record<string, unknown>)) {
+    if (typeof v === "string") out[k] = v
+  }
+  return out
 }
 
 /**

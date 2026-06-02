@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Star } from "lucide-react"
 
+import { ImagePlus, Lock } from "lucide-react"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import { createReviewAction } from "./actions"
 
 export function ReviewForm({ subscriptionId }: { subscriptionId: string }) {
@@ -68,6 +71,21 @@ export function ReviewForm({ subscriptionId }: { subscriptionId: string }) {
         placeholder="Contá tu experiencia (opcional)…"
         rows={3}
       />
+      {/* Slot de imagen (placeholder: la subida real se habilita más adelante) */}
+      <div className="flex items-center gap-3 rounded-xl border border-dashed p-3 opacity-70">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+          <ImagePlus className="size-4" />
+        </div>
+        <div className="flex flex-1 flex-col">
+          <span className="text-sm font-medium">Agregar una foto</span>
+          <span className="text-xs text-muted-foreground">
+            Mostrá tu resultado (opcional)
+          </span>
+        </div>
+        <Badge variant="outline" className="shrink-0 gap-1 text-[10px]">
+          <Lock className="size-3" /> Próximamente
+        </Badge>
+      </div>
       <Button disabled={isPending} onClick={handleSubmit}>
         {isPending ? "Enviando…" : "Enviar reseña"}
       </Button>

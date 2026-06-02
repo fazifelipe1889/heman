@@ -24,6 +24,7 @@ import {
   calculateCoachingPaymentSplit,
   readPerks,
   isPerkEnabled,
+  readRoutineTemplatePayload,
   DEFAULT_COACH_COMMISSION_PCT,
   type PaymentProvider,
 } from "@/lib/domain/coaching"
@@ -144,9 +145,79 @@ export async function provisionSubscription(
     })
   }
 
-  // TODO(routine snapshot): cuando exista coach_routine_template CRUD,
-  // si plan.routine_template_id y perks.routine.enabled → clonar la rutina
-  // en `routines` del usuario y guardar routine_id en la suscripción.
+  // 7. Snapshot de rutina (si el plan incluye rutina personalizada/adaptativa).
+  if (isPerkEnabled(perks, "routine") && plan.routine_template_id) {
+    try {
+      const { data: tpl } = await admin
+        .from("coach_routine_template")
+        .select("*")
+        .eq("id", plan.routine_template_id)
+        .maybeSingle()
+
+      if (tpl) {
+        const payload = readRoutineTemplatePayload(tpl.payload)
+        let routineId: string | null = null
+
+        if (payload?.mode === "personalized") {
+          // Clonar la rutina con todos sus ejercicios en la cuenta del usuario.
+          const { data: routine } = await admin
+            .from("routines")
+            .insert({
+              user_id: userId,
+              type: "musculacion",
+              name: tpl.name,
+              description: tpl.description ?? null,
+            })
+            .select("id")
+            .single()
+
+          if (routine) {
+            routineId = routine.id
+            const rows = payload.exercises.map((ex, i) => ({
+              routine_id: routineId!,
+              exercise_name: ex.exerciseName,
+              exercise_ref: ex.exerciseRef ?? null,
+              sets: ex.sets,
+              target_reps: ex.targetReps ?? null,
+              target_weight: ex.targetWeight ?? null,
+              target_rir: ex.targetRir ?? null,
+              rest_seconds: ex.restSeconds ?? null,
+              notes: ex.notes ?? null,
+              position: i,
+            }))
+            if (rows.length > 0) {
+              await admin.from("routine_exercises").insert(rows)
+            }
+          }
+        } else if (payload?.mode === "adaptive") {
+          // Crear una rutina vacía; el cliente elige los ejercicios después.
+          const { data: routine } = await admin
+            .from("routines")
+            .insert({
+              user_id: userId,
+              type: "musculacion",
+              name: tpl.name,
+              description: `Elegí tus ejercicios para cada músculo en tu asesoría.`,
+            })
+            .select("id")
+            .single()
+
+          if (routine) {
+            routineId = routine.id
+          }
+        }
+
+        if (routineId) {
+          await admin
+            .from("coaching_subscription")
+            .update({ routine_id: routineId })
+            .eq("id", subscriptionId)
+        }
+      }
+    } catch {
+      // No-fatal: un error en el snapshot no debe tirar el provisioning entero.
+    }
+  }
 
   return { subscriptionId, paymentId: payment.id, alreadyProcessed: false }
 }

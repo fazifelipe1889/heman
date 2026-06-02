@@ -20,6 +20,7 @@ import type {
   CoachingProgramStatus,
   CoachingCategory,
   CoachingLevel,
+  ProductType,
   BillingType,
   RecurringInterval,
   SubscriptionStatus,
@@ -589,7 +590,10 @@ export type Database = {
           bio: string | null
           avatar_url: string | null
           cover_url: string | null
+          location: string | null
+          public_email: string | null
           socials: Json
+          faq: Json
           is_verified: boolean
           status: CoachStatus
           commission_pct: number
@@ -609,7 +613,10 @@ export type Database = {
           bio?: string | null
           avatar_url?: string | null
           cover_url?: string | null
+          location?: string | null
+          public_email?: string | null
           socials?: Json
+          faq?: Json
           is_verified?: boolean
           status?: CoachStatus
           commission_pct?: number
@@ -625,7 +632,9 @@ export type Database = {
           coach_id: string
           slug: string
           title: string
+          product_type: ProductType
           tagline: string | null
+          short_description: string | null
           description: string | null
           category: CoachingCategory
           cover_url: string | null
@@ -644,7 +653,9 @@ export type Database = {
           coach_id: string
           slug: string
           title: string
+          product_type?: ProductType
           tagline?: string | null
+          short_description?: string | null
           description?: string | null
           category: CoachingCategory
           cover_url?: string | null
@@ -660,6 +671,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "coaching_program_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToMany: false
+            referencedRelation: "coach_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      coaching_program_content: {
+        Row: {
+          program_id: string
+          coach_id: string
+          content: Json
+          intake_form: Json
+          nutrition_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          program_id: string
+          coach_id: string
+          content?: Json
+          intake_form?: Json
+          nutrition_notes?: string | null
+          updated_at?: string
+        }
+        Update: Partial<Database["public"]["Tables"]["coaching_program_content"]["Insert"]>
+        Relationships: [
+          {
+            foreignKeyName: "coaching_program_content_program_id_fkey"
+            columns: ["program_id"]
+            isOneToMany: false
+            referencedRelation: "coaching_program"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coaching_program_content_coach_id_fkey"
             columns: ["coach_id"]
             isOneToMany: false
             referencedRelation: "coach_profiles"
@@ -812,6 +858,7 @@ export type Database = {
           video_calls_used: number
           reconfigs_used: number
           coach_notes: string | null
+          intake_answers: Json | null
           last_payment_id: string | null
           created_at: string
           updated_at: string
@@ -831,6 +878,7 @@ export type Database = {
           video_calls_used?: number
           reconfigs_used?: number
           coach_notes?: string | null
+          intake_answers?: Json | null
           last_payment_id?: string | null
         }
         Update: Partial<Database["public"]["Tables"]["coaching_subscription"]["Insert"]>
@@ -1002,6 +1050,8 @@ export type Database = {
           user_id: string
           rating: number
           comment: string | null
+          image_url: string | null
+          is_published: boolean
           created_at: string
         }
         Insert: {
@@ -1012,6 +1062,8 @@ export type Database = {
           user_id: string
           rating: number
           comment?: string | null
+          image_url?: string | null
+          is_published?: boolean
         }
         Update: Partial<Database["public"]["Tables"]["coaching_review"]["Insert"]>
         Relationships: [
@@ -1142,6 +1194,10 @@ export type CoachingProgram =
   Database["public"]["Tables"]["coaching_program"]["Row"]
 export type CoachingProgramInsert =
   Database["public"]["Tables"]["coaching_program"]["Insert"]
+export type CoachingProgramContent =
+  Database["public"]["Tables"]["coaching_program_content"]["Row"]
+export type CoachingProgramContentInsert =
+  Database["public"]["Tables"]["coaching_program_content"]["Insert"]
 export type CoachRoutineTemplate =
   Database["public"]["Tables"]["coach_routine_template"]["Row"]
 export type CoachRoutineTemplateInsert =

@@ -10,8 +10,20 @@ import {
   getSubscriptionReview,
   createReview,
   cancelUserSubscription,
+  saveIntakeAnswers,
+  saveAdaptiveExercises,
 } from "@/lib/db/coaching"
-import { sendMessageSchema, reviewSchema, type SendMessageValues, type ReviewValues } from "./schema"
+import type { Json } from "@/lib/supabase/types"
+import {
+  sendMessageSchema,
+  reviewSchema,
+  intakeAnswersSchema,
+  adaptiveExercisesSchema,
+  type SendMessageValues,
+  type ReviewValues,
+  type IntakeAnswersValues,
+  type AdaptiveExercisesValues,
+} from "./schema"
 
 export type ActionResult = { error?: string }
 
@@ -141,11 +153,66 @@ export async function createReviewAction(
       user_id: user.id,
       rating: v.rating,
       comment: v.comment || null,
+      image_url: v.imageUrl || null,
     })
   } catch {
     return { error: "No se pudo guardar la reseña." }
   }
 
   revalidatePath("/coaching/mi-asesoria")
+  return {}
+}
+
+// ---------------------------------------------------------------------------
+// Formulario al cliente (respuestas)
+// ---------------------------------------------------------------------------
+
+export async function saveIntakeAnswersAction(
+  values: IntakeAnswersValues
+): Promise<ActionResult> {
+  const parsed = intakeAnswersSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los datos del formulario." }
+
+  const { supabase, user } = await requireUser()
+  const v = parsed.data
+
+  const sub = await getSubscriptionDetail(supabase, v.subscriptionId)
+  if (!sub || sub.user_id !== user.id) {
+    return { error: "Suscripción no encontrada." }
+  }
+
+  try {
+    await saveIntakeAnswers(supabase, v.subscriptionId, user.id, v.answers as Json)
+  } catch {
+    return { error: "No se pudieron guardar tus datos." }
+  }
+
+  revalidatePath("/coaching/mi-asesoria")
+  revalidatePath(`/coach/clients/${v.subscriptionId}`)
+  return {}
+}
+
+// ---------------------------------------------------------------------------
+// Rutina adaptativa (el cliente elige sus ejercicios)
+// ---------------------------------------------------------------------------
+
+export async function saveAdaptiveExercisesAction(
+  values: AdaptiveExercisesValues
+): Promise<ActionResult> {
+  const parsed = adaptiveExercisesSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los ejercicios elegidos." }
+
+  const { supabase } = await requireUser()
+  const v = parsed.data
+
+  // RLS sobre routine_exercises valida que la rutina sea del usuario.
+  try {
+    await saveAdaptiveExercises(supabase, v.routineId, v.exercises)
+  } catch {
+    return { error: "No se pudo guardar tu rutina." }
+  }
+
+  revalidatePath("/coaching/mi-asesoria")
+  revalidatePath("/routines")
   return {}
 }

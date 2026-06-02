@@ -6,8 +6,18 @@ import { ArrowLeft } from "lucide-react"
 import { MessageCircle } from "lucide-react"
 
 import { requireCoach } from "@/lib/auth/guards"
-import { getSubscriptionDetail, listMessages } from "@/lib/db/coaching"
-import { readPerks, isPerkEnabled } from "@/lib/domain/coaching"
+import {
+  getSubscriptionDetail,
+  listMessages,
+  getProgramContent,
+  getIntakeAnswers,
+} from "@/lib/db/coaching"
+import {
+  readPerks,
+  isPerkEnabled,
+  readIntakeForm,
+  readIntakeAnswers,
+} from "@/lib/domain/coaching"
 import { SUBSCRIPTION_STATUS_LABELS } from "@/lib/domain/labels"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -39,6 +49,15 @@ export default async function CoachClientDetailPage({
   const perks = readPerks(sub.perks_snapshot)
   const chatEnabled = isPerkEnabled(perks, "chat") && sub.status === "active"
   const messages = chatEnabled ? await listMessages(supabase, sub.id) : []
+
+  // Respuestas del formulario que cargó el cliente.
+  const [delivery, answersRaw] = await Promise.all([
+    getProgramContent(supabase, sub.program_id).catch(() => null),
+    getIntakeAnswers(supabase, sub.id).catch(() => null),
+  ])
+  const intakeFields = readIntakeForm(delivery?.intake_form)
+  const intakeAnswers = readIntakeAnswers(answersRaw)
+  const hasAnswers = intakeFields.some((f) => intakeAnswers[f.id]?.trim())
   const perkList = [
     isPerkEnabled(perks, "chat") && "Chat",
     perks.video_calls.count > 0 && `${perks.video_calls.count} videollamadas`,
@@ -90,6 +109,31 @@ export default async function CoachClientDetailPage({
           )}
         </CardContent>
       </Card>
+
+      {/* Datos del cliente (respuestas del formulario) */}
+      {intakeFields.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h2 className="text-sm font-medium">Datos del cliente</h2>
+          <Card>
+            <CardContent className="flex flex-col gap-3 py-4 text-sm">
+              {hasAnswers ? (
+                intakeFields.map((f) => (
+                  <div key={f.id} className="flex flex-col gap-0.5">
+                    <span className="text-xs text-muted-foreground">{f.label}</span>
+                    <span className="whitespace-pre-line font-medium">
+                      {intakeAnswers[f.id]?.trim() || "—"}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <span className="text-muted-foreground">
+                  El cliente todavía no completó el formulario.
+                </span>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Chat con el cliente */}
       {chatEnabled && (

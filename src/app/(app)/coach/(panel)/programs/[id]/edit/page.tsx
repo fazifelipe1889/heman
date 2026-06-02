@@ -4,12 +4,12 @@ import { notFound } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 
 import { requireCoach } from "@/lib/auth/guards"
-import { getCoachingProgram } from "@/lib/db/coaching"
-import { ProgramForm } from "@/features/coach/program-form"
+import { getCoachProductWithPlan } from "@/lib/db/coaching"
+import { ProductForm } from "@/features/coach/product-form"
 
-export const metadata: Metadata = { title: "Editar detalles — EPHA" }
+export const metadata: Metadata = { title: "Editar producto — EPHA" }
 
-export default async function EditProgramPage({
+export default async function EditProductPage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -17,8 +17,8 @@ export default async function EditProgramPage({
   const { id } = await params
   const { supabase, coach } = await requireCoach()
 
-  const program = await getCoachingProgram(supabase, id)
-  if (!program || program.coach_id !== coach.id) notFound()
+  const product = await getCoachProductWithPlan(supabase, id)
+  if (!product || product.program.coach_id !== coach.id) notFound()
 
   return (
     <div className="flex flex-col gap-5">
@@ -29,9 +29,15 @@ export default async function EditProgramPage({
         >
           <ArrowLeft className="size-4" /> Volver
         </Link>
-        <h1 className="text-2xl font-bold tracking-tight">Editar detalles</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Editar producto</h1>
       </div>
-      <ProgramForm program={program} />
+      <ProductForm
+        productType={product.program.product_type ?? "asesoria"}
+        program={product.program}
+        plan={product.plan}
+        content={product.content}
+        routineTemplate={product.routineTemplate}
+      />
     </div>
   )
 }

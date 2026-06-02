@@ -74,7 +74,7 @@ export default async function DashboardPage() {
   // Entradas de coaching según el estado del usuario.
   const coachingSections: Section[] = [
     {
-      title: "Asesorías",
+      title: "Asesorías y planes",
       description: "Entrená con un coach profesional.",
       href: "/c",
     },

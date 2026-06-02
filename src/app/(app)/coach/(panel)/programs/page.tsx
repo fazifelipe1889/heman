@@ -1,20 +1,20 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Plus, ChevronRight, Dumbbell } from "lucide-react"
+import { ChevronRight, Dumbbell } from "lucide-react"
 
 import { requireCoach } from "@/lib/auth/guards"
 import { listCoachPrograms } from "@/lib/db/coaching"
 import {
   COACHING_CATEGORY_LABELS,
   COACHING_PROGRAM_STATUS_LABELS,
+  PRODUCT_TYPE_LABELS,
 } from "@/lib/domain/labels"
 import type { CoachingProgramStatus } from "@/lib/domain/coaching"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button, buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { CreateProductButton } from "@/features/coach/create-product-button"
 
-export const metadata: Metadata = { title: "Mis asesorías — EPHA" }
+export const metadata: Metadata = { title: "Mis productos — EPHA" }
 
 const STATUS_VARIANT: Record<CoachingProgramStatus, "default" | "secondary" | "outline"> = {
   published: "default",
@@ -29,13 +29,8 @@ export default async function CoachProgramsPage() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">Mis asesorías</h1>
-        <Link
-          href="/coach/programs/new"
-          className={cn(buttonVariants({ size: "sm" }))}
-        >
-          <Plus className="size-4" /> Nueva
-        </Link>
+        <h1 className="text-2xl font-bold tracking-tight">Mis productos</h1>
+        <CreateProductButton />
       </div>
 
       {programs.length === 0 ? (
@@ -45,14 +40,9 @@ export default async function CoachProgramsPage() {
               <Dumbbell className="size-6" />
             </div>
             <p className="text-sm text-muted-foreground">
-              Todavía no creaste ninguna asesoría.
+              Todavía no creaste ningún producto.
             </p>
-            <Link
-              href="/coach/programs/new"
-              className={buttonVariants()}
-            >
-              <Plus className="size-4" /> Crear la primera
-            </Link>
+            <CreateProductButton size="lg" />
           </CardContent>
         </Card>
       ) : (
@@ -64,6 +54,9 @@ export default async function CoachProgramsPage() {
                   <div className="flex min-w-0 flex-col gap-1">
                     <span className="truncate font-medium">{p.title}</span>
                     <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-[11px]">
+                        {PRODUCT_TYPE_LABELS[p.product_type ?? "asesoria"]}
+                      </Badge>
                       <Badge variant={STATUS_VARIANT[p.status]} className="text-[11px]">
                         {COACHING_PROGRAM_STATUS_LABELS[p.status]}
                       </Badge>

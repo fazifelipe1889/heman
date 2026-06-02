@@ -16,6 +16,10 @@ import {
   createCoachingPlan,
   updateCoachingPlan,
   deleteCoachingPlan,
+  createProduct,
+  updateProduct,
+  upsertProgramContent,
+  upsertRoutineTemplate,
   createCoachTransformation,
   updateCoachTransformation,
   deleteCoachTransformation,
@@ -28,11 +32,13 @@ import {
   coachProfileSchema,
   programSchema,
   planSchema,
+  productSchema,
   transformationSchema,
   coachNotesSchema,
   type CoachProfileValues,
   type ProgramValues,
   type PlanValues,
+  type ProductValues,
   type TransformationValues,
   type CoachNotesValues,
 } from "./schema"
@@ -43,8 +49,20 @@ export type ActionResult = { error?: string }
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Campos de perks compartidos por el form de plan y el de producto. */
+type PerkFormFields = Pick<
+  PlanValues,
+  | "chatEnabled"
+  | "videoCallsCount"
+  | "videoCallMinutes"
+  | "routineEnabled"
+  | "routineReconfigs"
+  | "supplementsEnabled"
+  | "progressSharingEnabled"
+>
+
 /** Construye el contenedor de perks a partir de los valores del formulario. */
-function buildPerks(v: PlanValues): PerkContainer {
+function buildPerks(v: PerkFormFields): PerkContainer {
   return {
     chat: { enabled: v.chatEnabled },
     video_calls: {
@@ -62,15 +80,78 @@ function buildPerks(v: PlanValues): PerkContainer {
 }
 
 /** Bullets de "qué incluye": limpia vacíos. */
-function buildIncludes(v: ProgramValues): string[] {
+function buildIncludes(v: { includes: { value: string }[] }): string[] {
   return v.includes.map((i) => i.value.trim()).filter(Boolean)
 }
 
 /** FAQ: descarta pares incompletos. */
-function buildFaq(v: ProgramValues): { question: string; answer: string }[] {
+function buildFaq(v: {
+  faq: { question: string; answer: string }[]
+}): { question: string; answer: string }[] {
   return v.faq
     .map((f) => ({ question: f.question.trim(), answer: f.answer.trim() }))
     .filter((f) => f.question && f.answer)
+}
+
+/** Bloques de contenido entregable: descarta bloques vacíos. */
+function buildContent(v: ProductValues) {
+  return v.content
+    .map((b) => ({
+      type: b.type,
+      title: b.title?.trim() || undefined,
+      body: b.body?.trim() || undefined,
+      url: b.url?.trim() || undefined,
+    }))
+    .filter((b) => b.title || b.body || b.url)
+}
+
+/**
+ * Construye el payload del template de rutina del coach.
+ * Devuelve null si no hay contenido para guardar.
+ */
+function buildRoutineTemplatePayload(v: ProductValues): Json | null {
+  if (!v.routineEnabled) return null
+  if (v.routineMode === "personalized") {
+    const exercises = v.routineExercises
+      .filter((e) => e.exerciseName.trim())
+      .map((e) => ({
+        exerciseName: e.exerciseName.trim(),
+        exerciseRef: e.exerciseRef || undefined,
+        sets: e.sets,
+        targetReps: e.targetReps?.trim() || undefined,
+        targetWeight: e.targetWeight ?? undefined,
+        targetRir: e.targetRir ?? undefined,
+        restSeconds: e.restSeconds ?? undefined,
+        notes: e.notes?.trim() || undefined,
+      }))
+    if (exercises.length === 0) return null
+    return { mode: "personalized", exercises } as unknown as Json
+  }
+  if (v.routineMode === "adaptive") {
+    const groups = v.routineGroups
+      .filter((g) => g.muscleGroup.trim())
+      .map((g) => ({
+        muscleGroup: g.muscleGroup.trim(),
+        exerciseCount: g.exerciseCount,
+        sets: g.sets,
+        notes: g.notes?.trim() || undefined,
+      }))
+    if (groups.length === 0) return null
+    return { mode: "adaptive", groups } as unknown as Json
+  }
+  return null
+}
+
+/** Definición del formulario: descarta campos sin etiqueta. */
+function buildIntakeForm(v: ProductValues) {
+  return v.intakeForm
+    .map((f) => ({
+      id: f.id,
+      label: f.label.trim(),
+      type: f.type,
+      required: f.required,
+    }))
+    .filter((f) => f.label)
 }
 
 function buildSocials(v: CoachProfileValues): Record<string, string> {
@@ -111,7 +192,10 @@ export async function applyAsCoachAction(
       bio: v.bio || null,
       avatar_url: v.avatarUrl || null,
       cover_url: v.coverUrl || null,
+      location: v.location || null,
+      public_email: v.publicEmail || null,
       socials: buildSocials(v) as Json,
+      faq: buildFaq(v) as Json,
       commission_pct: DEFAULT_COACH_COMMISSION_PCT,
     })
   } catch {
@@ -145,7 +229,10 @@ export async function updateCoachProfileAction(
       bio: v.bio || null,
       avatar_url: v.avatarUrl || null,
       cover_url: v.coverUrl || null,
+      location: v.location || null,
+      public_email: v.publicEmail || null,
       socials: buildSocials(v) as Json,
+      faq: buildFaq(v) as Json,
     })
   } catch {
     return { error: "No se pudo actualizar el perfil." }
@@ -242,6 +329,175 @@ export async function deleteProgramAction(programId: string): Promise<void> {
   await deleteCoachingProgram(supabase, programId)
   revalidatePath("/coach/programs")
   redirect("/coach/programs")
+}
+
+// ---------------------------------------------------------------------------
+// Productos (modelo plano: program + su único plan en una sola operación)
+// ---------------------------------------------------------------------------
+
+export async function createProductAction(
+  values: ProductValues
+): Promise<ActionResult> {
+  const parsed = productSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los datos del producto." }
+
+  const { supabase, coach } = await requireCoach()
+  const v = parsed.data
+
+  // Template de rutina (no-fatal si falla).
+  let routineTemplateId: string | null = null
+  const routinePayload = buildRoutineTemplatePayload(v)
+  if (routinePayload) {
+    try {
+      routineTemplateId = await upsertRoutineTemplate(
+        supabase,
+        coach.id,
+        v.title,
+        null,
+        routinePayload
+      )
+    } catch {
+      // Ignorado: el producto se crea sin template si falla.
+    }
+  }
+
+  let id: string
+  try {
+    id = await createProduct(
+      supabase,
+      {
+        coach_id: coach.id,
+        title: v.title,
+        slug: v.slug,
+        product_type: v.productType,
+        tagline: v.tagline || null,
+        short_description: v.shortDescription || null,
+        description: v.description || null,
+        category: v.category,
+        level: v.level || null,
+        cover_url: v.coverUrl || null,
+        intro_video_url: v.introVideoUrl || null,
+        includes: buildIncludes(v) as Json,
+        faq: buildFaq(v) as Json,
+      },
+      {
+        coach_id: coach.id,
+        name: v.title,
+        description: v.shortDescription || null,
+        price_cents: Math.round(v.price * 100),
+        price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
+        duration_days: v.durationDays,
+        perks: buildPerks(v) as Json,
+        routine_template_id: routineTemplateId,
+        is_visible: true,
+        is_featured: false,
+      }
+    )
+  } catch {
+    return { error: "No se pudo crear el producto. ¿El slug ya existe?" }
+  }
+
+  // El contenido es resiliente: si falla (p. ej. 0024 sin aplicar) no rompe el alta.
+  try {
+    await upsertProgramContent(supabase, {
+      program_id: id,
+      coach_id: coach.id,
+      content: buildContent(v) as Json,
+      intake_form: buildIntakeForm(v) as Json,
+      nutrition_notes: v.nutritionNotes?.trim() || null,
+    })
+  } catch {
+    // Ignorado a propósito.
+  }
+
+  revalidatePath("/coach/programs")
+  redirect(`/coach/programs/${id}`)
+}
+
+export async function updateProductAction(
+  programId: string,
+  existingPlanId: string | null,
+  existingTemplateId: string | null,
+  values: ProductValues
+): Promise<ActionResult> {
+  const parsed = productSchema.safeParse(values)
+  if (!parsed.success) return { error: "Revisá los datos del producto." }
+
+  const { supabase, coach } = await requireCoach()
+  const v = parsed.data
+
+  // Template de rutina (no-fatal si falla).
+  let routineTemplateId: string | null = existingTemplateId
+  const routinePayload = buildRoutineTemplatePayload(v)
+  if (routinePayload) {
+    try {
+      routineTemplateId = await upsertRoutineTemplate(
+        supabase,
+        coach.id,
+        v.title,
+        null,
+        routinePayload,
+        existingTemplateId ?? undefined
+      )
+    } catch {
+      // Ignorado: el producto se actualiza sin template si falla.
+    }
+  } else if (!v.routineEnabled) {
+    routineTemplateId = null
+  }
+
+  try {
+    await updateProduct(
+      supabase,
+      programId,
+      {
+        title: v.title,
+        slug: v.slug,
+        product_type: v.productType,
+        tagline: v.tagline || null,
+        short_description: v.shortDescription || null,
+        description: v.description || null,
+        category: v.category,
+        level: v.level || null,
+        cover_url: v.coverUrl || null,
+        intro_video_url: v.introVideoUrl || null,
+        includes: buildIncludes(v) as Json,
+        faq: buildFaq(v) as Json,
+      },
+      {
+        coach_id: coach.id,
+        name: v.title,
+        description: v.shortDescription || null,
+        price_cents: Math.round(v.price * 100),
+        price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
+        duration_days: v.durationDays,
+        perks: buildPerks(v) as Json,
+        routine_template_id: routineTemplateId,
+        is_visible: true,
+        is_featured: false,
+      },
+      existingPlanId
+    )
+  } catch {
+    return { error: "No se pudo actualizar el producto." }
+  }
+
+  // El contenido es resiliente: si falla (p. ej. 0024 sin aplicar) no rompe la edición.
+  try {
+    await upsertProgramContent(supabase, {
+      program_id: programId,
+      coach_id: coach.id,
+      content: buildContent(v) as Json,
+      intake_form: buildIntakeForm(v) as Json,
+      nutrition_notes: v.nutritionNotes?.trim() || null,
+    })
+  } catch {
+    // Ignorado a propósito.
+  }
+
+  revalidatePath(`/coach/programs/${programId}`)
+  revalidatePath("/coach/programs")
+  return {}
 }
 
 // ---------------------------------------------------------------------------

@@ -1,30 +1,40 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Pencil, Plus, Eye } from "lucide-react"
+import {
+  ArrowLeft,
+  Plus,
+  Eye,
+  Pencil,
+  MessageCircle,
+  Video,
+  Dumbbell,
+  Pill,
+  LineChart,
+} from "lucide-react"
 
 import { requireCoach } from "@/lib/auth/guards"
 import {
-  getCoachingProgram,
-  listProgramPlans,
+  getCoachProductWithPlan,
   listCoachTransformations,
 } from "@/lib/db/coaching"
 import {
   COACHING_CATEGORY_LABELS,
   COACHING_PROGRAM_STATUS_LABELS,
+  PRODUCT_TYPE_LABELS,
 } from "@/lib/domain/labels"
+import { formatMoney, readPerks } from "@/lib/domain/coaching"
 import { Card, CardContent } from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { ProgramStatusControl } from "@/features/coach/program-status-control"
-import { PlansList } from "@/features/coach/plans-list"
 import { TransformationsList } from "@/features/coach/transformations-list"
 import { DeleteProgramButton } from "@/features/coach/delete-program-button"
 
-export const metadata: Metadata = { title: "Editar asesoría — EPHA" }
+export const metadata: Metadata = { title: "Producto — EPHA" }
 
-export default async function ProgramDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -32,21 +42,37 @@ export default async function ProgramDetailPage({
   const { id } = await params
   const { supabase, coach } = await requireCoach()
 
-  const program = await getCoachingProgram(supabase, id)
-  if (!program || program.coach_id !== coach.id) notFound()
+  const product = await getCoachProductWithPlan(supabase, id)
+  if (!product || product.program.coach_id !== coach.id) notFound()
 
-  const plans = await listProgramPlans(supabase, id)
-  const visiblePlanCount = plans.filter((p) => p.is_visible).length
-  // En este programa solo gestionamos las transformaciones propias de la asesoría.
-  // Tolerante a que la migración 0019 aún no esté aplicada (no rompe la gestión de planes).
-  let programTransformations: Awaited<
+  const { program, plan } = product
+  const visiblePlanCount = plan && plan.is_visible ? 1 : 0
+
+  const perks = plan ? readPerks(plan.perks) : null
+  const perkLines: { icon: React.ElementType; label: string }[] = []
+  if (perks?.chat.enabled)
+    perkLines.push({ icon: MessageCircle, label: "Chat con el coach" })
+  if ((perks?.video_calls.count ?? 0) > 0)
+    perkLines.push({
+      icon: Video,
+      label: `${perks!.video_calls.count} videollamada${perks!.video_calls.count > 1 ? "s" : ""}`,
+    })
+  if (perks?.routine.enabled)
+    perkLines.push({ icon: Dumbbell, label: "Rutina personalizada" })
+  if (perks?.supplements.enabled)
+    perkLines.push({ icon: Pill, label: "Plan de suplementación" })
+  if (perks?.progress_sharing.enabled)
+    perkLines.push({ icon: LineChart, label: "Seguimiento de progreso" })
+
+  // Transformaciones del producto. Tolerante a que 0019 no esté aplicada.
+  let productTransformations: Awaited<
     ReturnType<typeof listCoachTransformations>
   > = []
   try {
     const transformations = await listCoachTransformations(supabase, coach.id)
-    programTransformations = transformations.filter((t) => t.program_id === id)
+    productTransformations = transformations.filter((t) => t.program_id === id)
   } catch {
-    programTransformations = []
+    productTransformations = []
   }
 
   return (
@@ -56,12 +82,15 @@ export default async function ProgramDetailPage({
           href="/coach/programs"
           className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="size-4" /> Asesorías
+          <ArrowLeft className="size-4" /> Mis productos
         </Link>
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-col gap-1">
             <h1 className="text-2xl font-bold tracking-tight">{program.title}</h1>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline">
+                {PRODUCT_TYPE_LABELS[program.product_type ?? "asesoria"]}
+              </Badge>
               <Badge variant={program.status === "published" ? "default" : "secondary"}>
                 {COACHING_PROGRAM_STATUS_LABELS[program.status]}
               </Badge>
@@ -73,12 +102,51 @@ export default async function ProgramDetailPage({
           <Link
             href={`/coach/programs/${id}/edit`}
             className={cn(buttonVariants({ variant: "ghost", size: "icon" }))}
-            aria-label="Editar detalles"
+            aria-label="Editar producto"
           >
             <Pencil className="size-4" />
           </Link>
         </div>
       </div>
+
+      {/* Resumen del producto */}
+      <Card>
+        <CardContent className="flex flex-col gap-3 py-4">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-sm font-medium">Resumen</span>
+            <Link
+              href={`/coach/programs/${id}/edit`}
+              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+            >
+              <Pencil className="size-4" /> Editar
+            </Link>
+          </div>
+          {plan ? (
+            <>
+              <span className="text-sm text-muted-foreground">
+                {formatMoney(plan.price_cents, plan.currency)}
+                {plan.price_usd_cents != null && (
+                  <> · {formatMoney(plan.price_usd_cents, "USD")}</>
+                )}{" "}
+                · {plan.duration_days} días
+              </span>
+              {perkLines.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {perkLines.map((l) => (
+                    <Badge key={l.label} variant="secondary" className="text-[11px]">
+                      {l.label}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <span className="text-sm text-muted-foreground">
+              Falta configurar precio y duración. Tocá “Editar”.
+            </span>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Estado de publicación */}
       <Card>
@@ -102,20 +170,6 @@ export default async function ProgramDetailPage({
         </CardContent>
       </Card>
 
-      {/* Planes */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold">Planes</h2>
-          <Link
-            href={`/coach/programs/${id}/plans/new`}
-            className={cn(buttonVariants({ size: "sm" }))}
-          >
-            <Plus className="size-4" /> Plan
-          </Link>
-        </div>
-        <PlansList programId={id} plans={plans} />
-      </div>
-
       {/* Transformaciones (prueba social) */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
@@ -129,7 +183,7 @@ export default async function ProgramDetailPage({
         </div>
         <TransformationsList
           programId={id}
-          transformations={programTransformations}
+          transformations={productTransformations}
         />
       </div>
 
