@@ -17,14 +17,5 @@ export const signUpSchema = z.object({
   }),
 })
 
-export const verifyOtpSchema = z.object({
-  email: z.email("Email inválido"),
-  token: z
-    .string()
-    .trim()
-    .regex(/^\d{6}$/, "El código son 6 dígitos"),
-})
-
 export type SignInValues = z.infer<typeof signInSchema>
 export type SignUpValues = z.infer<typeof signUpSchema>
-export type VerifyOtpValues = z.infer<typeof verifyOtpSchema>

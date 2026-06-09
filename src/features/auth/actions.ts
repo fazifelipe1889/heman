@@ -6,15 +6,12 @@ import { createClient } from "@/lib/supabase/server"
 import {
   signInSchema,
   signUpSchema,
-  verifyOtpSchema,
   type SignInValues,
   type SignUpValues,
-  type VerifyOtpValues,
 } from "./schemas"
 
 export type AuthResult = {
   error?: string
-  needsConfirmation?: boolean
 }
 
 /** Traduce los mensajes de error de Supabase Auth a español. */
@@ -55,61 +52,16 @@ export async function signUpAction(values: SignUpValues): Promise<AuthResult> {
   if (!parsed.success) return { error: "Datos inválidos." }
 
   const supabase = await createClient()
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: { data: { full_name: parsed.data.fullName } },
   })
   if (error) return { error: mapAuthError(error.message) }
 
-  // Defensa contra el auto-login: si el proyecto de Supabase tiene la
-  // confirmación de email desactivada, signUp devuelve una sesión y el usuario
-  // queda logueado sin verificar su correo. Cerramos esa sesión y forzamos
-  // siempre el paso de confirmación por código.
-  if (data.session) {
-    await supabase.auth.signOut()
-  }
-
-  // El usuario debe ingresar el código de 6 dígitos que recibió por email.
-  return { needsConfirmation: true }
-}
-
-/**
- * Verifica el código OTP de 6 dígitos que el usuario recibió por email tras
- * registrarse. Si es válido, Supabase confirma la cuenta y crea la sesión.
- */
-export async function verifyOtpAction(
-  values: VerifyOtpValues,
-): Promise<AuthResult> {
-  const parsed = verifyOtpSchema.safeParse(values)
-  if (!parsed.success) return { error: "Código inválido." }
-
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.verifyOtp({
-    email: parsed.data.email,
-    token: parsed.data.token,
-    type: "signup",
-  })
-  if (error) return { error: mapAuthError(error.message) }
-  if (!data.session) return { error: "No se pudo confirmar la cuenta." }
-
   redirect("/onboarding")
 }
 
-/** Reenvía el código de confirmación al email indicado. */
-export async function resendOtpAction(email: string): Promise<AuthResult> {
-  const parsed = signInSchema.shape.email.safeParse(email)
-  if (!parsed.success) return { error: "Email inválido." }
-
-  const supabase = await createClient()
-  const { error } = await supabase.auth.resend({
-    type: "signup",
-    email: parsed.data,
-  })
-  if (error) return { error: mapAuthError(error.message) }
-
-  return {}
-}
 
 export async function signOutAction(): Promise<void> {
   const supabase = await createClient()

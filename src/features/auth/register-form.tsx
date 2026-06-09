@@ -18,12 +18,10 @@ import {
 } from "@/components/ui/form"
 import { signUpAction } from "./actions"
 import { signUpSchema, type SignUpValues } from "./schemas"
-import { ConfirmEmailForm } from "./confirm-email-form"
 
 export function RegisterForm() {
   const [isPending, startTransition] = React.useTransition()
   const [formError, setFormError] = React.useState<string | null>(null)
-  const [confirmEmail, setConfirmEmail] = React.useState<string | null>(null)
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -35,12 +33,7 @@ export function RegisterForm() {
     startTransition(async () => {
       const res = await signUpAction(values)
       if (res?.error) setFormError(res.error)
-      else if (res?.needsConfirmation) setConfirmEmail(values.email)
     })
-  }
-
-  if (confirmEmail) {
-    return <ConfirmEmailForm email={confirmEmail} />
   }
 
   return (
