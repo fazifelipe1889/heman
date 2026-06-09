@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { createClient } from "@/lib/supabase/server"
-import { getExercises } from "@/lib/db/exercises"
+import { getAllExercises } from "@/lib/db/exercises"
 import { ExerciseBrowser } from "@/features/exercises/exercise-browser"
 
 export const metadata: Metadata = {
@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 
 export default async function ExercisesPage() {
   const supabase = await createClient()
-  // Cargar todos los globales de una vez (424 ejercicios ≈ trivial)
-  const { exercises } = await getExercises(supabase, {}, 0)
+  // Cargar todo el catálogo de una vez (~252 ejercicios ≈ trivial); el browser
+  // filtra y busca client-side.
+  const exercises = await getAllExercises(supabase)
 
   return <ExerciseBrowser exercises={exercises} />
 }

@@ -38,6 +38,23 @@ export async function getExercises(
 }
 
 /**
+ * Devuelve el catálogo global completo (created_by IS NULL) + los del usuario,
+ * sin paginar. Pensado para el browser de ejercicios, que filtra y busca
+ * client-side sobre todo el catálogo (~252 filas, trivial).
+ */
+export async function getAllExercises(
+  supabase: SupabaseClient,
+): Promise<Exercise[]> {
+  const { data, error } = await supabase
+    .from("exercises")
+    .select("*")
+    .order("name")
+
+  if (error) throw error
+  return (data ?? []) as Exercise[]
+}
+
+/**
  * Búsqueda rápida para el selector del builder (devuelve solo id + name + primary_muscle_group).
  */
 export async function searchExercises(
