@@ -23,7 +23,7 @@ import {
   COACHING_PROGRAM_STATUS_LABELS,
   PRODUCT_TYPE_LABELS,
 } from "@/lib/domain/labels"
-import { formatMoney, readPerks } from "@/lib/domain/coaching"
+import { formatMoney, readPerks, readCategories } from "@/lib/domain/coaching"
 import { Card, CardContent } from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils"
 import { ProgramStatusControl } from "@/features/coach/program-status-control"
 import { TransformationsList } from "@/features/coach/transformations-list"
 import { DeleteProgramButton } from "@/features/coach/delete-program-button"
+import { ShareLinkButton } from "@/features/coach/share-link-button"
 
 export const metadata: Metadata = { title: "Producto — EPHA" }
 
@@ -94,9 +95,11 @@ export default async function ProductDetailPage({
               <Badge variant={program.status === "published" ? "default" : "secondary"}>
                 {COACHING_PROGRAM_STATUS_LABELS[program.status]}
               </Badge>
-              <span className="text-sm text-muted-foreground">
-                {COACHING_CATEGORY_LABELS[program.category]}
-              </span>
+              {readCategories(program.category).map((cat) => (
+                <span key={cat} className="text-sm text-muted-foreground">
+                  {COACHING_CATEGORY_LABELS[cat]}
+                </span>
+              ))}
             </div>
           </div>
           <Link
@@ -154,12 +157,21 @@ export default async function ProductDetailPage({
           <div className="flex items-center justify-between gap-3">
             <span className="text-sm font-medium">Estado</span>
             {program.status === "published" && (
-              <Link
-                href={`/c/${coach.handle}/${program.slug}`}
-                className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
-              >
-                <Eye className="size-4" /> Ver
-              </Link>
+              <div className="flex items-center gap-1">
+                <ShareLinkButton
+                  path={`/c/${coach.handle}/${program.slug}`}
+                  label="Compartir"
+                  shareTitle={program.title}
+                  variant="ghost"
+                  size="sm"
+                />
+                <Link
+                  href={`/c/${coach.handle}/${program.slug}`}
+                  className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                >
+                  <Eye className="size-4" /> Ver
+                </Link>
+              </div>
             )}
           </div>
           <ProgramStatusControl

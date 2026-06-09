@@ -1,12 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { Send, Loader2 } from "lucide-react"
+import { Send } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner"
 import type { CoachingMessage } from "@/lib/supabase/types"
 import { sendMessageAction, markThreadReadAction } from "./actions"
 
@@ -145,7 +146,7 @@ export function ChatPanel({
             aria-label="Enviar"
           >
             {isSending ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Spinner />
             ) : (
               <Send className="size-4" />
             )}

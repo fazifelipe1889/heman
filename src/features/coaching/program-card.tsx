@@ -3,7 +3,7 @@ import { Star, BadgeCheck } from "lucide-react"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { formatMoney, getInitials } from "@/lib/domain/coaching"
+import { formatMoney, getInitials, readCategories } from "@/lib/domain/coaching"
 import { COACHING_CATEGORY_LABELS } from "@/lib/domain/labels"
 import type { MarketplaceProgram } from "@/lib/db/coaching"
 
@@ -27,10 +27,12 @@ export function ProgramCard({ program }: { program: MarketplaceProgram }) {
           <div className="h-32 w-full bg-gradient-to-br from-primary/20 to-muted" />
         )}
         <CardContent className="flex flex-col gap-2 py-3">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-[11px]">
-              {COACHING_CATEGORY_LABELS[program.category]}
-            </Badge>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {readCategories(program.category).map((cat) => (
+              <Badge key={cat} variant="secondary" className="text-[11px]">
+                {COACHING_CATEGORY_LABELS[cat]}
+              </Badge>
+            ))}
             {program.level && (
               <span className="text-xs text-muted-foreground">{program.level}</span>
             )}

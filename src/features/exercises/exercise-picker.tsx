@@ -232,24 +232,44 @@ function ExerciseRow({
     <button
       type="button"
       onClick={onSelect}
-      className="flex w-full flex-col gap-1 rounded-xl border border-border bg-background/60 p-3 text-left transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
+      className="flex w-full items-center gap-3 rounded-xl border border-border bg-background/60 p-3 text-left transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
     >
-      <div className="flex items-start justify-between gap-2">
+      {/* Info */}
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-sm font-medium leading-snug">{ex.name}</span>
-        <span
-          className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium ${diffColor}`}
-        >
-          {ex.difficulty}
-        </span>
+        <div className="flex flex-wrap gap-1">
+          <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
+            {ex.primary_muscle_group}
+          </span>
+          <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">
+            {ex.equipment}
+          </span>
+          <span
+            className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${diffColor}`}
+          >
+            {ex.difficulty}
+          </span>
+        </div>
       </div>
-      <div className="flex flex-wrap gap-1">
-        <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
-          {ex.primary_muscle_group}
-        </span>
-        <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">
-          {ex.equipment}
-        </span>
-      </div>
+
+      {/* Imagen */}
+      {ex.image_url ? (
+        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted/40">
+          <img
+            src={ex.image_url}
+            alt={ex.name}
+            className="h-full w-full object-contain"
+          />
+        </div>
+      ) : (
+        <div className="flex size-14 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/40 text-muted-foreground/30">
+          <svg viewBox="0 0 24 24" className="size-7 fill-none stroke-current stroke-[1.5]">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <circle cx="8.5" cy="9.5" r="1.5" />
+            <path d="m21 15-5-5L5 19" />
+          </svg>
+        </div>
+      )}
     </button>
   )
 }

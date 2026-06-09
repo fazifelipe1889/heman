@@ -1,0 +1,3115 @@
+[
+  {
+    "name": "Press de Banca Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros (anterior)"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje horizontal",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre a la anchura de los hombros, bajar la barra al pecho y empujar.",
+    "image_url": "/exercises/1.jpg"
+  },
+  {
+    "name": "Press de Banca Inclinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)",
+      "Triceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje inclinado",
+    "difficulty": "Intermedio",
+    "instructions": "Banco a 30-45, enfatiza la parte superior del pecho.",
+    "image_url": "/exercises/2.jpg"
+  },
+  {
+    "name": "Press de Banca Declinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje declinado",
+    "difficulty": "Intermedio",
+    "instructions": "Banco declinado, enfatiza la parte inferior del pecho.",
+    "image_url": null
+  },
+  {
+    "name": "Press de Banca Agarre Estrecho",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje estrecho",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre a la anchura de hombros, codos pegados al cuerpo.",
+    "image_url": "/exercises/4.jpg"
+  },
+  {
+    "name": "Press Guillotina (Neck Press)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje horizontal alto",
+    "difficulty": "Avanzado",
+    "instructions": "Barra baja hacia el cuello/garganta, maximo estiramiento pectoral superior.",
+    "image_url": "/exercises/5.jpg"
+  },
+  {
+    "name": "Svend Press",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Aislamiento de aduccion",
+    "difficulty": "Principiante",
+    "instructions": "Plato presionado entre las manos frente al pecho, empujar hacia adelante manteniendo la presion.",
+    "image_url": "/exercises/6.jpg"
+  },
+  {
+    "name": "Press de Banca con Mancuernas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros (anterior)"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Mayor rango de movimiento que con barra.",
+    "image_url": "/exercises/7.jpg"
+  },
+  {
+    "name": "Press Inclinado con Mancuernas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)",
+      "Triceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje inclinado",
+    "difficulty": "Principiante",
+    "instructions": "Banco a 30-45.",
+    "image_url": "/exercises/8.jpg"
+  },
+  {
+    "name": "Press Declinado con Mancuernas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje declinado",
+    "difficulty": "Principiante",
+    "instructions": "Banco declinado, codos a 75 grados.",
+    "image_url": "/exercises/9.jpg"
+  },
+  {
+    "name": "Aperturas con Mancuernas Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Brazos ligeramente flexionados, arco amplio.",
+    "image_url": "/exercises/10.jpg"
+  },
+  {
+    "name": "Aperturas Inclinadas con Mancuernas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento inclinado",
+    "difficulty": "Principiante",
+    "instructions": "Banco a 30, arco controlado.",
+    "image_url": "/exercises/11.jpg"
+  },
+  {
+    "name": "Aperturas Declinadas con Mancuernas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento declinado",
+    "difficulty": "Principiante",
+    "instructions": "Banco declinado, enfasis en pecho inferior.",
+    "image_url": "/exercises/12.jpg"
+  },
+  {
+    "name": "Pullover con Mancuerna",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Dorsal",
+      "Triceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento",
+    "difficulty": "Intermedio",
+    "instructions": "Tumbado en banco, bajar la mancuerna por detras de la cabeza.",
+    "image_url": "/exercises/13.jpg"
+  },
+  {
+    "name": "Press de Banca con Mancuernas Agarre Neutro",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje horizontal neutro",
+    "difficulty": "Principiante",
+    "instructions": "Palmas enfrentadas, menos estres en hombros.",
+    "image_url": "/exercises/14.jpg"
+  },
+  {
+    "name": "Press de Banca Una Mancuerna (Unilateral)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Core"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje horizontal unilateral",
+    "difficulty": "Intermedio",
+    "instructions": "Un brazo a la vez, mayor demanda de estabilizacion.",
+    "image_url": "/exercises/15.jpg"
+  },
+  {
+    "name": "Press en Maquina Pecho Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Guiado, ideal para principiantes o fatiga.",
+    "image_url": "/exercises/16.jpg"
+  },
+  {
+    "name": "Press en Maquina Pecho Inclinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)",
+      "Triceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje inclinado",
+    "difficulty": "Principiante",
+    "instructions": "Angulo fijo, enfasis pecho superior.",
+    "image_url": "/exercises/17.jpg"
+  },
+  {
+    "name": "Pec Deck (Aperturas en Maquina)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Aislamiento horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Mantener tension constante, ideal para finalizacion.",
+    "image_url": "/exercises/18.jpg"
+  },
+  {
+    "name": "Hammer Strength Press Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje horizontal articulado",
+    "difficulty": "Intermedio",
+    "instructions": "Maquina de palanca, permite movimiento mas natural que guiado.",
+    "image_url": "/exercises/19.jpg"
+  },
+  {
+    "name": "Hammer Strength Press Inclinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)",
+      "Triceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje inclinado articulado",
+    "difficulty": "Intermedio",
+    "instructions": "Palanca inclinada, pecho superior.",
+    "image_url": "/exercises/20.jpg"
+  },
+  {
+    "name": "Press en Maquina Smith Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Maquina Smith",
+    "movement_type": "Empuje horizontal guiado",
+    "difficulty": "Principiante",
+    "instructions": "Movimiento guiado en plano horizontal.",
+    "image_url": "/exercises/21.jpg"
+  },
+  {
+    "name": "Press en Maquina Smith Inclinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Maquina Smith",
+    "movement_type": "Empuje inclinado guiado",
+    "difficulty": "Principiante",
+    "instructions": "Movimiento guiado en plano inclinado.",
+    "image_url": "/exercises/22.jpg"
+  },
+  {
+    "name": "Cruce de Poleas Alto a Bajo",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento cruzado",
+    "difficulty": "Principiante",
+    "instructions": "Poleas altas, cruzar hacia abajo y adentro.",
+    "image_url": "/exercises/23.jpg"
+  },
+  {
+    "name": "Cruce de Poleas Bajo a Alto",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento cruzado",
+    "difficulty": "Principiante",
+    "instructions": "Poleas bajas, cruzar hacia arriba.",
+    "image_url": "/exercises/24.jpg"
+  },
+  {
+    "name": "Cruce de Poleas Neutro",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento cruzado",
+    "difficulty": "Principiante",
+    "instructions": "Poleas a altura media.",
+    "image_url": "/exercises/25.jpg"
+  },
+  {
+    "name": "Press con Cable Plano",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Empuje horizontal",
+    "difficulty": "Intermedio",
+    "instructions": "Tension constante a diferencia de la barra.",
+    "image_url": "/exercises/26.jpg"
+  },
+  {
+    "name": "Press con Cable Inclinado",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)",
+      "Triceps"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Empuje inclinado",
+    "difficulty": "Intermedio",
+    "instructions": "Polea baja, enfasis pecho superior.",
+    "image_url": "/exercises/27.jpg"
+  },
+  {
+    "name": "Apertura Unilateral en Cable",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Hombros (anterior)"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento unilateral",
+    "difficulty": "Intermedio",
+    "instructions": "Un brazo a la vez, mayor rango y contraccion.",
+    "image_url": "/exercises/28.jpg"
+  },
+  {
+    "name": "Flexiones (Push-ups)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Manos a anchura de hombros, cuerpo recto.",
+    "image_url": "/exercises/29.jpg"
+  },
+  {
+    "name": "Flexiones Inclinadas (Pies Elevados)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Pecho Superior",
+      "Triceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje declinado",
+    "difficulty": "Intermedio",
+    "instructions": "Pies elevados, mayor enfasis pecho superior.",
+    "image_url": "/exercises/30.jpg"
+  },
+  {
+    "name": "Flexiones Declinadas (Manos Elevadas)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Pecho Inferior",
+      "Triceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje inclinado",
+    "difficulty": "Principiante",
+    "instructions": "Manos sobre superficie elevada, pecho inferior.",
+    "image_url": "/exercises/31.jpg"
+  },
+  {
+    "name": "Flexiones Explosivas (Clap Push-ups)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje horizontal explosivo",
+    "difficulty": "Avanzado",
+    "instructions": "Empujar con fuerza para despegar las manos y aplaudir.",
+    "image_url": "/exercises/32.jpg"
+  },
+  {
+    "name": "Fondos en Paralelas (Pecho)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje vertical declinado",
+    "difficulty": "Intermedio",
+    "instructions": "Inclinar el torso hacia adelante para mayor enfasis en pecho.",
+    "image_url": "/exercises/33.jpg"
+  },
+  {
+    "name": "Flexiones Arqueras (Archer Push-ups)",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje unilateral",
+    "difficulty": "Avanzado",
+    "instructions": "Extender un brazo lateralmente mientras el otro hace la flexion.",
+    "image_url": "/exercises/34.jpg"
+  },
+  {
+    "name": "Flexiones con Manos Juntas",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje estrecho",
+    "difficulty": "Intermedio",
+    "instructions": "Mayor activacion del triceps lateral.",
+    "image_url": "/exercises/35.jpg"
+  },
+  {
+    "name": "Push-up en Anillas",
+    "primary_muscle_group": "Pecho",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Core",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje horizontal inestable",
+    "difficulty": "Avanzado",
+    "instructions": "Manos en anillas, requiere gran estabilizacion escapular.",
+    "image_url": "/exercises/36.jpg"
+  },
+  {
+    "name": "Peso Muerto Convencional",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales",
+      "Trapecios",
+      "Cuadriceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera",
+    "difficulty": "Avanzado",
+    "instructions": "Barra sobre el mediepie, espalda neutra, empujar el suelo al tirar.",
+    "image_url": "/exercises/37.jpg"
+  },
+  {
+    "name": "Peso Muerto Sumo",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Aductores",
+      "Cuadriceps",
+      "Espalda Baja"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera amplia",
+    "difficulty": "Avanzado",
+    "instructions": "Pies muy abiertos, puntas hacia afuera, agarre interior, torso mas erguido.",
+    "image_url": "/exercises/38.jpg"
+  },
+  {
+    "name": "Peso Muerto Rumano",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Espalda Baja"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera",
+    "difficulty": "Intermedio",
+    "instructions": "Rodillas ligeramente flexionadas, barra baja por las piernas.",
+    "image_url": "/exercises/39.jpg"
+  },
+  {
+    "name": "Peso Muerto con Barra Trap (Hexagonal)",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales",
+      "Cuadriceps"
+    ],
+    "equipment": "Barra Hexagonal",
+    "movement_type": "Bisagra de cadera",
+    "difficulty": "Intermedio",
+    "instructions": "Barra hexagonal, agarre neutro, postura intermedia entre convencional y sentadilla.",
+    "image_url": "/exercises/40.jpg"
+  },
+  {
+    "name": "Peso Muerto Piernas Rigidas (SLDL)",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Espalda Baja"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera",
+    "difficulty": "Intermedio",
+    "instructions": "Rodillas casi bloqueadas, maximo estiramiento de isquiotibiales.",
+    "image_url": "/exercises/41.jpg"
+  },
+  {
+    "name": "Peso Muerto Sumo con Mancuernas",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Aductores"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Bisagra de cadera amplia",
+    "difficulty": "Principiante",
+    "instructions": "Postura sumo, mancuernas frente al cuerpo.",
+    "image_url": "/exercises/42.jpg"
+  },
+  {
+    "name": "Peso Muerto con Deficit",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera desde elevacion",
+    "difficulty": "Avanzado",
+    "instructions": "De pie sobre una plataforma elevada, mayor rango de movimiento.",
+    "image_url": "/exercises/43.jpg"
+  },
+  {
+    "name": "Peso Muerto a Una Pierna con Barra",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera unilateral",
+    "difficulty": "Avanzado",
+    "instructions": "Mayor demanda de equilibrio y estabilizacion.",
+    "image_url": "/exercises/44.jpg"
+  },
+  {
+    "name": "Buenos Dias (Good Morning)",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Gluteos"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Bisagra de cadera",
+    "difficulty": "Avanzado",
+    "instructions": "Barra en trapecios, inclinarse hasta la horizontal manteniendo espalda neutra.",
+    "image_url": "/exercises/45.jpg"
+  },
+  {
+    "name": "Hiperextension con Barra",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Extension de cadera/columna",
+    "difficulty": "Intermedio",
+    "instructions": "En banco romano, sostener una barra frente al pecho.",
+    "image_url": "/exercises/46.jpg"
+  },
+  {
+    "name": "Remo con Barra Prono (Pendlay)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides",
+      "Trapecios"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal",
+    "difficulty": "Intermedio",
+    "instructions": "Torso paralelo al suelo, tirar la barra hacia el abdomen bajo.",
+    "image_url": "/exercises/47.jpg"
+  },
+  {
+    "name": "Remo con Barra Supino",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal supina",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre supino, mayor activacion del dorsal.",
+    "image_url": "/exercises/48.jpg"
+  },
+  {
+    "name": "Remo con Barra Agarre Estrecho",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal estrecha",
+    "difficulty": "Intermedio",
+    "instructions": "Manos juntas, mayor enfasis en romboides.",
+    "image_url": "/exercises/49.jpg"
+  },
+  {
+    "name": "Remo al Menton con Barra",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros (lateral)",
+      "Biceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre estrecho, tirar la barra hacia el menton.",
+    "image_url": "/exercises/50.jpg"
+  },
+  {
+    "name": "Remo con Barra en T (T-Bar Row)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides",
+      "Trapecios"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal",
+    "difficulty": "Intermedio",
+    "instructions": "Un extremo de la barra anclado, tirar del otro extremo con mangos.",
+    "image_url": "/exercises/51.jpg"
+  },
+  {
+    "name": "Remo Chest Supported en T-Bar",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal apoyada",
+    "difficulty": "Intermedio",
+    "instructions": "Pecho apoyado en pad inclinado, elimina el uso de la espalda baja.",
+    "image_url": "/exercises/52.jpg"
+  },
+  {
+    "name": "Seal Row",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Traccion horizontal tumbado",
+    "difficulty": "Avanzado",
+    "instructions": "Tumbado boca abajo sobre un banco alto, remo colgando libremente.",
+    "image_url": "/exercises/53.jpg"
+  },
+  {
+    "name": "Jalon al Pecho con barra",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion vertical amplia",
+    "difficulty": "Principiante",
+    "instructions": "Barra larga, agarre prono, tirar hacia la clavicula.",
+    "image_url": "/exercises/54.jpg"
+  },
+  {
+    "name": "Jalon Tras Nuca",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion vertical posterior",
+    "difficulty": "Intermedio",
+    "instructions": "Barra detras de la cabeza, requiere buena movilidad cervical.",
+    "image_url": "/exercises/55.jpg"
+  },
+  {
+    "name": "Jalon Agarre Supino",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion vertical supina",
+    "difficulty": "Principiante",
+    "instructions": "Palmas mirando hacia vos, mayor activacion de biceps.",
+    "image_url": "/exercises/56.jpg"
+  },
+  {
+    "name": "Remo en Maquina Sentado (Polea)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides",
+      "Trapecios"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion horizontal sentado",
+    "difficulty": "Principiante",
+    "instructions": "Pies en los pedales, tirar con mangos hacia el abdomen.",
+    "image_url": "/exercises/57.jpg"
+  },
+  {
+    "name": "Remo Hammer Strength Un Brazo",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion horizontal unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Palanca articulada, un brazo a la vez.",
+    "image_url": "/exercises/58.jpg"
+  },
+  {
+    "name": "Remo Hammer Strength Bilateral",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Traccion horizontal bilateral",
+    "difficulty": "Principiante",
+    "instructions": "Ambos brazos simultaneamente.",
+    "image_url": "/exercises/59.jpg"
+  },
+  {
+    "name": "Pullover en Maquina (Nautilus)",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Triceps largo",
+      "Pecho"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Tiracion vertical/anterior",
+    "difficulty": "Intermedio",
+    "instructions": "Codos sobre el pad, llevar los brazos de arriba hacia adelante y abajo.",
+    "image_url": "/exercises/60.jpg"
+  },
+  {
+    "name": "Jalon Unilateral (Cable)",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion vertical unilateral",
+    "difficulty": "Intermedio",
+    "instructions": "Un brazo a la vez, mayor rango y contraccion.",
+    "image_url": "/exercises/61.jpg"
+  },
+  {
+    "name": "Remo con Cable Sentado (Mangos V)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Mangos V, tirar con codos pegados al cuerpo.",
+    "image_url": "/exercises/62.jpg"
+  },
+  {
+    "name": "Remo con Cable Agarre Amplio",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Romboides",
+      "Trapecios"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion horizontal amplia",
+    "difficulty": "Intermedio",
+    "instructions": "Barra larga, codos hacia afuera, mayor trabajo de romboides.",
+    "image_url": "/exercises/63.jpg"
+  },
+  {
+    "name": "Remo Unilateral con Cable",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion horizontal unilateral",
+    "difficulty": "Intermedio",
+    "instructions": "Un brazo, mayor rango de rotacion escapular.",
+    "image_url": "/exercises/64.jpg"
+  },
+  {
+    "name": "Face Pull",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros (posterior)",
+      "Manguito Rotador"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion diagonal",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, tirar hacia la cara separando las manos.",
+    "image_url": "/exercises/65.jpg"
+  },
+  {
+    "name": "Pullover con Cable",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Triceps largo",
+      "Pecho"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Tiracion vertical/anterior",
+    "difficulty": "Intermedio",
+    "instructions": "Polea alta, tirar hacia los muslos manteniendo brazos semi-extendidos.",
+    "image_url": "/exercises/66.jpg"
+  },
+  {
+    "name": "Remo de Pie con Cable (Polea Baja)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion horizontal de pie",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, tirar hacia el abdomen de pie.",
+    "image_url": "/exercises/67.jpg"
+  },
+  {
+    "name": "Straight Arm Pulldown",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Triceps largo"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Tiracion vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Brazos casi extendidos, tirar la barra/cuerda de arriba hacia los muslos.",
+    "image_url": "/exercises/68.jpg"
+  },
+  {
+    "name": "Dominadas Agarre Prono (Pull-ups)",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion vertical",
+    "difficulty": "Avanzado",
+    "instructions": "Agarre prono mas ancho que los hombros, subir hasta la barbilla.",
+    "image_url": "/exercises/69.jpg"
+  },
+  {
+    "name": "Dominadas Agarre Supino (Chin-ups)",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion vertical supina",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre supino, mayor activacion de biceps.",
+    "image_url": "/exercises/70.jpg"
+  },
+  {
+    "name": "Dominadas Agarre Neutro",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Braquial"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion vertical neutra",
+    "difficulty": "Intermedio",
+    "instructions": "Manos enfrentadas, posicion intermedia.",
+    "image_url": "/exercises/71.jpg"
+  },
+  {
+    "name": "Dominadas Agarre Estrecho",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion vertical estrecha",
+    "difficulty": "Avanzado",
+    "instructions": "Manos juntas, mayor enfasis en la parte interna del dorsal.",
+    "image_url": "/exercises/72.jpg"
+  },
+  {
+    "name": "Dominadas con Lastre",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion vertical con carga extra",
+    "difficulty": "Avanzado",
+    "instructions": "Cinto con disco o chaleco lastrado.",
+    "image_url": "/exercises/73.jpg"
+  },
+  {
+    "name": "Muscle Up",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Hombros",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion + empuje vertical",
+    "difficulty": "Avanzado",
+    "instructions": "Subir por encima de la barra llevando el pecho.",
+    "image_url": "/exercises/74.jpg"
+  },
+  {
+    "name": "Remo Invertido en Barra Baja",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Traccion horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Cuerpo inclinado bajo la barra, tirar el pecho hacia la barra.",
+    "image_url": "/exercises/75.jpg"
+  },
+  {
+    "name": "Remo Invertido TRX",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Romboides"
+    ],
+    "equipment": "TRX / Suspension",
+    "movement_type": "Traccion horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Mayor inclinacion = mayor dificultad.",
+    "image_url": "/exercises/76.jpg"
+  },
+  {
+    "name": "Dead Hang",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Hombros",
+      "Antebrazo"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Descompresion/grip isometrico",
+    "difficulty": "Principiante",
+    "instructions": "Colgar de la barra, descomprimir la columna, trabajar el agarre.",
+    "image_url": "/exercises/77.jpg"
+  },
+  {
+    "name": "Active Hang (Escapular Pull-up)",
+    "primary_muscle_group": "Dorsal",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Depresion escapular",
+    "difficulty": "Intermedio",
+    "instructions": "Sin doblar los codos, retraer y deprimir las escapulas desde el hang.",
+    "image_url": "/exercises/78.jpg"
+  },
+  {
+    "name": "Press Militar con Barra De Pie",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Trapecios",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Agarre a la anchura de hombros, press sobre la cabeza.",
+    "image_url": "/exercises/79.jpg"
+  },
+  {
+    "name": "Press Militar con Barra Sentado",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Trapecios"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje vertical",
+    "difficulty": "Principiante",
+    "instructions": "Version sentada, mas estable.",
+    "image_url": "/exercises/80.jpg"
+  },
+  {
+    "name": "Push Press con Barra",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Cuadriceps",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje vertical explosivo",
+    "difficulty": "Intermedio",
+    "instructions": "Ligero impulso de piernas para dar inercia a la barra.",
+    "image_url": "/exercises/81.jpg"
+  },
+  {
+    "name": "Push Jerk",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Cuadriceps",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje vertical olimpico",
+    "difficulty": "Avanzado",
+    "instructions": "Impulso de piernas, caer bajo la barra con brazos extendidos.",
+    "image_url": "/exercises/82.jpg"
+  },
+  {
+    "name": "Press con Barra Landmine (Un Brazo)",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje semi-vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Un extremo de la barra anclado en esquina, press diagonal.",
+    "image_url": "/exercises/83.jpg"
+  },
+  {
+    "name": "Remo al Menton con Mancuernas",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros (lateral)",
+      "Biceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Traccion vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Mancuernas frente al cuerpo, codos por encima de las munecas.",
+    "image_url": "/exercises/84.jpg"
+  },
+  {
+    "name": "Press de Hombros con Mancuernas Sentado",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje vertical",
+    "difficulty": "Principiante",
+    "instructions": "Banco con respaldo, mas estable.",
+    "image_url": "/exercises/85.jpg"
+  },
+  {
+    "name": "Press de Hombros con Mancuernas De Pie",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Core"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje vertical de pie",
+    "difficulty": "Intermedio",
+    "instructions": "Mayor demanda de estabilizacion del core.",
+    "image_url": "/exercises/86.jpg"
+  },
+  {
+    "name": "Elevaciones Laterales",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento lateral",
+    "difficulty": "Principiante",
+    "instructions": "Brazos ligeramente flexionados, elevar hasta la altura del hombro.",
+    "image_url": "/exercises/87.jpg"
+  },
+  {
+    "name": "Elevaciones Laterales Inclinado",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento lateral inclinado",
+    "difficulty": "Intermedio",
+    "instructions": "Cuerpo inclinado lateralmente, mayor rango efectivo.",
+    "image_url": "/exercises/88.jpg"
+  },
+  {
+    "name": "Elevaciones Frontales Alternadas",
+    "primary_muscle_group": "Hombros (anterior)",
+    "secondary_muscle_groups": [
+      "Pecho Superior"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento frontal",
+    "difficulty": "Principiante",
+    "instructions": "Alternar brazos, elevar al frente hasta la horizontal.",
+    "image_url": "/exercises/89.jpg"
+  },
+  {
+    "name": "Elevaciones Frontales Simultaneas",
+    "primary_muscle_group": "Hombros (anterior)",
+    "secondary_muscle_groups": [
+      "Pecho Superior"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento frontal bilateral",
+    "difficulty": "Principiante",
+    "instructions": "Ambos brazos a la vez.",
+    "image_url": "/exercises/90.jpg"
+  },
+  {
+    "name": "Pajaro / Elevaciones Posteriores",
+    "primary_muscle_group": "Hombros (posterior)",
+    "secondary_muscle_groups": [
+      "Romboides",
+      "Trapecios"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Aislamiento posterior",
+    "difficulty": "Principiante",
+    "instructions": "Inclinado hacia adelante, abrir los brazos como alas.",
+    "image_url": "/exercises/91.jpg"
+  },
+  {
+    "name": "Press Arnold",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps",
+      "Pecho"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Empuje vertical con rotacion",
+    "difficulty": "Intermedio",
+    "instructions": "Palmas hacia vos al inicio, rotar y extender sobre la cabeza.",
+    "image_url": "/exercises/92.jpg"
+  },
+  {
+    "name": "Press de Hombros en Maquina",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje vertical guiado",
+    "difficulty": "Principiante",
+    "instructions": "Movimiento guiado, ideal para aprender.",
+    "image_url": "/exercises/93.jpg"
+  },
+  {
+    "name": "Elevaciones Laterales en Maquina",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Aislamiento lateral guiado",
+    "difficulty": "Principiante",
+    "instructions": "Tension constante a lo largo del rango.",
+    "image_url": "/exercises/94.jpg"
+  },
+  {
+    "name": "Reverse Pec Deck",
+    "primary_muscle_group": "Hombros (posterior)",
+    "secondary_muscle_groups": [
+      "Romboides"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Aislamiento posterior",
+    "difficulty": "Principiante",
+    "instructions": "Codos casi extendidos, abrir hacia atras.",
+    "image_url": "/exercises/95.jpg"
+  },
+  {
+    "name": "Maquina de Hombros Hammer Strength",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje vertical articulado",
+    "difficulty": "Principiante",
+    "instructions": "Palanca articulada, movimiento mas natural.",
+    "image_url": "/exercises/96.jpg"
+  },
+  {
+    "name": "Elevaciones Laterales con Cable",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento lateral",
+    "difficulty": "Principiante",
+    "instructions": "Tension constante a diferencia de la mancuerna.",
+    "image_url": "/exercises/97.jpg"
+  },
+  {
+    "name": "Elevaciones Laterales Unilateral Cable",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento lateral unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, un brazo, tension constante.",
+    "image_url": "/exercises/98.jpg"
+  },
+  {
+    "name": "Elevaciones Frontales con Cable",
+    "primary_muscle_group": "Hombros (anterior)",
+    "secondary_muscle_groups": [
+      "Pecho Superior"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento frontal",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, elevar hacia el frente.",
+    "image_url": "/exercises/99.jpg"
+  },
+  {
+    "name": "Elevaciones Posteriores con Cable",
+    "primary_muscle_group": "Hombros (posterior)",
+    "secondary_muscle_groups": [
+      "Romboides"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Aislamiento posterior",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, cruzando el cuerpo hacia abajo.",
+    "image_url": "/exercises/100.jpg"
+  },
+  {
+    "name": "Pike Push-up",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Triceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Caderas elevadas, cuerpo en V invertida, bajar la cabeza al suelo.",
+    "image_url": "/exercises/101.jpg"
+  },
+  {
+    "name": "Curl de Biceps con Barra",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial",
+      "Braquiorradial"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de codo",
+    "difficulty": "Principiante",
+    "instructions": "Codos fijos a los costados, curl completo.",
+    "image_url": "/exercises/102.jpg"
+  },
+  {
+    "name": "Curl de Biceps con Barra EZ",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial",
+      "Braquiorradial"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de codo",
+    "difficulty": "Principiante",
+    "instructions": "Agarre semisupino, menor estres en las munecas.",
+    "image_url": "/exercises/103.jpg"
+  },
+  {
+    "name": "Curl con Barra EZ Agarre Invertido",
+    "primary_muscle_group": "Braquiorradial",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Extensores del Antebrazo"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de codo prono",
+    "difficulty": "Principiante",
+    "instructions": "Agarre prono, enfasis en braquiorradial.",
+    "image_url": "/exercises/104.jpg"
+  },
+  {
+    "name": "Curl de Biceps en Banco Scott con Barra EZ",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de codo apoyada",
+    "difficulty": "Principiante",
+    "instructions": "Brazo apoyado en el pad inclinado, elimina el balanceo.",
+    "image_url": "/exercises/105.jpg"
+  },
+  {
+    "name": "Curl Alternado con Mancuernas",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Un brazo a la vez, supinar al subir.",
+    "image_url": "/exercises/106.jpg"
+  },
+  {
+    "name": "Curl Simultaneo con Mancuernas",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo bilateral",
+    "difficulty": "Principiante",
+    "instructions": "Ambos brazos a la vez.",
+    "image_url": "/exercises/107.jpg"
+  },
+  {
+    "name": "Curl Martillo",
+    "primary_muscle_group": "Braquiorradial",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo neutral",
+    "difficulty": "Principiante",
+    "instructions": "Agarre neutro, pulgares arriba.",
+    "image_url": "/exercises/108.jpg"
+  },
+  {
+    "name": "Curl Martillo Cruzado",
+    "primary_muscle_group": "Braquiorradial",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo cruzada",
+    "difficulty": "Principiante",
+    "instructions": "Elevar la mancuerna cruzando frente al pecho.",
+    "image_url": "/exercises/109.jpg"
+  },
+  {
+    "name": "Curl Concentrado",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo aislada",
+    "difficulty": "Principiante",
+    "instructions": "Codo apoyado en cara interna del muslo, maximo aislamiento.",
+    "image_url": "/exercises/110.jpg"
+  },
+  {
+    "name": "Curl en Banco Scott con Mancuernas",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo apoyada",
+    "difficulty": "Principiante",
+    "instructions": "Brazo apoyado en pad inclinado.",
+    "image_url": "/exercises/111.jpg"
+  },
+  {
+    "name": "Curl Spider",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo inclinada",
+    "difficulty": "Intermedio",
+    "instructions": "Pecho apoyado en banco inclinado, codos apuntando al suelo.",
+    "image_url": "/exercises/112.jpg"
+  },
+  {
+    "name": "Curl Inclinado Stretch",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de codo elongada",
+    "difficulty": "Intermedio",
+    "instructions": "Banco inclinado, maximo estiramiento del biceps.",
+    "image_url": "/exercises/113.jpg"
+  },
+  {
+    "name": "Curl de Muñeca Supino con Mancuerna",
+    "primary_muscle_group": "Flexores del Antebrazo",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazo apoyado, solo mueve la muneca.",
+    "image_url": "/exercises/114.jpg"
+  },
+  {
+    "name": "Curl de Biceps en Maquina Sentado",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de codo guiada",
+    "difficulty": "Principiante",
+    "instructions": "Movimiento guiado, tension constante.",
+    "image_url": "/exercises/115.jpg"
+  },
+  {
+    "name": "Curl de Biceps en Maquina de Predicador",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de codo apoyada guiada",
+    "difficulty": "Principiante",
+    "instructions": "Brazo sobre pad inclinado, movimiento guiado.",
+    "image_url": "/exercises/116.jpg"
+  },
+  {
+    "name": "Curl de Biceps en Cable Polea Baja",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Flexion de codo",
+    "difficulty": "Principiante",
+    "instructions": "Tension constante en todo el rango.",
+    "image_url": "/exercises/117.jpg"
+  },
+  {
+    "name": "Curl Unilateral en Cable",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Flexion de codo unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Un brazo, maximo rango.",
+    "image_url": "/exercises/118.jpg"
+  },
+  {
+    "name": "Curl de Biceps Polea Alta (Supino)",
+    "primary_muscle_group": "Biceps",
+    "secondary_muscle_groups": [
+      "Braquial"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Flexion de codo en abduccion",
+    "difficulty": "Intermedio",
+    "instructions": "Brazos abiertos a altura del hombro, doblar los codos.",
+    "image_url": "/exercises/119.jpg"
+  },
+  {
+    "name": "Press Frances con Barra EZ (Skullcrusher)",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Barra",
+    "movement_type": "Extension de codo acostado",
+    "difficulty": "Intermedio",
+    "instructions": "Barra a la frente doblando solo los codos.",
+    "image_url": "/exercises/120.jpg"
+  },
+  {
+    "name": "Press Frances Inclinado con Barra EZ",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Barra",
+    "movement_type": "Extension de codo inclinada",
+    "difficulty": "Intermedio",
+    "instructions": "Banco inclinado, mayor rango de movimiento.",
+    "image_url": "/exercises/121.jpg"
+  },
+  {
+    "name": "JM Press",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Hibrido press-skullcrusher",
+    "difficulty": "Avanzado",
+    "instructions": "Hibrido entre press estrecho y press frances, muy eficiente para triceps.",
+    "image_url": "/exercises/122.jpg"
+  },
+  {
+    "name": "Press Frances con Mancuernas",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de codo acostado",
+    "difficulty": "Principiante",
+    "instructions": "Mancuernas bajan a los costados de la cabeza.",
+    "image_url": "/exercises/123.jpg"
+  },
+  {
+    "name": "Extension de Triceps Sobre la Cabeza",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de codo sobre cabeza",
+    "difficulty": "Principiante",
+    "instructions": "Mancuerna detras de la cabeza, extender los codos.",
+    "image_url": "/exercises/124.jpg"
+  },
+  {
+    "name": "Extension de Triceps Sobre Cabeza Bilateral",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de codo sobre cabeza bilateral",
+    "difficulty": "Principiante",
+    "instructions": "Una mancuerna sostenida con ambas manos detras de la cabeza.",
+    "image_url": "/exercises/125.jpg"
+  },
+  {
+    "name": "Patada de Triceps (Kickback)",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de codo",
+    "difficulty": "Principiante",
+    "instructions": "Inclinado, codo fijo, extender el brazo hacia atras.",
+    "image_url": "/exercises/126.jpg"
+  },
+  {
+    "name": "Pushdown de Triceps con Barra",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, codos fijos a los costados.",
+    "image_url": "/exercises/127.jpg"
+  },
+  {
+    "name": "Pushdown de Triceps con Cuerda",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo con rotacion",
+    "difficulty": "Principiante",
+    "instructions": "Al final separar la cuerda hacia afuera.",
+    "image_url": "/exercises/128.jpg"
+  },
+  {
+    "name": "Pushdown de Triceps con Barra V",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo",
+    "difficulty": "Principiante",
+    "instructions": "Barra V, agarre comodo para las munecas.",
+    "image_url": "/exercises/129.jpg"
+  },
+  {
+    "name": "Pushdown Unilateral con Cable",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Un brazo a la vez, mayor rango.",
+    "image_url": "/exercises/130.jpg"
+  },
+  {
+    "name": "Extension de Triceps Sobre Cabeza (Cable)",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo sobre cabeza",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, manos detras de la cabeza.",
+    "image_url": "/exercises/131.jpg"
+  },
+  {
+    "name": "Extension de Triceps Sobre Cabeza con Cuerda",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo sobre cabeza",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, cuerda, mayor rango de separacion.",
+    "image_url": "/exercises/132.jpg"
+  },
+  {
+    "name": "Press Frances en Cable",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de codo acostado",
+    "difficulty": "Intermedio",
+    "instructions": "Tumbado frente a la polea baja, skullcrusher con cable.",
+    "image_url": "/exercises/133.jpg"
+  },
+  {
+    "name": "Extension Triceps en Maquina",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Extension de codo guiada",
+    "difficulty": "Principiante",
+    "instructions": "Tension constante, movimiento guiado.",
+    "image_url": "/exercises/134.jpg"
+  },
+  {
+    "name": "Dips en Maquina Asistida",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho",
+      "Hombros"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje vertical asistido",
+    "difficulty": "Principiante",
+    "instructions": "Maquina contrarresta parte del peso corporal.",
+    "image_url": "/exercises/135.jpg"
+  },
+  {
+    "name": "Fondos en Paralelas (Triceps)",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Cuerpo erguido, codos pegados.",
+    "image_url": "/exercises/136.jpg"
+  },
+  {
+    "name": "Fondos en Banco (Bench Dips)",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje decline",
+    "difficulty": "Principiante",
+    "instructions": "Manos en banco detras, pies en suelo o elevados.",
+    "image_url": "/exercises/137.jpg"
+  },
+  {
+    "name": "Fondos en Banco Pies Elevados",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje decline avanzado",
+    "difficulty": "Intermedio",
+    "instructions": "Pies sobre otro banco, mayor carga.",
+    "image_url": "/exercises/138.jpg"
+  },
+  {
+    "name": "Diamond Push-up",
+    "primary_muscle_group": "Triceps",
+    "secondary_muscle_groups": [
+      "Pecho"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Empuje estrecho",
+    "difficulty": "Intermedio",
+    "instructions": "Manos en diamante bajo el pecho.",
+    "image_url": "/exercises/139.jpg"
+  },
+  {
+    "name": "Sentadilla con Barra Alta (High Bar)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla",
+    "difficulty": "Intermedio",
+    "instructions": "Barra en trapecios superior, torso mas erguido, mayor profundidad.",
+    "image_url": "/exercises/140.jpg"
+  },
+  {
+    "name": "Sentadilla con Barra Baja (Low Bar)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales",
+      "Espalda Baja"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla",
+    "difficulty": "Avanzado",
+    "instructions": "Barra en trapecios medios, mayor inclinacion del torso.",
+    "image_url": "/exercises/141.jpg"
+  },
+  {
+    "name": "Sentadilla Frontal",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla",
+    "difficulty": "Avanzado",
+    "instructions": "Barra en hombros delanteros, torso muy erguido.",
+    "image_url": "/exercises/142.jpg"
+  },
+  {
+    "name": "Sentadilla de Zercher",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core",
+      "Biceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla",
+    "difficulty": "Avanzado",
+    "instructions": "Barra en el pliegue de los codos, postura muy erguida.",
+    "image_url": "/exercises/143.jpg"
+  },
+  {
+    "name": "Sentadilla Overhead (OHS)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Core",
+      "Hombros",
+      "Gluteos"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla con barra sobre cabeza",
+    "difficulty": "Avanzado",
+    "instructions": "Requiere gran movilidad y estabilidad general.",
+    "image_url": "/exercises/144.jpg"
+  },
+  {
+    "name": "Sentadilla Sumo con Barra",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Aductores"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Sentadilla amplia",
+    "difficulty": "Intermedio",
+    "instructions": "Pies muy abiertos, puntas hacia afuera.",
+    "image_url": "/exercises/145.jpg"
+  },
+  {
+    "name": "Zancadas con Barra Al Frente",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Zancada hacia adelante",
+    "difficulty": "Intermedio",
+    "instructions": "Un paso al frente, doblar ambas rodillas a 90.",
+    "image_url": "/exercises/146.jpg"
+  },
+  {
+    "name": "Zancadas con Barra Al Atras",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Zancada hacia atras",
+    "difficulty": "Intermedio",
+    "instructions": "Paso hacia atras, mayor control de rodilla.",
+    "image_url": "/exercises/147.jpg"
+  },
+  {
+    "name": "Zancadas Caminando con Barra",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Zancada caminando",
+    "difficulty": "Intermedio",
+    "instructions": "Avanzar con pasos alternos.",
+    "image_url": "/exercises/148.jpg"
+  },
+  {
+    "name": "Sentadilla Goblet con Mancuerna",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Sentadilla",
+    "difficulty": "Principiante",
+    "instructions": "Mancuerna frente al pecho, torso erguido.",
+    "image_url": "/exercises/149.jpg"
+  },
+  {
+    "name": "Zancadas con Mancuernas Al Frente",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Zancada hacia adelante",
+    "difficulty": "Principiante",
+    "instructions": "Paso al frente, rodillas a 90.",
+    "image_url": "/exercises/150.jpg"
+  },
+  {
+    "name": "Zancadas Inversas con Mancuernas",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Zancada hacia atras",
+    "difficulty": "Principiante",
+    "instructions": "Paso hacia atras, mayor control de rodilla.",
+    "image_url": "/exercises/151.jpg"
+  },
+  {
+    "name": "Zancadas Laterales con Mancuernas",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Aductores"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Zancada lateral",
+    "difficulty": "Intermedio",
+    "instructions": "Paso lateral, doblar la rodilla que carga el peso.",
+    "image_url": "/exercises/152.jpg"
+  },
+  {
+    "name": "Zancadas Caminando con Mancuernas",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Zancada caminando",
+    "difficulty": "Principiante",
+    "instructions": "Avanzar con pasos alternos.",
+    "image_url": "/exercises/153.jpg"
+  },
+  {
+    "name": "Step-Up con Mancuernas",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Unilateral cadera/rodilla",
+    "difficulty": "Principiante",
+    "instructions": "Subir a un banco con una pierna a la vez.",
+    "image_url": "/exercises/154.jpg"
+  },
+  {
+    "name": "Extension de Cuadriceps en Maquina",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Extension de rodilla",
+    "difficulty": "Principiante",
+    "instructions": "Sentado, extender las rodillas.",
+    "image_url": "/exercises/155.jpg"
+  },
+  {
+    "name": "Extension Unilateral en Maquina",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Extension de rodilla unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Una pierna a la vez, mayor concentracion.",
+    "image_url": "/exercises/156.jpg"
+  },
+  {
+    "name": "Prensa de Piernas (Leg Press) 45",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje bilateral 45",
+    "difficulty": "Principiante",
+    "instructions": "Angulo 45, pies en la plataforma.",
+    "image_url": "/exercises/157.jpg"
+  },
+  {
+    "name": "Prensa de Piernas Horizontal",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Empuje bilateral horizontal",
+    "difficulty": "Principiante",
+    "instructions": "Angulo horizontal, diferente tension en la articulacion.",
+    "image_url": "/exercises/158.jpg"
+  },
+  {
+    "name": "Hack Squat en Maquina",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Sentadilla guiada",
+    "difficulty": "Principiante",
+    "instructions": "Espalda contra el pad inclinado.",
+    "image_url": "/exercises/159.jpg"
+  },
+  {
+    "name": "Pendulum Squat",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Sentadilla en arco",
+    "difficulty": "Intermedio",
+    "instructions": "Maquina de arco pendular, excelente para cuadriceps sin carga en la columna.",
+    "image_url": "/exercises/160.jpg"
+  },
+  {
+    "name": "Belt Squat (Sentadilla con Cinto)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Sentadilla sin carga en columna",
+    "difficulty": "Intermedio",
+    "instructions": "La carga se cuelga del cinto en la cadera, sin carga en columna.",
+    "image_url": "/exercises/161.jpg"
+  },
+  {
+    "name": "Sissy Squat",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Extension de rodilla de pie",
+    "difficulty": "Avanzado",
+    "instructions": "Inclinarse hacia atras mientras las rodillas avanzan hacia adelante.",
+    "image_url": "/exercises/162.jpg"
+  },
+  {
+    "name": "Sentadilla en Maquina Smith",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Maquina Smith",
+    "movement_type": "Sentadilla guiada",
+    "difficulty": "Principiante",
+    "instructions": "Barra guiada.",
+    "image_url": "/exercises/163.jpg"
+  },
+  {
+    "name": "Sentadilla Libre (Sin peso)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Sentadilla",
+    "difficulty": "Principiante",
+    "instructions": "Pies a la anchura de los hombros.",
+    "image_url": "/exercises/164.jpg"
+  },
+  {
+    "name": "Sentadilla Bulgara",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Zancada dividida",
+    "difficulty": "Intermedio",
+    "instructions": "Pie trasero elevado en banco.",
+    "image_url": "/exercises/165.jpg"
+  },
+  {
+    "name": "Pistol Squat",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Sentadilla unilateral",
+    "difficulty": "Avanzado",
+    "instructions": "Sentadilla con una sola pierna.",
+    "image_url": "/exercises/166.jpg"
+  },
+  {
+    "name": "Box Squat",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Sentadilla a caja",
+    "difficulty": "Intermedio",
+    "instructions": "Sentarse sobre una caja/banco y volver a subir.",
+    "image_url": "/exercises/167.jpg"
+  },
+  {
+    "name": "Jump Squat",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Sentadilla explosiva",
+    "difficulty": "Intermedio",
+    "instructions": "Sentadilla profunda y saltar explosivamente.",
+    "image_url": "/exercises/168.jpg"
+  },
+  {
+    "name": "Curl de Piernas Tumbado",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [
+      "Gastrocnemio"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de rodilla",
+    "difficulty": "Principiante",
+    "instructions": "Tumbado boca abajo, curvar los talones hacia los gluteos.",
+    "image_url": "/exercises/169.jpg"
+  },
+  {
+    "name": "Curl de Piernas Sentado",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de rodilla",
+    "difficulty": "Principiante",
+    "instructions": "Sentado, tension constante en todo el rango.",
+    "image_url": "/exercises/170.jpg"
+  },
+  {
+    "name": "Curl de Piernas De Pie Unilateral",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de rodilla unilateral",
+    "difficulty": "Principiante",
+    "instructions": "De pie, una pierna a la vez.",
+    "image_url": "/exercises/171.jpg"
+  },
+  {
+    "name": "Nordic Curl",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de rodilla excentrica",
+    "difficulty": "Avanzado",
+    "instructions": "Talones sujetos, descender lentamente controlando la caida.",
+    "image_url": "/exercises/172.jpg"
+  },
+  {
+    "name": "Curl de Isquios con Cable (Tumbado)",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Flexion de rodilla",
+    "difficulty": "Principiante",
+    "instructions": "Tobillera, tumbado, curvar la rodilla hacia el gluteo.",
+    "image_url": "/exercises/173.jpg"
+  },
+  {
+    "name": "Curl de Isquios con Cable (De Pie)",
+    "primary_muscle_group": "Isquiotibiales",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Flexion de rodilla de pie",
+    "difficulty": "Principiante",
+    "instructions": "Tobillera, de pie, curvar la rodilla.",
+    "image_url": "/exercises/174.jpg"
+  },
+  {
+    "name": "Hip Thrust con Barra",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Cuadriceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Intermedio",
+    "instructions": "Espalda en banco, barra en cadera, empujar las caderas.",
+    "image_url": "/exercises/175.jpg"
+  },
+  {
+    "name": "Hip Thrust con Mancuerna",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Principiante",
+    "instructions": "Mancuerna sobre la cadera.",
+    "image_url": "/exercises/176.jpg"
+  },
+  {
+    "name": "Abduccion de Cadera en Maquina",
+    "primary_muscle_group": "Gluteos (medio)",
+    "secondary_muscle_groups": [
+      "TFL"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Abduccion de cadera sentado",
+    "difficulty": "Principiante",
+    "instructions": "Separar las piernas contra la resistencia.",
+    "image_url": "/exercises/177.jpg"
+  },
+  {
+    "name": "Aduccion de Cadera en Maquina",
+    "primary_muscle_group": "Aductores",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Aduccion de cadera sentado",
+    "difficulty": "Principiante",
+    "instructions": "Juntar las piernas contra la resistencia.",
+    "image_url": "/exercises/178.jpg"
+  },
+  {
+    "name": "Extension de Cadera en Maquina",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Principiante",
+    "instructions": "De pie o inclinado, extender la pierna hacia atras.",
+    "image_url": "/exercises/179.jpg"
+  },
+  {
+    "name": "Hip Thrust en Maquina",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Extension de cadera guiada",
+    "difficulty": "Principiante",
+    "instructions": "Maquina especifica de hip thrust.",
+    "image_url": "/exercises/180.jpg"
+  },
+  {
+    "name": "Cable Kickback",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Principiante",
+    "instructions": "Tobillera, polea baja, extender la pierna hacia atras.",
+    "image_url": "/exercises/181.jpg"
+  },
+  {
+    "name": "Hip Thrust con Cable",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Extension de cadera con cable",
+    "difficulty": "Intermedio",
+    "instructions": "Cable entre las piernas, empujar las caderas hacia arriba.",
+    "image_url": "/exercises/182.jpg"
+  },
+  {
+    "name": "Puente de Gluteos",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Principiante",
+    "instructions": "Tumbado, pies apoyados, elevar las caderas.",
+    "image_url": "/exercises/183.jpg"
+  },
+  {
+    "name": "Hip Thrust con Peso Corporal",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Extension de cadera",
+    "difficulty": "Principiante",
+    "instructions": "Espalda en banco, sin peso adicional.",
+    "image_url": "/exercises/184.jpg"
+  },
+  {
+    "name": "Donkey Kicks",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [],
+    "equipment": "Peso Corporal",
+    "movement_type": "Extension de cadera en cuadrupedia",
+    "difficulty": "Principiante",
+    "instructions": "En cuatro apoyos, llevar el talon hacia el techo.",
+    "image_url": "/exercises/185.jpg"
+  },
+  {
+    "name": "Fire Hydrant",
+    "primary_muscle_group": "Gluteos (medio)",
+    "secondary_muscle_groups": [],
+    "equipment": "Peso Corporal",
+    "movement_type": "Abduccion de cadera en cuadrupedia",
+    "difficulty": "Principiante",
+    "instructions": "En cuatro apoyos, elevar la rodilla hacia afuera como un perro.",
+    "image_url": "/exercises/186.jpg"
+  },
+  {
+    "name": "Monster Walk",
+    "primary_muscle_group": "Gluteos (medio)",
+    "secondary_muscle_groups": [
+      "TFL"
+    ],
+    "equipment": "Bandas Elasticas",
+    "movement_type": "Abduccion dinamica",
+    "difficulty": "Principiante",
+    "instructions": "Banda en rodillas, pasos laterales.",
+    "image_url": "/exercises/187.jpg"
+  },
+  {
+    "name": "Elevacion de Talones con Mancuernas",
+    "primary_muscle_group": "Gastrocnemio",
+    "secondary_muscle_groups": [
+      "Soleo"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion plantar",
+    "difficulty": "Principiante",
+    "instructions": "Mancuernas a los costados.",
+    "image_url": "/exercises/188.jpg"
+  },
+  {
+    "name": "Elevacion de Talones De Pie en Maquina",
+    "primary_muscle_group": "Gastrocnemio",
+    "secondary_muscle_groups": [
+      "Soleo"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion plantar",
+    "difficulty": "Principiante",
+    "instructions": "Hombros bajo los pads.",
+    "image_url": "/exercises/189.jpg"
+  },
+  {
+    "name": "Elevacion de Talones Sentado en Maquina",
+    "primary_muscle_group": "Soleo",
+    "secondary_muscle_groups": [
+      "Gastrocnemio"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion plantar sentado",
+    "difficulty": "Principiante",
+    "instructions": "Rodillas a 90, enfasis en soleo.",
+    "image_url": "/exercises/190.jpg"
+  },
+  {
+    "name": "Elevacion de Talones en Leg Press",
+    "primary_muscle_group": "Gastrocnemio",
+    "secondary_muscle_groups": [
+      "Soleo"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion plantar en prensa",
+    "difficulty": "Principiante",
+    "instructions": "Solo la parte delantera del pie en la plataforma.",
+    "image_url": "/exercises/191.jpg"
+  },
+  {
+    "name": "Elevacion de Talones en Smith",
+    "primary_muscle_group": "Gastrocnemio",
+    "secondary_muscle_groups": [
+      "Soleo"
+    ],
+    "equipment": "Maquina Smith",
+    "movement_type": "Flexion plantar",
+    "difficulty": "Principiante",
+    "instructions": "Barra guiada, pies en una plataforma.",
+    "image_url": "/exercises/192.jpg"
+  },
+  {
+    "name": "Encogimientos con Barra (Shrugs)",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Elevador de la Escapula"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Elevacion de escapula",
+    "difficulty": "Principiante",
+    "instructions": "Barra frente al cuerpo, elevar los hombros sin rotar.",
+    "image_url": "/exercises/193.jpg"
+  },
+  {
+    "name": "Encogimientos Detras de la Espalda",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Elevador de la Escapula"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Elevacion de escapula posterior",
+    "difficulty": "Intermedio",
+    "instructions": "Barra detras del cuerpo, mayor rango posterior.",
+    "image_url": "/exercises/194.jpg"
+  },
+  {
+    "name": "Encogimientos con Mancuernas",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Elevador de la Escapula"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Elevacion de escapula",
+    "difficulty": "Principiante",
+    "instructions": "Mancuernas a los costados.",
+    "image_url": "/exercises/195.jpg"
+  },
+  {
+    "name": "Encogimientos con Mancuernas Unilateral",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Elevador de la Escapula"
+    ],
+    "equipment": "Mancuernas",
+    "movement_type": "Elevacion de escapula unilateral",
+    "difficulty": "Principiante",
+    "instructions": "Un hombro a la vez.",
+    "image_url": "/exercises/196.jpg"
+  },
+  {
+    "name": "Encogimientos en Maquina Smith",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina Smith",
+    "movement_type": "Elevacion de escapula guiada",
+    "difficulty": "Principiante",
+    "instructions": "Barra guiada.",
+    "image_url": "/exercises/197.jpg"
+  },
+  {
+    "name": "Encogimientos con Cable (Polea Baja)",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Elevacion de escapula",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, tension constante.",
+    "image_url": "/exercises/198.jpg"
+  },
+  {
+    "name": "Face Pull (Trapecios)",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros (posterior)",
+      "Manguito Rotador"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion diagonal",
+    "difficulty": "Principiante",
+    "instructions": "Polea alta, tirar hacia la cara separando las manos.",
+    "image_url": "/exercises/199.jpg"
+  },
+  {
+    "name": "Remo al Menton con Cable",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros (lateral)",
+      "Biceps"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Traccion vertical",
+    "difficulty": "Intermedio",
+    "instructions": "Polea baja, misma mecanica que con barra.",
+    "image_url": "/exercises/200.jpg"
+  },
+  {
+    "name": "Plancha Frontal",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Hombros",
+      "Gluteos"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Isometria frontal",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazos en el suelo, cuerpo recto.",
+    "image_url": "/exercises/201.jpg"
+  },
+  {
+    "name": "Plancha Lateral",
+    "primary_muscle_group": "Oblicuos",
+    "secondary_muscle_groups": [
+      "Core",
+      "Abductores"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Isometria lateral",
+    "difficulty": "Principiante",
+    "instructions": "Un antebrazo en el suelo, cuerpo lateral recto.",
+    "image_url": "/exercises/202.jpg"
+  },
+  {
+    "name": "Plancha RKC (Cuerpo Tenso)",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Cuadriceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Isometria de alta tension",
+    "difficulty": "Intermedio",
+    "instructions": "Plancha con maximo tension en todo el cuerpo.",
+    "image_url": "/exercises/203.jpg"
+  },
+  {
+    "name": "Crunch Abdominal",
+    "primary_muscle_group": "Recto Abdominal",
+    "secondary_muscle_groups": [
+      "Oblicuos"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de columna",
+    "difficulty": "Principiante",
+    "instructions": "Elevar solo los hombros contrayendo el abdomen.",
+    "image_url": "/exercises/204.jpg"
+  },
+  {
+    "name": "Crunch Inverso",
+    "primary_muscle_group": "Recto Abdominal (inferior)",
+    "secondary_muscle_groups": [
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de cadera/columna",
+    "difficulty": "Principiante",
+    "instructions": "Elevar la pelvis llevando rodillas al pecho.",
+    "image_url": "/exercises/205.jpg"
+  },
+  {
+    "name": "Crunch Bicicleta",
+    "primary_muscle_group": "Oblicuos",
+    "secondary_muscle_groups": [
+      "Recto Abdominal"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Rotacion + flexion",
+    "difficulty": "Principiante",
+    "instructions": "Llevar codo hacia rodilla opuesta alternando.",
+    "image_url": "/exercises/206.jpg"
+  },
+  {
+    "name": "Crunch en Polea Alta",
+    "primary_muscle_group": "Recto Abdominal",
+    "secondary_muscle_groups": [
+      "Oblicuos"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Flexion de columna",
+    "difficulty": "Principiante",
+    "instructions": "De rodillas frente a la polea, contraer el abdomen.",
+    "image_url": "/exercises/207.jpg"
+  },
+  {
+    "name": "Crunch con Peso (Plato)",
+    "primary_muscle_group": "Recto Abdominal",
+    "secondary_muscle_groups": [
+      "Oblicuos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de columna con carga",
+    "difficulty": "Intermedio",
+    "instructions": "Sujetar un plato detras de la cabeza.",
+    "image_url": "/exercises/208.jpg"
+  },
+  {
+    "name": "Elevacion de Piernas",
+    "primary_muscle_group": "Recto Abdominal (inferior)",
+    "secondary_muscle_groups": [
+      "Iliopsoas",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de cadera",
+    "difficulty": "Intermedio",
+    "instructions": "Tumbado, elevar piernas juntas hasta 90.",
+    "image_url": "/exercises/209.jpg"
+  },
+  {
+    "name": "Elevacion de Piernas Colgando (Hanging Leg Raise)",
+    "primary_muscle_group": "Recto Abdominal (inferior)",
+    "secondary_muscle_groups": [
+      "Iliopsoas",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de cadera colgando",
+    "difficulty": "Avanzado",
+    "instructions": "Colgando de la barra, elevar piernas hasta 90 o mas.",
+    "image_url": "/exercises/210.jpg"
+  },
+  {
+    "name": "Elevacion de Rodillas Colgando",
+    "primary_muscle_group": "Recto Abdominal (inferior)",
+    "secondary_muscle_groups": [
+      "Iliopsoas"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Flexion de cadera colgando",
+    "difficulty": "Intermedio",
+    "instructions": "Version mas facil que el de piernas estiradas.",
+    "image_url": "/exercises/211.jpg"
+  },
+  {
+    "name": "Elevacion de Piernas en Silla Romana",
+    "primary_muscle_group": "Recto Abdominal (inferior)",
+    "secondary_muscle_groups": [
+      "Iliopsoas"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Flexion de cadera con soporte",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazos apoyados, elevar rodillas o piernas estiradas.",
+    "image_url": "/exercises/212.jpg"
+  },
+  {
+    "name": "Dragon Flag",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Espalda Baja",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Isometria/Flexion de cuerpo entero",
+    "difficulty": "Avanzado",
+    "instructions": "Tumbado en banco, bajar el cuerpo recto desde los hombros.",
+    "image_url": "/exercises/213.jpg"
+  },
+  {
+    "name": "Mountain Climbers",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Hombros",
+      "Cuadriceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Dinamico de core",
+    "difficulty": "Principiante",
+    "instructions": "Plancha alta, llevar rodillas al pecho alternando.",
+    "image_url": "/exercises/214.jpg"
+  },
+  {
+    "name": "Dead Bug",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Espalda Baja"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Estabilizacion antiextension",
+    "difficulty": "Principiante",
+    "instructions": "Tumbado, extender brazo y pierna opuestos.",
+    "image_url": "/exercises/215.jpg"
+  },
+  {
+    "name": "Ab Wheel Rollout",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Dorsal",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Antiextension dinamica",
+    "difficulty": "Avanzado",
+    "instructions": "Rueda abdominal, extender brazos manteniendo columna neutra.",
+    "image_url": "/exercises/216.jpg"
+  },
+  {
+    "name": "Ab Wheel desde Rodillas",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Dorsal",
+      "Hombros"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Antiextension dinamica",
+    "difficulty": "Intermedio",
+    "instructions": "Version mas facil de rodillas.",
+    "image_url": "/exercises/217.jpg"
+  },
+  {
+    "name": "Rotacion de Tronco con Cable",
+    "primary_muscle_group": "Oblicuos",
+    "secondary_muscle_groups": [
+      "Core"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Rotacion de tronco",
+    "difficulty": "Principiante",
+    "instructions": "Polea media, rotar el tronco.",
+    "image_url": "/exercises/218.jpg"
+  },
+  {
+    "name": "Russian Twist",
+    "primary_muscle_group": "Oblicuos",
+    "secondary_muscle_groups": [
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Rotacion de tronco",
+    "difficulty": "Principiante",
+    "instructions": "Sentado inclinado, rotar el tronco de lado a lado.",
+    "image_url": "/exercises/219.jpg"
+  },
+  {
+    "name": "Cable Crunch",
+    "primary_muscle_group": "Recto Abdominal",
+    "secondary_muscle_groups": [
+      "Oblicuos"
+    ],
+    "equipment": "Cable",
+    "movement_type": "Flexion de columna",
+    "difficulty": "Principiante",
+    "instructions": "De rodillas frente a la polea alta, flexionar el tronco.",
+    "image_url": "/exercises/220.jpg"
+  },
+  {
+    "name": "Curl de Muneca con Barra Supino",
+    "primary_muscle_group": "Flexores del Antebrazo",
+    "secondary_muscle_groups": [
+      "Biceps"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazos apoyados en banco, flexionar la muneca.",
+    "image_url": "/exercises/221.jpg"
+  },
+  {
+    "name": "Curl de Muneca con Barra Prono",
+    "primary_muscle_group": "Extensores del Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Barra",
+    "movement_type": "Extension de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazos apoyados, extender la muneca.",
+    "image_url": "/exercises/222.jpg"
+  },
+  {
+    "name": "Curl de Muneca con Mancuerna",
+    "primary_muscle_group": "Flexores del Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Flexion de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazo apoyado en el muslo.",
+    "image_url": "/exercises/223.jpg"
+  },
+  {
+    "name": "Extension de Muneca con Mancuerna",
+    "primary_muscle_group": "Extensores del Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Mancuernas",
+    "movement_type": "Extension de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Antebrazo apoyado, extender la muneca hacia arriba.",
+    "image_url": "/exercises/224.jpg"
+  },
+  {
+    "name": "Curl de Muneca con Cable",
+    "primary_muscle_group": "Flexores del Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Flexion de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, tension constante.",
+    "image_url": "/exercises/225.jpg"
+  },
+  {
+    "name": "Extension de Muneca con Cable",
+    "primary_muscle_group": "Extensores del Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Cable",
+    "movement_type": "Extension de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Polea baja, extension de muneca.",
+    "image_url": "/exercises/226.jpg"
+  },
+  {
+    "name": "Reverse Curl con Barra",
+    "primary_muscle_group": "Braquiorradial",
+    "secondary_muscle_groups": [
+      "Extensores del Antebrazo"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Flexion de codo prono",
+    "difficulty": "Principiante",
+    "instructions": "Agarre prono, curvar la barra hacia arriba.",
+    "image_url": "/exercises/227.jpg"
+  },
+  {
+    "name": "Wrist Roller",
+    "primary_muscle_group": "Antebrazo",
+    "secondary_muscle_groups": [],
+    "equipment": "Maquina",
+    "movement_type": "Flexion/extension alternada de muneca",
+    "difficulty": "Principiante",
+    "instructions": "Rollo con cuerda y peso, enrollar y desenrollar.",
+    "image_url": "/exercises/228.jpg"
+  },
+  {
+    "name": "Zancada Lateral",
+    "primary_muscle_group": "Aductores",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Cuadriceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Zancada lateral",
+    "difficulty": "Principiante",
+    "instructions": "Paso lateral amplio, doblar la rodilla de carga.",
+    "image_url": "/exercises/229.jpg"
+  },
+  {
+    "name": "Lateral Squat",
+    "primary_muscle_group": "Aductores",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Cuadriceps"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Sentadilla lateral",
+    "difficulty": "Intermedio",
+    "instructions": "Ampliar la zancada lateral y bajar profundo.",
+    "image_url": "/exercises/230.jpg"
+  },
+  {
+    "name": "Extension de Espalda Baja en Maquina",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Isquiotibiales"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Extension de columna",
+    "difficulty": "Principiante",
+    "instructions": "Sentado, extender la columna contra la resistencia.",
+    "image_url": "/exercises/231.jpg"
+  },
+  {
+    "name": "Bird Dog",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Estabilizacion en cuadrupedia",
+    "difficulty": "Principiante",
+    "instructions": "En cuatro apoyos, extender brazo y pierna opuestos.",
+    "image_url": "/exercises/232.jpg"
+  },
+  {
+    "name": "Cat-Cow (Movilidad)",
+    "primary_muscle_group": "Espalda Baja",
+    "secondary_muscle_groups": [
+      "Core"
+    ],
+    "equipment": "Peso Corporal",
+    "movement_type": "Movilidad de columna",
+    "difficulty": "Principiante",
+    "instructions": "En cuatro apoyos, alternar flexion y extension de columna.",
+    "image_url": "/exercises/233.jpg"
+  },
+  {
+    "name": "Swing con Kettlebell (Dos Manos)",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Core",
+      "Espalda Baja"
+    ],
+    "equipment": "Kettlebell",
+    "movement_type": "Bisagra de cadera explosiva",
+    "difficulty": "Intermedio",
+    "instructions": "Bisagra explosiva, swing hasta la altura de los hombros.",
+    "image_url": "/exercises/234.jpg"
+  },
+  {
+    "name": "Swing con Kettlebell (Un Brazo)",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Isquiotibiales",
+      "Core",
+      "Hombros"
+    ],
+    "equipment": "Kettlebell",
+    "movement_type": "Bisagra de cadera explosiva unilateral",
+    "difficulty": "Intermedio",
+    "instructions": "Mayor rotacion y estabilizacion.",
+    "image_url": "/exercises/235.jpg"
+  },
+  {
+    "name": "Goblet Squat con Kettlebell",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Core"
+    ],
+    "equipment": "Kettlebell",
+    "movement_type": "Sentadilla frontal",
+    "difficulty": "Principiante",
+    "instructions": "Kettlebell frente al pecho, torso erguido.",
+    "image_url": "/exercises/236.jpg"
+  },
+  {
+    "name": "Clamshell con Banda",
+    "primary_muscle_group": "Gluteos (medio)",
+    "secondary_muscle_groups": [],
+    "equipment": "Bandas Elasticas",
+    "movement_type": "Rotacion externa de cadera",
+    "difficulty": "Principiante",
+    "instructions": "Tumbado de lado, abrir como una almeja.",
+    "image_url": "/exercises/237.jpg"
+  },
+  {
+    "name": "TRX Pistol Squat Asistido",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos"
+    ],
+    "equipment": "TRX / Suspension",
+    "movement_type": "Sentadilla unilateral asistida",
+    "difficulty": "Intermedio",
+    "instructions": "Usar los mangos como soporte.",
+    "image_url": "/exercises/238.jpg"
+  },
+  {
+    "name": "TRX Pike",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Hombros"
+    ],
+    "equipment": "TRX / Suspension",
+    "movement_type": "Flexion de cadera en suspension",
+    "difficulty": "Avanzado",
+    "instructions": "Pies en los mangos, llevar caderas hacia arriba.",
+    "image_url": "/exercises/239.jpg"
+  },
+  {
+    "name": "Clean and Jerk",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Hombros",
+      "Core",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento olimpico completo",
+    "difficulty": "Avanzado",
+    "instructions": "Levantar la barra del suelo a los hombros (clean) y luego sobre la cabeza (jerk).",
+    "image_url": "/exercises/240.jpg"
+  },
+  {
+    "name": "Snatch",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Hombros",
+      "Core",
+      "Isquiotibiales"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento olimpico completo",
+    "difficulty": "Avanzado",
+    "instructions": "Levantar la barra del suelo a sobre la cabeza en un solo movimiento.",
+    "image_url": "/exercises/241.jpg"
+  },
+  {
+    "name": "Power Clean",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Isquiotibiales",
+      "Core",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento de potencia",
+    "difficulty": "Avanzado",
+    "instructions": "Clean sin caer bajo la barra, quedando de pie.",
+    "image_url": "/exercises/242.jpg"
+  },
+  {
+    "name": "Power Snatch",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Isquiotibiales",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento de potencia",
+    "difficulty": "Avanzado",
+    "instructions": "Snatch sin caer en sentadilla.",
+    "image_url": "/exercises/243.jpg"
+  },
+  {
+    "name": "Hang Clean",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Isquiotibiales",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento olimpico desde hang",
+    "difficulty": "Avanzado",
+    "instructions": "Clean comenzando desde la posicion de hang (barra a la altura del muslo).",
+    "image_url": "/exercises/244.jpg"
+  },
+  {
+    "name": "Hang Power Clean",
+    "primary_muscle_group": "Gluteos",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Isquiotibiales",
+      "Hombros"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Movimiento de potencia desde hang",
+    "difficulty": "Avanzado",
+    "instructions": "Power clean desde posicion de hang.",
+    "image_url": "/exercises/245.jpg"
+  },
+  {
+    "name": "High Pull",
+    "primary_muscle_group": "Trapecios",
+    "secondary_muscle_groups": [
+      "Hombros",
+      "Isquiotibiales",
+      "Gluteos"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Tiracion explosiva vertical",
+    "difficulty": "Avanzado",
+    "instructions": "Tiracion de barra desde el suelo hasta la barbilla con impulso de caderas.",
+    "image_url": "/exercises/246.jpg"
+  },
+  {
+    "name": "Split Jerk",
+    "primary_muscle_group": "Hombros",
+    "secondary_muscle_groups": [
+      "Cuadriceps",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Empuje vertical con separacion de piernas",
+    "difficulty": "Avanzado",
+    "instructions": "Caer con una pierna adelante y otra atras al extender los brazos.",
+    "image_url": "/exercises/247.jpg"
+  },
+  {
+    "name": "Landmine Squat to Press",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Hombros",
+      "Core"
+    ],
+    "equipment": "Barra",
+    "movement_type": "Compuesto de sentadilla + press",
+    "difficulty": "Intermedio",
+    "instructions": "Un extremo de la barra anclado, sentadilla y press en un movimiento.",
+    "image_url": "/exercises/248.jpg"
+  },
+  {
+    "name": "Maquina de Hombros (Lateral Raise)",
+    "primary_muscle_group": "Hombros (lateral)",
+    "secondary_muscle_groups": [
+      "Trapecios"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Aislamiento lateral",
+    "difficulty": "Principiante",
+    "instructions": "Tension constante a lo largo de todo el rango.",
+    "image_url": "/exercises/249.jpg"
+  },
+  {
+    "name": "Rower (Maquina de Remo)",
+    "primary_muscle_group": "Espalda Alta",
+    "secondary_muscle_groups": [
+      "Biceps",
+      "Cuadriceps",
+      "Gluteos"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Cardio-fuerza de remo",
+    "difficulty": "Intermedio",
+    "instructions": "Maquina de remo de resistencia, trabaja cuerpo completo.",
+    "image_url": "/exercises/250.jpg"
+  },
+  {
+    "name": "Maquina Battle Rope",
+    "primary_muscle_group": "Core",
+    "secondary_muscle_groups": [
+      "Hombros",
+      "Espalda Alta"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Cardio-fuerza con cuerdas",
+    "difficulty": "Intermedio",
+    "instructions": "Cuerdas pesadas, movimientos ondulatorios de brazos.",
+    "image_url": "/exercises/251.jpg"
+  },
+  {
+    "name": "AirBike (Bicicleta de Aire)",
+    "primary_muscle_group": "Cuadriceps",
+    "secondary_muscle_groups": [
+      "Gluteos",
+      "Hombros",
+      "Core"
+    ],
+    "equipment": "Maquina",
+    "movement_type": "Cardio-fuerza cuerpo completo",
+    "difficulty": "Principiante",
+    "instructions": "Bicicleta con palancas para los brazos, resistencia por aire.",
+    "image_url": "/exercises/252.jpg"
+  }
+]

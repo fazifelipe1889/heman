@@ -42,6 +42,28 @@ export const COACHING_CATEGORIES = [
 ] as const
 export type CoachingCategory = (typeof COACHING_CATEGORIES)[number]
 
+/**
+ * Lee las categorías de un programa desde el campo `category` de la BD.
+ * Soporta tanto el formato viejo (string único) como el nuevo (JSON array).
+ */
+export function readCategories(value: string | null | undefined): CoachingCategory[] {
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    if (Array.isArray(parsed)) {
+      return parsed.filter((v) =>
+        (COACHING_CATEGORIES as readonly string[]).includes(v)
+      ) as CoachingCategory[]
+    }
+  } catch {
+    // no es JSON — formato viejo: string único
+  }
+  if ((COACHING_CATEGORIES as readonly string[]).includes(value)) {
+    return [value as CoachingCategory]
+  }
+  return []
+}
+
 export const COACHING_LEVELS = [
   "Principiante",
   "Intermedio",
@@ -75,13 +97,15 @@ export type ContentBlock = {
 }
 
 /** Tipos de campo del formulario que el coach le pide al cliente. */
-export const INTAKE_FIELD_TYPES = ["text", "textarea", "number"] as const
+export const INTAKE_FIELD_TYPES = ["text", "textarea", "number", "select"] as const
 export type IntakeFieldType = (typeof INTAKE_FIELD_TYPES)[number]
 export type IntakeField = {
   id: string
   label: string
   type: IntakeFieldType
   required: boolean
+  /** Opciones disponibles (solo para type === "select"). */
+  options?: string[]
 }
 
 /** Respuestas del cliente, indexadas por id de campo. */
@@ -129,9 +153,49 @@ export type AdaptiveTemplatePayload = {
   groups: AdaptiveTemplateGroup[]
 }
 
+/**
+ * Template MULTI-ADAPTATIVO: el coach define varias rutinas adaptativas y
+ * una planificación que las ordena. Cada cliente elige sus ejercicios por rutina.
+ */
+export type MultiAdaptiveRoutine = {
+  name: string
+  groups: AdaptiveTemplateGroup[]
+}
+export type MultiAdaptivePlanningEntry = {
+  label: string
+  routineIndex: number
+}
+export type MultiAdaptiveTemplatePayload = {
+  mode: "multi_adaptive"
+  routines: MultiAdaptiveRoutine[]
+  planning: MultiAdaptivePlanningEntry[]
+}
+
+/**
+ * Template MULTI-PERSONALIZADO: el coach arma los ejercicios exactos por
+ * cliente. Se crea individualmente desde la ficha de cada suscriptor.
+ */
+export type PersonalizedExercise = {
+  exerciseName: string
+  sets: number
+  targetReps?: string | null
+  notes?: string | null
+}
+export type MultiPersonalizedRoutine = {
+  name: string
+  exercises: PersonalizedExercise[]
+}
+export type MultiPersonalizedTemplatePayload = {
+  mode: "multi_personalized"
+  routines: MultiPersonalizedRoutine[]
+  planning: MultiAdaptivePlanningEntry[]
+}
+
 export type RoutineTemplatePayload =
   | PersonalizedTemplatePayload
   | AdaptiveTemplatePayload
+  | MultiAdaptiveTemplatePayload
+  | MultiPersonalizedTemplatePayload
 
 /**
  * Lee el payload del template de rutina desde JSONB. Valida la forma mínima.
@@ -146,6 +210,12 @@ export function readRoutineTemplatePayload(
   }
   if (obj.mode === "adaptive" && Array.isArray(obj.groups)) {
     return json as AdaptiveTemplatePayload
+  }
+  if (obj.mode === "multi_adaptive" && Array.isArray(obj.routines)) {
+    return json as MultiAdaptiveTemplatePayload
+  }
+  if (obj.mode === "multi_personalized" && Array.isArray(obj.routines)) {
+    return json as MultiPersonalizedTemplatePayload
   }
   return null
 }
@@ -235,6 +305,7 @@ export type VideoCallsPerk = z.infer<typeof VideoCallsPerkSchema>
 export const RoutinePerkSchema = z.object({
   enabled: z.boolean().default(false),
   reconfigs_included: z.number().int().min(0).default(DEFAULT_RECONFIGS_INCLUDED),
+  mode: z.enum(["adaptive", "personalized"]).optional(),
 })
 export type RoutinePerk = z.infer<typeof RoutinePerkSchema>
 

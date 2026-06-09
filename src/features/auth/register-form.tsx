@@ -4,7 +4,6 @@ import * as React from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { MailCheck } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,11 +18,12 @@ import {
 } from "@/components/ui/form"
 import { signUpAction } from "./actions"
 import { signUpSchema, type SignUpValues } from "./schemas"
+import { ConfirmEmailForm } from "./confirm-email-form"
 
 export function RegisterForm() {
   const [isPending, startTransition] = React.useTransition()
   const [formError, setFormError] = React.useState<string | null>(null)
-  const [confirmationSent, setConfirmationSent] = React.useState(false)
+  const [confirmEmail, setConfirmEmail] = React.useState<string | null>(null)
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -35,32 +35,12 @@ export function RegisterForm() {
     startTransition(async () => {
       const res = await signUpAction(values)
       if (res?.error) setFormError(res.error)
-      else if (res?.needsConfirmation) setConfirmationSent(true)
+      else if (res?.needsConfirmation) setConfirmEmail(values.email)
     })
   }
 
-  if (confirmationSent) {
-    return (
-      <div className="flex flex-col items-center gap-4 text-center">
-        <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <MailCheck className="size-6" />
-        </div>
-        <h2 className="text-lg font-semibold">Revisá tu email</h2>
-        <p className="text-sm text-muted-foreground">
-          Te enviamos un enlace de confirmación a{" "}
-          <span className="font-medium text-foreground">
-            {form.getValues("email")}
-          </span>
-          . Confirmá tu cuenta para continuar.
-        </p>
-        <Link
-          href="/login"
-          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
-        >
-          Volver a iniciar sesión
-        </Link>
-      </div>
-    )
+  if (confirmEmail) {
+    return <ConfirmEmailForm email={confirmEmail} />
   }
 
   return (

@@ -10,6 +10,7 @@ import { redirect } from "next/navigation"
 import type { SupabaseClient, User } from "@supabase/supabase-js"
 
 import { createClient } from "@/lib/supabase/server"
+import { getCachedUser } from "@/lib/supabase/auth"
 import type { Database, CoachProfile, Profile } from "@/lib/supabase/types"
 
 type Client = SupabaseClient<Database>
@@ -21,9 +22,7 @@ export type AdminContext = UserContext & { profile: Profile }
 /** Requiere sesión iniciada. Redirige a /login si no hay usuario. */
 export async function requireUser(): Promise<UserContext> {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) redirect("/login")
   return { supabase, user }
 }
@@ -60,9 +59,7 @@ export async function getCoachContext(): Promise<{
   coach: CoachProfile | null
 }> {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) return { supabase, user: null, coach: null }
 
   const { data: coach } = await supabase

@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ChevronRight, FileText, LogOut, ShieldCheck, Sparkles, UserPen } from "lucide-react"
+import { ChevronRight, FileText, HelpCircle, LogOut, ShieldCheck, Sparkles, UserPen } from "lucide-react"
 
-import { createClient } from "@/lib/supabase/server"
-import { getProfile } from "@/lib/db/profiles"
+import { getCachedUser, getCachedProfile } from "@/lib/supabase/auth"
 import { signOutAction } from "@/features/auth/actions"
 import { Card } from "@/components/ui/card"
 
@@ -12,11 +11,8 @@ export const metadata: Metadata = {
 }
 
 export default async function SettingsPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const profile = user ? await getProfile(supabase, user.id) : null
+  const user = await getCachedUser()
+  const profile = user ? await getCachedProfile(user.id) : null
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6">
@@ -51,6 +47,18 @@ export default async function SettingsPage() {
             <Sparkles className="size-4 text-foreground" />
           </div>
           <span className="flex-1 text-sm font-medium">Frases & Reflexiones</span>
+          <ChevronRight className="size-4 text-muted-foreground" />
+        </Link>
+
+        {/* Ver tutorial de nuevo */}
+        <Link
+          href="/dashboard?tour=1"
+          className="flex items-center gap-4 px-4 py-4 transition-colors hover:bg-muted/50"
+        >
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted">
+            <HelpCircle className="size-4 text-foreground" />
+          </div>
+          <span className="flex-1 text-sm font-medium">Ver tutorial</span>
           <ChevronRight className="size-4 text-muted-foreground" />
         </Link>
 

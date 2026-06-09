@@ -136,6 +136,24 @@ export type Exercise = {
   updated_at: string
 }
 
+// ─── Imágenes ─────────────────────────────────────────────────────────────────
+// Lógica espejo de exercise_slug.py. Si cambias una, cambia la otra.
+// `EXERCISE_IMG_BASE` es el único punto a tocar para migrar a Supabase Storage.
+
+export const EXERCISE_IMG_BASE = "/exercises"
+export const EXERCISE_IMG_EXT = "webp"
+
+/** `Pec Deck (Aperturas en Maquina)` → `pec-deck`. */
+export function exerciseImageSlug(name: string): string {
+  return name
+    .split("(")[0] // descartar paréntesis y lo que sigue
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "") // quitar acentos (marcas combinantes)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
 // ─── Filtros ──────────────────────────────────────────────────────────────────
 
 export type ExerciseFilters = {

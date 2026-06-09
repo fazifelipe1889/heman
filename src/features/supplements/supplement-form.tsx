@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { Loader2 } from "lucide-react"
 
 import type { Supplement } from "@/lib/db/supplements"
 import {
@@ -15,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Spinner } from "@/components/ui/spinner"
 import {
   createSupplementAction,
   updateSupplementAction,
@@ -202,7 +202,7 @@ export function SupplementForm({ supplement }: Props) {
           Cancelar
         </Button>
         <Button type="submit" className="flex-1" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {isPending && <Spinner className="mr-2" />}
           {supplement ? "Guardar cambios" : "Crear suplemento"}
         </Button>
       </div>

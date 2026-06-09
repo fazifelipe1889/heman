@@ -16,10 +16,12 @@ import {
   getCoachProfileByHandle,
   listMarketplacePrograms,
   listCoachReviews,
+  listCoachTransformations,
 } from "@/lib/db/coaching"
 import { getInitials, readFaq } from "@/lib/domain/coaching"
 import type { CoachingReview } from "@/lib/supabase/types"
 import { Carousel } from "@/components/ui/carousel"
+import { Card, CardContent } from "@/components/ui/card"
 import { ProductShowcaseCard } from "@/features/coaching/product-showcase-card"
 import { ReviewCard } from "@/features/coaching/review-card"
 import { FaqAccordion } from "@/features/coaching/faq-accordion"
@@ -50,9 +52,10 @@ export default async function CoachPublicPage({ params }: Props) {
   const coach = await getCoachProfileByHandle(supabase, handle)
   if (!coach || coach.status !== "active") notFound()
 
-  const [programs, reviews] = await Promise.all([
+  const [programs, reviews, transformations] = await Promise.all([
     listMarketplacePrograms(supabase, { coachId: coach.id }),
     listCoachReviews(supabase, coach.id).catch((): CoachingReview[] => []),
+    listCoachTransformations(supabase, coach.id).catch(() => []),
   ])
 
   const faq = readFaq(coach.faq)
@@ -124,6 +127,68 @@ export default async function CoachPublicPage({ params }: Props) {
             </Carousel>
           )}
         </section>
+
+        {/* Transformaciones */}
+        {transformations.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h2 className="text-lg font-semibold">Transformaciones reales</h2>
+            {transformations.map((t) => (
+              <Card key={t.id} size="sm">
+                <CardContent className="flex flex-col gap-3 py-3">
+                  {(t.before_url || t.after_url) && (
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="relative">
+                        {t.before_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={t.before_url}
+                            alt="Antes"
+                            className="aspect-square w-full rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="aspect-square w-full rounded-lg bg-muted" />
+                        )}
+                        <span className="absolute left-1.5 top-1.5 rounded bg-background/80 px-1.5 py-0.5 text-[10px] font-medium">
+                          Antes
+                        </span>
+                      </div>
+                      <div className="relative">
+                        {t.after_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={t.after_url}
+                            alt="Después"
+                            className="aspect-square w-full rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="aspect-square w-full rounded-lg bg-muted" />
+                        )}
+                        <span className="absolute left-1.5 top-1.5 rounded bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground">
+                          Después
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="font-medium">{t.client_name}</span>
+                      {t.metric && (
+                        <span className="text-sm font-semibold text-primary">
+                          {t.metric}
+                        </span>
+                      )}
+                    </div>
+                    {t.testimonial && (
+                      <p className="text-sm text-muted-foreground">
+                        &ldquo;{t.testimonial}&rdquo;
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </section>
+        )}
 
         {/* Reseñas */}
         {reviews.length > 0 && (

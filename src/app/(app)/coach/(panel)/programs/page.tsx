@@ -10,9 +10,11 @@ import {
   PRODUCT_TYPE_LABELS,
 } from "@/lib/domain/labels"
 import type { CoachingProgramStatus } from "@/lib/domain/coaching"
+import { readCategories } from "@/lib/domain/coaching"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CreateProductButton } from "@/features/coach/create-product-button"
+import { ShareLinkButton } from "@/features/coach/share-link-button"
 
 export const metadata: Metadata = { title: "Mis productos — EPHA" }
 
@@ -48,27 +50,45 @@ export default async function CoachProgramsPage() {
       ) : (
         <div className="grid gap-3">
           {programs.map((p) => (
-            <Link key={p.id} href={`/coach/programs/${p.id}`} className="rounded-xl">
-              <Card className="transition-colors hover:border-primary/50">
-                <CardContent className="flex items-center justify-between gap-3 py-4">
-                  <div className="flex min-w-0 flex-col gap-1">
-                    <span className="truncate font-medium">{p.title}</span>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-[11px]">
-                        {PRODUCT_TYPE_LABELS[p.product_type ?? "asesoria"]}
-                      </Badge>
-                      <Badge variant={STATUS_VARIANT[p.status]} className="text-[11px]">
-                        {COACHING_PROGRAM_STATUS_LABELS[p.status]}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {COACHING_CATEGORY_LABELS[p.category]}
+            <Card key={p.id} className="transition-colors hover:border-primary/50">
+              <CardContent className="flex items-center justify-between gap-3 py-4">
+                <Link
+                  href={`/coach/programs/${p.id}`}
+                  className="flex min-w-0 flex-1 flex-col gap-1"
+                >
+                  <span className="truncate font-medium">{p.title}</span>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="text-[11px]">
+                      {PRODUCT_TYPE_LABELS[p.product_type ?? "asesoria"]}
+                    </Badge>
+                    <Badge variant={STATUS_VARIANT[p.status]} className="text-[11px]">
+                      {COACHING_PROGRAM_STATUS_LABELS[p.status]}
+                    </Badge>
+                    {readCategories(p.category).map((cat) => (
+                      <span key={cat} className="text-xs text-muted-foreground">
+                        {COACHING_CATEGORY_LABELS[cat]}
                       </span>
-                    </div>
+                    ))}
                   </div>
-                  <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-                </CardContent>
-              </Card>
-            </Link>
+                </Link>
+                {p.status === "published" ? (
+                  <ShareLinkButton
+                    path={`/c/${coach.handle}/${p.slug}`}
+                    label=""
+                    shareTitle={p.title}
+                    variant="ghost"
+                    size="icon"
+                  />
+                ) : (
+                  <Link
+                    href={`/coach/programs/${p.id}`}
+                    aria-label="Abrir producto"
+                  >
+                    <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+                  </Link>
+                )}
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}

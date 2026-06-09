@@ -24,6 +24,8 @@ import {
   updateCoachTransformation,
   deleteCoachTransformation,
   updateCoachNotes,
+  getSubscriptionDetail,
+  updateSubscriptionPersonalizedTemplate,
 } from "@/lib/db/coaching"
 import type { PerkContainer, CoachingProgramStatus } from "@/lib/domain/coaching"
 import { DEFAULT_COACH_COMMISSION_PCT } from "@/lib/domain/coaching"
@@ -49,20 +51,30 @@ export type ActionResult = { error?: string }
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Campos de perks compartidos por el form de plan y el de producto. */
-type PerkFormFields = Pick<
-  PlanValues,
-  | "chatEnabled"
-  | "videoCallsCount"
-  | "videoCallMinutes"
-  | "routineEnabled"
-  | "routineReconfigs"
-  | "supplementsEnabled"
-  | "progressSharingEnabled"
->
+/**
+ * Campos de perks usados por buildPerks.
+ * Acepta tanto PlanValues (con routineEnabled) como ProductValues (con routineMode).
+ */
+type PerkFormFields = {
+  chatEnabled: boolean
+  videoCallsCount: number
+  videoCallMinutes: number
+  /** Desde PlanValues (formulario de plan). */
+  routineEnabled?: boolean
+  /** Desde ProductValues (formulario de producto). */
+  routineMode?: "none" | "adaptive" | "personalized"
+  routineReconfigs: number
+  supplementsEnabled: boolean
+  progressSharingEnabled: boolean
+}
 
 /** Construye el contenedor de perks a partir de los valores del formulario. */
 function buildPerks(v: PerkFormFields): PerkContainer {
+  const routineOn =
+    v.routineMode !== undefined ? v.routineMode !== "none" : (v.routineEnabled ?? false)
+  const routineMode =
+    v.routineMode && v.routineMode !== "none" ? v.routineMode : undefined
+
   return {
     chat: { enabled: v.chatEnabled },
     video_calls: {
@@ -71,8 +83,9 @@ function buildPerks(v: PerkFormFields): PerkContainer {
       minutes: v.videoCallMinutes,
     },
     routine: {
-      enabled: v.routineEnabled,
+      enabled: routineOn,
       reconfigs_included: v.routineReconfigs,
+      ...(routineMode ? { mode: routineMode } : {}),
     },
     supplements: { enabled: v.supplementsEnabled },
     progress_sharing: { enabled: v.progressSharingEnabled },
@@ -106,40 +119,29 @@ function buildContent(v: ProductValues) {
 }
 
 /**
- * Construye el payload del template de rutina del coach.
- * Devuelve null si no hay contenido para guardar.
+ * Construye el payload multi-adaptativo del template de rutina del coach.
+ * Devuelve null si routineMode no es "adaptive" o no hay rutinas con grupos.
  */
 function buildRoutineTemplatePayload(v: ProductValues): Json | null {
-  if (!v.routineEnabled) return null
-  if (v.routineMode === "personalized") {
-    const exercises = v.routineExercises
-      .filter((e) => e.exerciseName.trim())
-      .map((e) => ({
-        exerciseName: e.exerciseName.trim(),
-        exerciseRef: e.exerciseRef || undefined,
-        sets: e.sets,
-        targetReps: e.targetReps?.trim() || undefined,
-        targetWeight: e.targetWeight ?? undefined,
-        targetRir: e.targetRir ?? undefined,
-        restSeconds: e.restSeconds ?? undefined,
-        notes: e.notes?.trim() || undefined,
-      }))
-    if (exercises.length === 0) return null
-    return { mode: "personalized", exercises } as unknown as Json
-  }
-  if (v.routineMode === "adaptive") {
-    const groups = v.routineGroups
-      .filter((g) => g.muscleGroup.trim())
-      .map((g) => ({
-        muscleGroup: g.muscleGroup.trim(),
-        exerciseCount: g.exerciseCount,
-        sets: g.sets,
-        notes: g.notes?.trim() || undefined,
-      }))
-    if (groups.length === 0) return null
-    return { mode: "adaptive", groups } as unknown as Json
-  }
-  return null
+  if (v.routineMode !== "adaptive") return null
+  const routines = v.routines
+    .map((r) => ({
+      name: r.name.trim() || "Rutina",
+      groups: r.groups
+        .filter((g) => g.muscleGroup.trim())
+        .map((g) => ({
+          muscleGroup: g.muscleGroup.trim(),
+          exerciseCount: g.exerciseCount,
+          sets: g.sets,
+          notes: g.notes?.trim() || undefined,
+        })),
+    }))
+    .filter((r) => r.groups.length > 0)
+  if (routines.length === 0) return null
+  const planning = v.routinePlanning
+    .filter((p) => p.label.trim() && p.routineIndex < routines.length)
+    .map((p) => ({ label: p.label.trim(), routineIndex: p.routineIndex }))
+  return { mode: "multi_adaptive", routines, planning } as unknown as Json
 }
 
 /** Definición del formulario: descarta campos sin etiqueta. */
@@ -150,6 +152,7 @@ function buildIntakeForm(v: ProductValues) {
       label: f.label.trim(),
       type: f.type,
       required: f.required,
+      ...(f.options?.length ? { options: f.options } : {}),
     }))
     .filter((f) => f.label)
 }
@@ -373,7 +376,7 @@ export async function createProductAction(
         tagline: v.tagline || null,
         short_description: v.shortDescription || null,
         description: v.description || null,
-        category: v.category,
+        category: JSON.stringify(v.categories),
         level: v.level || null,
         cover_url: v.coverUrl || null,
         intro_video_url: v.introVideoUrl || null,
@@ -386,6 +389,8 @@ export async function createProductAction(
         description: v.shortDescription || null,
         price_cents: Math.round(v.price * 100),
         price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
+        discount_pct: v.discountPct ?? 0,
+        accent_color: v.accentColor || null,
         duration_days: v.durationDays,
         perks: buildPerks(v) as Json,
         routine_template_id: routineTemplateId,
@@ -442,7 +447,7 @@ export async function updateProductAction(
     } catch {
       // Ignorado: el producto se actualiza sin template si falla.
     }
-  } else if (!v.routineEnabled) {
+  } else if (v.routineMode !== "adaptive") {
     routineTemplateId = null
   }
 
@@ -457,7 +462,7 @@ export async function updateProductAction(
         tagline: v.tagline || null,
         short_description: v.shortDescription || null,
         description: v.description || null,
-        category: v.category,
+        category: JSON.stringify(v.categories),
         level: v.level || null,
         cover_url: v.coverUrl || null,
         intro_video_url: v.introVideoUrl || null,
@@ -470,6 +475,8 @@ export async function updateProductAction(
         description: v.shortDescription || null,
         price_cents: Math.round(v.price * 100),
         price_usd_cents: v.priceUsd != null ? Math.round(v.priceUsd * 100) : null,
+        discount_pct: v.discountPct ?? 0,
+        accent_color: v.accentColor || null,
         duration_days: v.durationDays,
         perks: buildPerks(v) as Json,
         routine_template_id: routineTemplateId,
@@ -678,5 +685,73 @@ export async function saveCoachNotesAction(
   }
 
   revalidatePath(`/coach/clients/${parsed.data.subscriptionId}`)
+  return {}
+}
+
+// ---------------------------------------------------------------------------
+// Rutina personalizada por cliente
+// ---------------------------------------------------------------------------
+
+export type ClientRoutineValues = {
+  routines: Array<{
+    name: string
+    exercises: Array<{
+      exerciseName: string
+      sets: number
+      targetReps?: string
+      notes?: string
+    }>
+  }>
+  planning: Array<{
+    label: string
+    routineIndex: number
+  }>
+}
+
+export async function saveClientRoutineAction(
+  subscriptionId: string,
+  existingTemplateId: string | null,
+  values: ClientRoutineValues
+): Promise<ActionResult> {
+  const { supabase, coach } = await requireCoach()
+
+  const sub = await getSubscriptionDetail(supabase, subscriptionId)
+  if (!sub || sub.coach_id !== coach.id) return { error: "Sin acceso a esta suscripción." }
+
+  const routines = values.routines
+    .map((r) => ({
+      name: r.name.trim() || "Rutina",
+      exercises: r.exercises
+        .filter((e) => e.exerciseName.trim())
+        .map((e) => ({
+          exerciseName: e.exerciseName.trim(),
+          sets: e.sets,
+          ...(e.targetReps?.trim() ? { targetReps: e.targetReps.trim() } : {}),
+          ...(e.notes?.trim() ? { notes: e.notes.trim() } : {}),
+        })),
+    }))
+    .filter((r) => r.exercises.length > 0)
+
+  const planning = values.planning
+    .filter((p) => p.label.trim() && p.routineIndex < routines.length)
+    .map((p) => ({ label: p.label.trim(), routineIndex: p.routineIndex }))
+
+  const payload: Json = { mode: "multi_personalized", routines, planning }
+
+  try {
+    const templateId = await upsertRoutineTemplate(
+      supabase,
+      coach.id,
+      `Rutina personalizada — ${sub.program.title}`,
+      null,
+      payload,
+      existingTemplateId ?? undefined
+    )
+    await updateSubscriptionPersonalizedTemplate(supabase, subscriptionId, templateId)
+  } catch {
+    return { error: "No se pudo guardar la rutina." }
+  }
+
+  revalidatePath(`/coach/clients/${subscriptionId}`)
   return {}
 }

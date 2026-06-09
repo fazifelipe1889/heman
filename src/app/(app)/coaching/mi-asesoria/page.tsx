@@ -224,6 +224,7 @@ export default async function MiAsesoriaPage() {
       <ProductContent
         content={contentBlocks}
         nutritionNotes={delivery?.nutrition_notes ?? null}
+        intakeAnswers={intakeAnswers}
       />
 
       {/* Formulario al cliente */}

@@ -263,6 +263,7 @@ export type Database = {
           preferred_training_type: TrainingType | null
           units: Units
           onboarding_completed: boolean
+          tour_completed_at: string | null
           role: ProfileRole
           created_at: string
           updated_at: string
@@ -280,6 +281,7 @@ export type Database = {
           preferred_training_type?: TrainingType | null
           units?: Units
           onboarding_completed?: boolean
+          tour_completed_at?: string | null
           role?: ProfileRole
           created_at?: string
           updated_at?: string
@@ -636,7 +638,7 @@ export type Database = {
           tagline: string | null
           short_description: string | null
           description: string | null
-          category: CoachingCategory
+          category: string
           cover_url: string | null
           intro_video_url: string | null
           level: CoachingLevel | null
@@ -657,7 +659,7 @@ export type Database = {
           tagline?: string | null
           short_description?: string | null
           description?: string | null
-          category: CoachingCategory
+          category: string
           cover_url?: string | null
           intro_video_url?: string | null
           level?: CoachingLevel | null
@@ -787,6 +789,8 @@ export type Database = {
           is_visible: boolean
           is_featured: boolean
           price_usd_cents: number | null
+          discount_pct: number
+          accent_color: string | null
           position: number
           created_at: string
           updated_at: string
@@ -808,6 +812,8 @@ export type Database = {
           is_visible?: boolean
           is_featured?: boolean
           price_usd_cents?: number | null
+          discount_pct?: number
+          accent_color?: string | null
           position?: number
         }
         Update: Partial<Database["public"]["Tables"]["coaching_plan"]["Insert"]>
@@ -854,6 +860,7 @@ export type Database = {
           ends_at: string | null
           perks_snapshot: Json
           routine_id: string | null
+          personalized_template_id: string | null
           messages_used: number
           video_calls_used: number
           reconfigs_used: number
@@ -874,6 +881,7 @@ export type Database = {
           ends_at?: string | null
           perks_snapshot: Json
           routine_id?: string | null
+          personalized_template_id?: string | null
           messages_used?: number
           video_calls_used?: number
           reconfigs_used?: number

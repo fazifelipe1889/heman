@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Dumbbell,
   HeartPulse,
+  ListChecks,
   Plus,
   Star,
 } from "lucide-react"
@@ -14,6 +15,7 @@ import { listRoutines } from "@/lib/db/routines"
 import { ROUTINE_TYPE_META } from "@/features/routines/routine-type"
 import { RoutineListActions } from "@/features/routines/routine-list-actions"
 import { Card } from "@/components/ui/card"
+import { PageHeader } from "@/components/ui/page-header"
 
 export const metadata: Metadata = {
   title: "Rutinas — EPHA",
@@ -25,12 +27,11 @@ export default async function RoutinesPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight">Rutinas</h1>
-        <p className="text-sm text-muted-foreground">
-          Creá rutinas y organizalas en tu semana.
-        </p>
-      </div>
+      <PageHeader
+        icon={ListChecks}
+        title="Rutinas"
+        description="Creá rutinas y organizalas en tu semana."
+      />
 
       {/* Opciones de creación */}
       <div className="grid grid-cols-2 gap-3">

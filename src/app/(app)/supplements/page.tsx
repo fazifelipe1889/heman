@@ -8,6 +8,7 @@ import { toLocalDateString, weekdayOf } from "@/lib/domain/supplements"
 import { SupplementChecklist } from "@/features/supplements/supplement-checklist"
 import { SupplementListItem } from "@/features/supplements/supplement-list-item"
 import { Card } from "@/components/ui/card"
+import { PageHeader } from "@/components/ui/page-header"
 
 export const metadata: Metadata = {
   title: "Suplementación — EPHA",
@@ -36,25 +37,20 @@ export default async function SupplementsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6">
-      {/* Encabezado */}
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <FlaskConical className="size-6 text-primary" />
-            <h1 className="text-2xl font-bold tracking-tight">Suplementación</h1>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Registrá tu consumo diario.
-          </p>
-        </div>
-        <Link
-          href="/supplements/new"
-          className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        >
-          <Plus className="size-4" />
-          Agregar
-        </Link>
-      </div>
+      <PageHeader
+        icon={FlaskConical}
+        title="Suplementación"
+        description="Registrá tu consumo diario."
+        action={
+          <Link
+            href="/supplements/new"
+            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            <Plus className="size-4" />
+            Agregar
+          </Link>
+        }
+      />
 
       {/* Checklist de hoy */}
       <section className="flex flex-col gap-3">

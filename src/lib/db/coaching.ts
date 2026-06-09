@@ -35,6 +35,7 @@ import type {
   CoachingReviewInsert,
   CoachingTransformation,
   CoachingTransformationInsert,
+  Profile,
 } from "@/lib/supabase/types"
 import type {
   CoachStatus,
@@ -79,6 +80,11 @@ export type SubscriptionWithContext = CoachingSubscription & {
 export type CoachClient = CoachingSubscription & {
   program: Pick<CoachingProgram, "id" | "title">
   plan: Pick<CoachingPlan, "id" | "name">
+}
+
+/** Cliente con datos de perfil del usuario (para el panel del coach). */
+export type CoachClientWithUser = CoachClient & {
+  user: Pick<Profile, "id" | "full_name"> | null
 }
 
 /** Thread del inbox del coach con el último mensaje. */
@@ -1079,6 +1085,46 @@ export async function listCoachClients(
   }))
 }
 
+/** Lista los clientes de un programa específico, con datos de perfil del usuario. */
+export async function listCoachClientsForProgram(
+  supabase: Client,
+  coachId: string,
+  programId: string
+): Promise<CoachClientWithUser[]> {
+  const { data, error } = await supabase
+    .from("coaching_subscription")
+    .select(
+      `*,
+       program:coaching_program!coaching_subscription_program_id_fkey(id, title),
+       plan:coaching_plan!coaching_subscription_plan_id_fkey(id, name)`
+    )
+    .eq("coach_id", coachId)
+    .eq("program_id", programId)
+    .order("created_at", { ascending: false })
+  if (error) throw error
+
+  const clients: CoachClient[] = (data ?? []).map((row) => ({
+    ...(row as unknown as CoachingSubscription),
+    program: row.program as CoachClient["program"],
+    plan: row.plan as CoachClient["plan"],
+  }))
+
+  if (clients.length === 0) return []
+
+  const userIds = [...new Set(clients.map((c) => c.user_id))]
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, full_name")
+    .in("id", userIds)
+
+  const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]))
+
+  return clients.map((c) => ({
+    ...c,
+    user: profileMap.get(c.user_id) ?? null,
+  }))
+}
+
 /** Actualiza las notas privadas del coach sobre un cliente. */
 export async function updateCoachNotes(
   supabase: Client,
@@ -1090,6 +1136,33 @@ export async function updateCoachNotes(
     .update({ coach_notes: notes })
     .eq("id", subscriptionId)
   if (error) throw error
+}
+
+/** Vincula un template personalizado a una suscripción (rutina por cliente). */
+export async function updateSubscriptionPersonalizedTemplate(
+  supabase: Client,
+  subscriptionId: string,
+  templateId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("coaching_subscription")
+    .update({ personalized_template_id: templateId })
+    .eq("id", subscriptionId)
+  if (error) throw error
+}
+
+/** Lee el template de rutina personalizada de una suscripción. */
+export async function getPersonalizedTemplate(
+  supabase: Client,
+  templateId: string
+): Promise<CoachRoutineTemplate | null> {
+  const { data, error } = await supabase
+    .from("coach_routine_template")
+    .select("*")
+    .eq("id", templateId)
+    .maybeSingle()
+  if (error) throw error
+  return data
 }
 
 /**

@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import {
   formatMoney,
   readIncludes,
+  readCategories,
   PRODUCT_TYPES,
 } from "@/lib/domain/coaching"
 import { COACHING_CATEGORY_LABELS, PRODUCT_TYPE_LABELS } from "@/lib/domain/labels"
@@ -59,9 +60,11 @@ export function ProductShowcaseCard({
           <Badge variant="secondary" className="text-[11px]">
             {PRODUCT_TYPE_LABELS[productType]}
           </Badge>
-          <span className="text-xs text-muted-foreground">
-            {COACHING_CATEGORY_LABELS[program.category]}
-          </span>
+          {readCategories(program.category).map((cat) => (
+            <span key={cat} className="text-xs text-muted-foreground">
+              {COACHING_CATEGORY_LABELS[cat]}
+            </span>
+          ))}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -94,24 +97,7 @@ export function ProductShowcaseCard({
 
         {/* Precio + duración */}
         {plan && (
-          <div className="mt-auto rounded-lg border bg-muted/40 p-3">
-            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
-              Precio
-            </span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold tracking-tight">
-                {formatMoney(plan.price_cents, plan.currency)}
-              </span>
-              {plan.price_usd_cents != null && (
-                <span className="text-xs text-muted-foreground">
-                  / {formatMoney(plan.price_usd_cents, "USD")}
-                </span>
-              )}
-            </div>
-            <span className="text-xs text-muted-foreground">
-              Duración: {plan.duration_days} días
-            </span>
-          </div>
+          <PriceBlock plan={plan} />
         )}
 
         <div className="flex flex-col gap-2">
@@ -163,5 +149,56 @@ export function ProductShowcaseCard({
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+function PriceBlock({ plan }: { plan: import("@/lib/supabase/types").CoachingPlan }) {
+  const discountPct: number = (plan as { discount_pct?: number }).discount_pct ?? 0
+  const accentColor: string | null = (plan as { accent_color?: string | null }).accent_color ?? null
+  const discountedCents =
+    discountPct > 0 ? Math.round(plan.price_cents * (1 - discountPct / 100)) : null
+
+  return (
+    <div
+      className="mt-auto rounded-lg border p-3 transition-colors"
+      style={
+        accentColor
+          ? { backgroundColor: `${accentColor}18`, borderColor: `${accentColor}60` }
+          : undefined
+      }
+    >
+      <span
+        className="text-[11px] uppercase tracking-wide"
+        style={accentColor ? { color: accentColor } : { color: "var(--muted-foreground)" }}
+      >
+        Precio
+      </span>
+      <div className="flex items-baseline gap-1.5">
+        <span className="text-xl font-bold tracking-tight">
+          {formatMoney(discountedCents ?? plan.price_cents, plan.currency)}
+        </span>
+        {discountedCents != null && (
+          <span className="text-sm text-muted-foreground line-through">
+            {formatMoney(plan.price_cents, plan.currency)}
+          </span>
+        )}
+        {plan.price_usd_cents != null && (
+          <span className="text-xs text-muted-foreground">
+            / {formatMoney(plan.price_usd_cents, "USD")}
+          </span>
+        )}
+      </div>
+      {discountPct > 0 && (
+        <span
+          className="text-xs font-medium"
+          style={accentColor ? { color: accentColor } : {}}
+        >
+          {discountPct}% de descuento
+        </span>
+      )}
+      <span className="block text-xs text-muted-foreground">
+        Duración: {plan.duration_days} días
+      </span>
+    </div>
   )
 }

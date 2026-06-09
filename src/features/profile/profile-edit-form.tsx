@@ -4,7 +4,6 @@ import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { Loader2 } from "lucide-react"
 
 import {
   EXPERIENCE_LEVELS,
@@ -23,6 +22,7 @@ import {
 import type { Profile } from "@/lib/supabase/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Form,
   FormControl,
@@ -280,7 +280,7 @@ export function ProfileEditForm({ profile }: { profile: Profile }) {
         </section>
 
         <Button type="submit" disabled={isPending} className="h-12 w-full text-base font-semibold">
-          {isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {isPending && <Spinner className="mr-2" />}
           Guardar cambios
         </Button>
       </form>

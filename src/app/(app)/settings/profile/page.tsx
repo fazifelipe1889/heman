@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-import { createClient } from "@/lib/supabase/server"
-import { getProfile } from "@/lib/db/profiles"
+import { getCachedUser, getCachedProfile } from "@/lib/supabase/auth"
 import { ProfileEditForm } from "@/features/profile/profile-edit-form"
 
 export const metadata: Metadata = {
@@ -11,11 +10,8 @@ export const metadata: Metadata = {
 }
 
 export default async function ProfileEditPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  const profile = user ? await getProfile(supabase, user.id) : null
+  const user = await getCachedUser()
+  const profile = user ? await getCachedProfile(user.id) : null
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6">

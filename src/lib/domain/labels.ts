@@ -173,6 +173,7 @@ export const INTAKE_FIELD_TYPE_LABELS: Record<IntakeFieldType, string> = {
   text: "Texto corto",
   textarea: "Texto largo",
   number: "Número",
+  select: "Selección",
 }
 
 export const INTAKE_FIELD_TYPE_OPTIONS = (

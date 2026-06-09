@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import { Toaster } from "@/components/ui/sonner"
+import { SplashScreen } from "@/components/splash-screen"
+import { NavigationProgress } from "@/components/navigation-progress"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
@@ -29,7 +31,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <QueryClientProvider client={queryClient}>
+        <NavigationProgress />
         {children}
+        <SplashScreen />
         <Toaster position="top-center" richColors />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

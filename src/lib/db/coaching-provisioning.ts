@@ -205,6 +205,24 @@ export async function provisionSubscription(
           if (routine) {
             routineId = routine.id
           }
+        } else if (payload?.mode === "multi_adaptive") {
+          // Multi-adaptativo: crear una rutina vacía por cada entrada del template.
+          // Se almacena la primera en routine_id para el flujo existente.
+          for (const [i, r] of payload.routines.entries()) {
+            const { data: routine } = await admin
+              .from("routines")
+              .insert({
+                user_id: userId,
+                type: "musculacion",
+                name: r.name || `Rutina ${i + 1}`,
+                description: `Elegí tus ejercicios para cada músculo.`,
+              })
+              .select("id")
+              .single()
+            if (routine && i === 0) {
+              routineId = routine.id
+            }
+          }
         }
 
         if (routineId) {

@@ -32,16 +32,22 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
-    title: "Rutinas",
-    description: "Creá y organizá tus rutinas de entrenamiento.",
-    href: "/routines",
-    tourId: "rutinas",
-  },
-  {
     title: "Entrenar",
     description: "Seguí tu plan o elegí una rutina.",
     href: "/train",
     tourId: "entrenar",
+  },
+  {
+    title: "Suplementación",
+    description: "Registrá tu constancia diaria de suplementos.",
+    href: "/supplements",
+    tourId: "supplements",
+  },
+  {
+    title: "Rutinas",
+    description: "Creá y organizá tus rutinas de entrenamiento.",
+    href: "/routines",
+    tourId: "rutinas",
   },
   {
     title: "Progreso",
@@ -54,18 +60,6 @@ const SECTIONS: Section[] = [
     description: "Biblioteca de entrenamiento y nutrición.",
     href: "/wiki",
     tourId: "wiki",
-  },
-  {
-    title: "Suplementación",
-    description: "Registrá tu constancia diaria de suplementos.",
-    href: "/supplements",
-    tourId: "supplements",
-  },
-  {
-    title: "Ejercicios",
-    description: "Catálogo de 252 ejercicios con imágenes y filtros.",
-    href: "/exercises",
-    tourId: "ejercicios",
   },
 ]
 

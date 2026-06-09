@@ -6,7 +6,6 @@ import {
   PRODUCT_TYPES,
   CONTENT_BLOCK_TYPES,
   INTAKE_FIELD_TYPES,
-  ROUTINE_MODES,
 } from "@/lib/domain/coaching"
 
 /**
@@ -57,7 +56,7 @@ export const programSchema = z.object({
     .regex(/^[a-z0-9_-]+$/i, "Solo letras, números, guiones y guion bajo"),
   tagline: z.string().max(300).optional(),
   description: z.string().max(2000).optional(),
-  category: z.enum(COACHING_CATEGORIES),
+  category: z.string(),
   level: z.enum(COACHING_LEVELS).optional(),
   coverUrl: z.string().url("URL inválida").optional().or(z.literal("")),
   introVideoUrl: z.string().url("URL inválida").optional().or(z.literal("")),
@@ -122,7 +121,9 @@ export const productSchema = z.object({
   // descripción corta (vitrina) vs descripción larga (ver detalle)
   shortDescription: z.string().max(400).optional(),
   description: z.string().max(2000).optional(),
-  category: z.enum(COACHING_CATEGORIES),
+  categories: z
+    .array(z.enum(COACHING_CATEGORIES))
+    .min(1, "Seleccioná al menos una categoría"),
   level: z.enum(COACHING_LEVELS).optional(),
   coverUrl: z.string().url("URL inválida").optional().or(z.literal("")),
   introVideoUrl: z.string().url("URL inválida").optional().or(z.literal("")),
@@ -137,6 +138,8 @@ export const productSchema = z.object({
   // --- Precio y duración (plan comprable) ---
   price: z.number("Ingresá un precio").min(0, "No puede ser negativo").max(100_000_000),
   priceUsd: z.number().min(0).max(1_000_000).optional(),
+  discountPct: z.number().int().min(0).max(99).optional(),
+  accentColor: z.string().max(7).optional(),
   durationDays: z
     .number("Ingresá la duración")
     .int()
@@ -146,30 +149,28 @@ export const productSchema = z.object({
   chatEnabled: z.boolean(),
   videoCallsCount: z.number().int().min(0).max(100),
   videoCallMinutes: z.number().int().min(0).max(240),
-  routineEnabled: z.boolean(),
+  routineMode: z.enum(["none", "adaptive", "personalized"]),
   routineReconfigs: z.number().int().min(0).max(52),
-  // --- Configuración de rutina (solo si routineEnabled) ---
-  routineMode: z.enum(ROUTINE_MODES),
-  /** Ejercicios exactos (modo personalizado). */
-  routineExercises: z.array(
+  // --- Rutinas adaptativas (múltiples, opcional) ---
+  /** Lista de rutinas adaptativas que define el coach. */
+  routines: z.array(
     z.object({
-      exerciseName: z.string().max(200),
-      exerciseRef: z.string().optional(),
-      sets: z.number().int().min(1).max(20),
-      targetReps: z.string().max(20).optional(),
-      targetWeight: z.number().min(0).max(1000).optional(),
-      targetRir: z.number().min(0).max(10).optional(),
-      restSeconds: z.number().int().min(0).max(900).optional(),
-      notes: z.string().max(300).optional(),
+      name: z.string().max(100),
+      groups: z.array(
+        z.object({
+          muscleGroup: z.string().max(80),
+          exerciseCount: z.number().int().min(1).max(10),
+          sets: z.number().int().min(1).max(20),
+          notes: z.string().max(200).optional(),
+        })
+      ),
     })
   ),
-  /** Grupos musculares y volumen (modo adaptativo). */
-  routineGroups: z.array(
+  /** Planificación: asignación ordenada de rutinas (ej. Día 1 → Rutina A). */
+  routinePlanning: z.array(
     z.object({
-      muscleGroup: z.string().max(80),
-      exerciseCount: z.number().int().min(1).max(10),
-      sets: z.number().int().min(1).max(20),
-      notes: z.string().max(200).optional(),
+      label: z.string().max(80),
+      routineIndex: z.number().int().min(0),
     })
   ),
   supplementsEnabled: z.boolean(),
@@ -191,6 +192,7 @@ export const productSchema = z.object({
       label: z.string().max(200),
       type: z.enum(INTAKE_FIELD_TYPES),
       required: z.boolean(),
+      options: z.array(z.string()).optional(),
     })
   ),
 })

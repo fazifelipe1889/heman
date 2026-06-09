@@ -1,8 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { CalendarDays, ChevronRight, Dumbbell, HeartPulse } from "lucide-react"
+import {
+  CalendarDays,
+  ChevronRight,
+  Dumbbell,
+  HeartPulse,
+  Zap,
+} from "lucide-react"
 
 import { Card } from "@/components/ui/card"
+import { PageHeader } from "@/components/ui/page-header"
 
 export const metadata: Metadata = {
   title: "Entrenar — EPHA",
@@ -11,10 +18,11 @@ export const metadata: Metadata = {
 export default function TrainPage() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight">Entrenar</h1>
-        <p className="text-sm text-muted-foreground">¿Qué vas a entrenar hoy?</p>
-      </div>
+      <PageHeader
+        icon={Zap}
+        title="Entrenar"
+        description="¿Qué vas a entrenar hoy?"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <Link

@@ -254,3 +254,48 @@
   display: block;
   letter-spacing: 0.04em;
 }
+
+/* ─── Animaciones de marca ───────────────────────────────────────────────── */
+
+/* Barrido de luz que recorre el logo del splash (izq → der). */
+@keyframes epha-shimmer {
+  0%   { transform: translateX(-130%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+
+/* Entrada suave fade + desplazamiento hacia arriba */
+@keyframes epha-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Línea de luz dorada que barre en diagonal toda la pantalla. */
+.epha-shimmer-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 46%,
+    rgba(245, 216, 122, 0.25) 49%,
+    rgba(255, 248, 220, 0.85) 50%,
+    rgba(245, 216, 122, 0.25) 51%,
+    transparent 54%
+  );
+  mix-blend-mode: screen;
+  animation: epha-shimmer 1.3s ease-in-out 0.4s 1 both;
+}
+
+/* ─── Accesibilidad de movimiento ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

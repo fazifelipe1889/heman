@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#0f0f1a"/>
+  <!-- Floor -->
+  <line x1="10" y1="185" x2="190" y2="185" stroke="#27272a" stroke-width="2"/>
+
+  <!-- Person: front view, standing -->
+  <!-- Head -->
+  <circle cx="100" cy="28" r="12" fill="none" stroke="#d4d4d8" stroke-width="2"/>
+  <!-- Neck -->
+  <line x1="100" y1="40" x2="100" y2="50" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Shoulders -->
+  <line x1="72" y1="52" x2="128" y2="52" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Torso sides -->
+  <line x1="72" y1="52" x2="80" y2="120" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="128" y1="52" x2="120" y2="120" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Hips -->
+  <line x1="80" y1="120" x2="120" y2="120" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Left leg -->
+  <line x1="87" y1="120" x2="82" y2="183" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Right leg -->
+  <line x1="113" y1="120" x2="118" y2="183" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Feet -->
+  <line x1="75" y1="183" x2="90" y2="183" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="110" y1="183" x2="125" y2="183" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Chest highlight (pec area) -->
+  <ellipse cx="100" cy="82" rx="22" ry="14" fill="rgba(239,68,68,0.4)"/>
+
+  <!-- Left arm: upper arm down and out, forearm bending in toward plate -->
+  <line x1="72" y1="52" x2="55" y2="78" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="55" y1="78" x2="72" y2="90" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Right arm -->
+  <line x1="128" y1="52" x2="145" y2="78" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="145" y1="78" x2="128" y2="90" stroke="#d4d4d8" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Weight plate held between palms at chest (key Svend Press element) -->
+  <!-- Plate body -->
+  <circle cx="100" cy="88" r="20" fill="none" stroke="#6b7280" stroke-width="4"/>
+  <!-- Plate center hole -->
+  <circle cx="100" cy="88" r="5" fill="#3f3f46" stroke="#52525b" stroke-width="2"/>
+  <!-- Plate grip texture lines -->
+  <line x1="82" y1="88" x2="88" y2="88" stroke="#52525b" stroke-width="1.5"/>
+  <line x1="112" y1="88" x2="118" y2="88" stroke="#52525b" stroke-width="1.5"/>
+  <!-- Squeeze arrows (isometric pressing motion) -->
+  <path d="M62,88 L68,84 M62,88 L68,92" stroke="#fbbf24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M138,88 L132,84 M138,88 L132,92" stroke="#fbbf24" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

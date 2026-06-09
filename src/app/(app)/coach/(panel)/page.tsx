@@ -10,9 +10,10 @@ import {
 } from "@/lib/db/coaching"
 import { formatMoney } from "@/lib/domain/coaching"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { ShareLinkButton } from "@/features/coach/share-link-button"
 
 export const metadata: Metadata = { title: "Panel de coach — EPHA" }
 
@@ -71,12 +72,25 @@ export default async function CoachHomePage() {
         >
           <Plus className="size-4" /> Crear asesoría
         </Link>
-        <Link
-          href={`/c/${coach.handle}`}
-          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12")}
-        >
-          <Eye className="size-4" /> Ver mi perfil público
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href={`/c/${coach.handle}`}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-12 flex-1",
+            )}
+          >
+            <Eye className="size-4" /> Ver mi perfil
+          </Link>
+          <ShareLinkButton
+            path={`/c/${coach.handle}`}
+            label="Compartir perfil"
+            shareTitle={`${coach.display_name} — Coach en EPHA`}
+            variant="outline"
+            size="lg"
+            className="h-12 flex-1"
+          />
+        </div>
       </div>
 
       {/* Atajos */}

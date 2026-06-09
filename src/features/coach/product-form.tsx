@@ -22,6 +22,9 @@ import {
   Apple,
   CalendarRange,
   Lock,
+  ChevronDown,
+  ChevronUp,
+  GripVertical,
 } from "lucide-react"
 
 import {
@@ -37,10 +40,10 @@ import {
   readContentBlocks,
   readIntakeForm,
   readRoutineTemplatePayload,
-  ROUTINE_MODES,
+  readCategories,
 } from "@/lib/domain/coaching"
 import type { ProductType } from "@/lib/domain/coaching"
-import { ExercisePicker } from "@/features/exercises/exercise-picker"
+import { FORMULA_INTAKE_FIELDS, PREDEFINED_COMMANDS } from "@/lib/domain/nutrition-formulas"
 import { MUSCLE_GROUPS_ES } from "@/lib/domain/exercises"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -61,21 +64,30 @@ import type {
 import { createProductAction, updateProductAction } from "./actions"
 import { productSchema, type ProductValues } from "./schema"
 
-/** Opciones de grupo muscular para el modo adaptativo. */
 const MUSCLE_GROUP_OPTIONS = MUSCLE_GROUPS_ES.map((g) => ({ value: g, label: g }))
 
-/** Genera un slug a partir del título. */
+/** Colores de acento disponibles para resaltar el cuadrante de precio. */
+const ACCENT_COLORS = [
+  { value: "", label: "Sin color" },
+  { value: "#6366f1", label: "Índigo" },
+  { value: "#8b5cf6", label: "Violeta" },
+  { value: "#ec4899", label: "Rosa" },
+  { value: "#f97316", label: "Naranja" },
+  { value: "#10b981", label: "Esmeralda" },
+  { value: "#06b6d4", label: "Cyan" },
+  { value: "#f59e0b", label: "Ámbar" },
+]
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "") // quitar diacríticos
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 60)
 }
 
-/** Fila de perk con switch (compartida con el form de plan). */
 function PerkRow({
   icon: Icon,
   title,
@@ -129,7 +141,6 @@ function PerkRow({
   )
 }
 
-/** Slot de contenido aún no configurable (placeholder de subida). */
 function ContentSlot({
   icon: Icon,
   title,
@@ -155,14 +166,72 @@ function ContentSlot({
   )
 }
 
+function NutritionCommandsPanel({
+  intakeFields,
+}: {
+  intakeFields: Array<{ id?: string; label?: string } | undefined>
+}) {
+  const [open, setOpen] = React.useState(false)
+  const fieldIds = intakeFields
+    .map((f) => f?.id)
+    .filter((id): id is string => Boolean(id))
+
+  return (
+    <div className="rounded-xl border border-dashed">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between px-3 py-2 text-xs text-muted-foreground"
+      >
+        <span>Comandos disponibles para el texto</span>
+        {open ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />}
+      </button>
+      {open && (
+        <div className="flex flex-col gap-3 border-t px-3 pb-3 pt-2">
+          <p className="text-[11px] text-muted-foreground">
+            Escribí comandos en el texto de arriba. El cliente verá los valores
+            calculados con sus datos. Podés combinar con aritmética:{" "}
+            <code className="rounded bg-muted px-1">/tdee - 500</code>
+          </p>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[11px] font-medium text-muted-foreground">
+              Fórmulas predeterminadas
+            </span>
+            {Object.entries(PREDEFINED_COMMANDS).map(([, cmd]) => (
+              <div key={cmd.label} className="flex flex-col gap-0.5">
+                <code className="text-xs font-semibold text-primary">{cmd.label}</code>
+                <span className="text-[11px] text-muted-foreground">{cmd.description}</span>
+              </div>
+            ))}
+          </div>
+          {fieldIds.length > 0 && (
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[11px] font-medium text-muted-foreground">
+                Variables del formulario del cliente
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {fieldIds.map((id) => (
+                  <code
+                    key={id}
+                    className="rounded bg-muted px-1.5 py-0.5 text-[11px] text-foreground"
+                  >
+                    /{id}
+                  </code>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 type Props = {
-  /** Tipo de producto (en alta viene del selector "+ Crear"; en edición, del producto). */
   productType: ProductType
-  /** Modo edición: program existente + su plan (si lo tiene) + su contenido. */
   program?: CoachingProgram
   plan?: CoachingPlan | null
   content?: CoachingProgramContent | null
-  /** Template de rutina existente (para edición). */
   routineTemplate?: import("@/lib/supabase/types").CoachRoutineTemplate | null
 }
 
@@ -170,12 +239,48 @@ export function ProductForm({ productType, program, plan, content, routineTempla
   const isEdit = Boolean(program)
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
+  // qué rutinas están expandidas en el builder
+  const [expandedRoutines, setExpandedRoutines] = React.useState<Set<number>>(new Set([0]))
 
   const existingPerks = plan ? readPerks(plan.perks) : null
   const typeLabel = PRODUCT_TYPE_LABELS[productType]
 
-  // Leer el payload del template de rutina existente.
+  // Convertir template existente al nuevo formato multi-rutina
   const existingRoutinePayload = readRoutineTemplatePayload(routineTemplate?.payload)
+  let defaultRoutines: ProductValues["routines"] = []
+  let defaultPlanning: ProductValues["routinePlanning"] = []
+  if (existingRoutinePayload) {
+    if (existingRoutinePayload.mode === "multi_adaptive") {
+      defaultRoutines = existingRoutinePayload.routines.map((r) => ({
+        name: r.name,
+        groups: r.groups.map((g) => ({
+          muscleGroup: g.muscleGroup,
+          exerciseCount: g.exerciseCount,
+          sets: g.sets,
+          notes: g.notes ?? "",
+        })),
+      }))
+      defaultPlanning = existingRoutinePayload.planning
+    } else if (existingRoutinePayload.mode === "adaptive") {
+      // Migrar formato viejo (un solo adaptive) al nuevo
+      defaultRoutines = [
+        {
+          name: routineTemplate?.name ?? "Rutina principal",
+          groups: existingRoutinePayload.groups.map((g) => ({
+            muscleGroup: g.muscleGroup,
+            exerciseCount: g.exerciseCount,
+            sets: g.sets,
+            notes: g.notes ?? "",
+          })),
+        },
+      ]
+    }
+  }
+
+  // Leer categorías del programa existente (formato viejo o nuevo)
+  const existingCategories = program?.category
+    ? readCategories(program.category)
+    : []
 
   const form = useForm<ProductValues>({
     resolver: zodResolver(productSchema),
@@ -186,7 +291,7 @@ export function ProductForm({ productType, program, plan, content, routineTempla
       tagline: program?.tagline ?? "",
       shortDescription: program?.short_description ?? "",
       description: program?.description ?? "",
-      category: program?.category ?? undefined,
+      categories: existingCategories.length > 0 ? existingCategories : undefined,
       level: program?.level ?? undefined,
       coverUrl: program?.cover_url ?? "",
       introVideoUrl: program?.intro_video_url ?? "",
@@ -194,35 +299,18 @@ export function ProductForm({ productType, program, plan, content, routineTempla
       faq: readFaq(program?.faq),
       price: plan ? plan.price_cents / 100 : undefined,
       priceUsd: plan?.price_usd_cents != null ? plan.price_usd_cents / 100 : undefined,
+      discountPct: plan?.discount_pct ? plan.discount_pct : undefined,
+      accentColor: plan?.accent_color ?? "",
       durationDays: plan?.duration_days ?? 30,
       chatEnabled: existingPerks?.chat.enabled ?? false,
       videoCallsCount: existingPerks?.video_calls.count ?? 0,
       videoCallMinutes: existingPerks?.video_calls.minutes ?? 0,
-      routineEnabled: existingPerks?.routine.enabled ?? false,
+      routineMode: existingPerks?.routine.enabled
+        ? (existingPerks.routine.mode ?? "adaptive")
+        : "none",
       routineReconfigs: existingPerks?.routine.reconfigs_included ?? 0,
-      routineMode: existingRoutinePayload?.mode ?? "personalized",
-      routineExercises:
-        existingRoutinePayload?.mode === "personalized"
-          ? existingRoutinePayload.exercises.map((e) => ({
-              exerciseName: e.exerciseName,
-              exerciseRef: e.exerciseRef ?? "",
-              sets: e.sets,
-              targetReps: e.targetReps ?? "",
-              targetWeight: e.targetWeight ?? undefined,
-              targetRir: e.targetRir ?? undefined,
-              restSeconds: e.restSeconds ?? undefined,
-              notes: e.notes ?? "",
-            }))
-          : [],
-      routineGroups:
-        existingRoutinePayload?.mode === "adaptive"
-          ? existingRoutinePayload.groups.map((g) => ({
-              muscleGroup: g.muscleGroup,
-              exerciseCount: g.exerciseCount,
-              sets: g.sets,
-              notes: g.notes ?? "",
-            }))
-          : [],
+      routines: defaultRoutines,
+      routinePlanning: defaultPlanning,
       supplementsEnabled: existingPerks?.supplements.enabled ?? false,
       progressSharingEnabled: existingPerks?.progress_sharing.enabled ?? false,
       content: readContentBlocks(content?.content)
@@ -241,11 +329,10 @@ export function ProductForm({ productType, program, plan, content, routineTempla
   const faq = useFieldArray({ control: form.control, name: "faq" })
   const textBlocks = useFieldArray({ control: form.control, name: "content" })
   const intake = useFieldArray({ control: form.control, name: "intakeForm" })
-  const routineExercises = useFieldArray({ control: form.control, name: "routineExercises" })
-  const routineGroups = useFieldArray({ control: form.control, name: "routineGroups" })
+  const routinesList = useFieldArray({ control: form.control, name: "routines" })
+  const planningList = useFieldArray({ control: form.control, name: "routinePlanning" })
   const w = useWatch({ control: form.control })
 
-  // Autogenerar slug desde el título mientras no se haya editado a mano (solo en alta).
   const slugEdited = React.useRef(isEdit)
   const title = useWatch({ control: form.control, name: "title" })
   React.useEffect(() => {
@@ -258,6 +345,42 @@ export function ProductForm({ productType, program, plan, content, routineTempla
     form.setValue(field, !form.getValues(field) as never, { shouldDirty: true })
   }
 
+  function toggleCategory(cat: ProductValues["categories"][number]) {
+    const current = form.getValues("categories") ?? []
+    const next = current.includes(cat)
+      ? current.filter((c) => c !== cat)
+      : [...current, cat]
+    form.setValue("categories", next as ProductValues["categories"], { shouldDirty: true })
+  }
+
+  function toggleRoutineExpanded(idx: number) {
+    setExpandedRoutines((prev) => {
+      const next = new Set(prev)
+      if (next.has(idx)) next.delete(idx)
+      else next.add(idx)
+      return next
+    })
+  }
+
+  function addFormulaFields() {
+    const existing = form.getValues("intakeForm")
+    const existingIds = new Set(existing.map((f) => f.id))
+    const toAdd = FORMULA_INTAKE_FIELDS.filter((f) => !existingIds.has(f.id))
+    if (toAdd.length === 0) {
+      toast.info("Los campos ya están agregados")
+      return
+    }
+    toAdd.forEach((f) =>
+      intake.append({
+        id: f.id,
+        label: f.label,
+        type: f.type,
+        required: f.required,
+        options: f.options,
+      })
+    )
+  }
+
   function onSubmit(values: ProductValues) {
     startTransition(async () => {
       const res = isEdit
@@ -268,7 +391,6 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             values
           )
         : await createProductAction(values)
-      // En alta la action redirige al detalle; solo llega acá si hubo error.
       if (res?.error) {
         toast.error(res.error)
         return
@@ -280,6 +402,11 @@ export function ProductForm({ productType, program, plan, content, routineTempla
       }
     })
   }
+
+  const selectedCategories = w.categories ?? []
+  const discountPct = w.discountPct ?? 0
+  const price = w.price ?? 0
+  const discountedPrice = discountPct > 0 ? price * (1 - discountPct / 100) : null
 
   return (
     <Form {...form}>
@@ -297,7 +424,6 @@ export function ProductForm({ productType, program, plan, content, routineTempla
 
           <Card>
             <CardContent className="flex flex-col gap-4 pt-6">
-              {/* Imagen: slot de subida (placeholder) + URL como fallback */}
               <div className="flex flex-col gap-1.5">
                 <ContentSlot
                   icon={ImageIcon}
@@ -331,25 +457,52 @@ export function ProductForm({ productType, program, plan, content, routineTempla
               <TextAreaField
                 name="description"
                 label="Descripción larga"
-                placeholder="El detalle completo que se ve al tocar “Ver detalle”…"
+                placeholder={'El detalle completo que se ve al tocar "Ver detalle"…'}
               />
             </CardContent>
           </Card>
 
+          {/* Categorías (multi-select) + Nivel */}
           <Card>
             <CardContent className="flex flex-col gap-4 pt-6">
-              <div className="grid grid-cols-2 gap-3">
-                <SelectField
-                  name="category"
-                  label="Categoría"
-                  options={COACHING_CATEGORY_OPTIONS}
-                />
-                <SelectField
-                  name="level"
-                  label="Nivel"
-                  options={COACHING_LEVEL_OPTIONS}
-                />
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-medium">Categorías</p>
+                <div className="flex flex-wrap gap-2">
+                  {COACHING_CATEGORY_OPTIONS.map((opt) => {
+                    const active = selectedCategories.includes(
+                      opt.value as ProductValues["categories"][number]
+                    )
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() =>
+                          toggleCategory(opt.value as ProductValues["categories"][number])
+                        }
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-sm transition-colors",
+                          active
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-background hover:border-primary/50"
+                        )}
+                      >
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+                {form.formState.errors.categories && (
+                  <p className="text-xs text-destructive">
+                    {form.formState.errors.categories.message ??
+                      "Seleccioná al menos una categoría"}
+                  </p>
+                )}
               </div>
+              <SelectField
+                name="level"
+                label="Nivel"
+                options={COACHING_LEVEL_OPTIONS}
+              />
               <div className="flex flex-col gap-1.5">
                 <TextField
                   name="introVideoUrl"
@@ -419,6 +572,62 @@ export function ProductForm({ productType, program, plan, content, routineTempla
                 placeholder="Para mostrar doble moneda"
                 min={0}
               />
+
+              {/* Descuento */}
+              <div className="flex flex-col gap-1.5">
+                <NumberField
+                  name="discountPct"
+                  label="Descuento (%)"
+                  placeholder="Ej: 20"
+                  min={0}
+                  max={99}
+                />
+                {discountPct > 0 && price > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    Precio final:{" "}
+                    <span className="font-medium text-foreground">
+                      ${discountedPrice!.toLocaleString("es-AR", { maximumFractionDigits: 0 })}
+                    </span>{" "}
+                    <span className="line-through">
+                      ${price.toLocaleString("es-AR", { maximumFractionDigits: 0 })}
+                    </span>
+                  </p>
+                )}
+              </div>
+
+              {/* Color de acento de la tarjeta */}
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-medium">Color de la tarjeta de precio</p>
+                <div className="flex flex-wrap gap-2">
+                  {ACCENT_COLORS.map((c) => {
+                    const active = (w.accentColor ?? "") === c.value
+                    return (
+                      <button
+                        key={c.value}
+                        type="button"
+                        title={c.label}
+                        onClick={() =>
+                          form.setValue("accentColor", c.value, { shouldDirty: true })
+                        }
+                        className={cn(
+                          "flex size-8 items-center justify-center rounded-full border-2 transition-all",
+                          active ? "border-foreground scale-110" : "border-transparent"
+                        )}
+                        style={
+                          c.value
+                            ? { backgroundColor: c.value }
+                            : { backgroundColor: "var(--muted)" }
+                        }
+                        aria-label={c.label}
+                      >
+                        {!c.value && (
+                          <X className="size-3 text-muted-foreground" />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             </CardContent>
           </Card>
 
@@ -479,7 +688,7 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </h2>
           </div>
 
-          {/* Perks: qué acompañamiento incluye (más relevante para asesorías) */}
+          {/* Perks */}
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium">Acompañamiento incluido</p>
 
@@ -510,20 +719,74 @@ export function ProductForm({ productType, program, plan, content, routineTempla
               </div>
             </PerkRow>
 
-            <PerkRow
-              icon={Dumbbell}
-              title="Rutina personalizada"
-              description="El coach asigna una rutina a medida"
-              enabled={w.routineEnabled ?? false}
-              onToggle={() => toggle("routineEnabled")}
-            >
-              <NumberField
-                name="routineReconfigs"
-                label="Reconfiguraciones incluidas"
-                min={0}
-                max={52}
-              />
-            </PerkRow>
+            {/* Selector de tipo de rutina */}
+            <div className="flex flex-col gap-3 rounded-xl border p-3">
+              <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    "flex size-9 shrink-0 items-center justify-center rounded-lg",
+                    w.routineMode !== "none"
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  )}
+                >
+                  <Dumbbell className="size-4" />
+                </div>
+                <div className="flex flex-1 flex-col">
+                  <span className="text-sm font-medium">Rutinas</span>
+                  <span className="text-xs text-muted-foreground">
+                    Acceso del cliente a rutinas de entrenamiento
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {(
+                  [
+                    {
+                      value: "adaptive" as const,
+                      label: "Adaptativa",
+                      desc: "El cliente elige sus ejercicios por grupo muscular",
+                    },
+                    {
+                      value: "personalized" as const,
+                      label: "Personalizada",
+                      desc: "El coach crea una rutina a medida por cliente",
+                    },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() =>
+                      form.setValue(
+                        "routineMode",
+                        w.routineMode === opt.value ? "none" : opt.value,
+                        { shouldDirty: true }
+                      )
+                    }
+                    className={cn(
+                      "flex flex-col items-start gap-0.5 rounded-xl border p-3 text-left transition-colors",
+                      w.routineMode === opt.value
+                        ? "border-primary bg-primary/5 text-foreground"
+                        : "border-border text-muted-foreground hover:border-primary/40"
+                    )}
+                  >
+                    <span className="text-sm font-medium">{opt.label}</span>
+                    <span className="text-[11px] leading-tight">{opt.desc}</span>
+                  </button>
+                ))}
+              </div>
+
+              {w.routineMode !== "none" && (
+                <NumberField
+                  name="routineReconfigs"
+                  label="Reconfiguraciones incluidas"
+                  min={0}
+                  max={52}
+                />
+              )}
+            </div>
 
             <PerkRow
               icon={Pill}
@@ -542,220 +805,181 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             />
           </div>
 
-          {/* Builder de rutina (solo si la rutina está activada) */}
-          {w.routineEnabled && (
+          {/* Builder de rutinas adaptativas */}
+          {w.routineMode === "adaptive" && (
             <Card>
-              <CardContent className="flex flex-col gap-4 pt-6">
+              <CardContent className="flex flex-col gap-5 pt-6">
                 <div className="flex items-center gap-2">
                   <Dumbbell className="size-4 text-muted-foreground" />
-                  <p className="text-sm font-medium">Armado de la rutina</p>
+                  <p className="text-sm font-medium">Rutinas adaptativas</p>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Definí cuántos ejercicios y series por músculo en cada rutina.
+                  El cliente elegirá los ejercicios concretos al comprar.
+                </p>
 
-                {/* Selector de modo */}
-                <div className="grid grid-cols-2 gap-2">
-                  {ROUTINE_MODES.map((mode) => {
-                    const active = (w.routineMode ?? "personalized") === mode
+                {/* Lista de rutinas */}
+                <div className="flex flex-col gap-3">
+                  {routinesList.fields.map((routineField, ri) => {
+                    const isExpanded = expandedRoutines.has(ri)
                     return (
-                      <button
-                        key={mode}
-                        type="button"
-                        onClick={() =>
-                          form.setValue("routineMode", mode, { shouldDirty: true })
-                        }
-                        className={cn(
-                          "flex flex-col gap-0.5 rounded-xl border p-3 text-left transition-colors",
-                          active
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/40"
-                        )}
+                      <div
+                        key={routineField.id}
+                        className="flex flex-col rounded-xl border bg-background/40"
                       >
-                        <span className="text-sm font-medium">
-                          {mode === "personalized" ? "Personalizada" : "Adaptativa"}
-                        </span>
-                        <span className="text-[11px] text-muted-foreground">
-                          {mode === "personalized"
-                            ? "Vos definís los ejercicios exactos"
-                            : "El cliente elige sus ejercicios por músculo"}
-                        </span>
-                      </button>
+                        {/* Cabecera de rutina */}
+                        <div className="flex items-center gap-2 p-3">
+                          <GripVertical className="size-4 shrink-0 text-muted-foreground/40" />
+                          <input
+                            className="flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-muted-foreground"
+                            placeholder={`Rutina ${ri + 1}`}
+                            {...form.register(`routines.${ri}.name`)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleRoutineExpanded(ri)}
+                            className="rounded p-1 text-muted-foreground hover:text-foreground"
+                          >
+                            {isExpanded ? (
+                              <ChevronUp className="size-4" />
+                            ) : (
+                              <ChevronDown className="size-4" />
+                            )}
+                          </button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="shrink-0 text-muted-foreground"
+                            onClick={() => {
+                              routinesList.remove(ri)
+                              setExpandedRoutines((prev) => {
+                                const next = new Set<number>()
+                                prev.forEach((idx) => {
+                                  if (idx < ri) next.add(idx)
+                                  else if (idx > ri) next.add(idx - 1)
+                                })
+                                return next
+                              })
+                            }}
+                            aria-label="Quitar rutina"
+                          >
+                            <X className="size-4" />
+                          </Button>
+                        </div>
+
+                        {/* Cuerpo expandible */}
+                        {isExpanded && (
+                          <div className="flex flex-col gap-3 border-t px-3 pb-3 pt-3">
+                            <GroupsForRoutine
+                              routineIndex={ri}
+                              form={form}
+                            />
+                          </div>
+                        )}
+                      </div>
                     )
                   })}
                 </div>
 
-                {/* MODO PERSONALIZADO: ejercicios exactos */}
-                {(w.routineMode ?? "personalized") === "personalized" && (
-                  <div className="flex flex-col gap-3">
-                    {routineExercises.fields.map((f, i) => (
-                      <div
-                        key={f.id}
-                        className="flex flex-col gap-3 rounded-xl border bg-background/40 p-3"
-                      >
-                        <div className="flex items-start gap-2">
-                          <div className="flex-1">
-                            <ExercisePicker
-                              value={w.routineExercises?.[i]?.exerciseName ?? ""}
-                              onPick={(ex) => {
-                                form.setValue(
-                                  `routineExercises.${i}.exerciseName`,
-                                  ex.name,
-                                  { shouldDirty: true }
-                                )
-                                form.setValue(
-                                  `routineExercises.${i}.exerciseRef`,
-                                  ex.id
-                                )
-                              }}
-                            />
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="mt-0.5 shrink-0 text-muted-foreground"
-                            onClick={() => routineExercises.remove(i)}
-                            aria-label="Quitar ejercicio"
-                          >
-                            <X className="size-4" />
-                          </Button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <NumberField
-                            name={`routineExercises.${i}.sets`}
-                            label="Series"
-                            min={1}
-                            max={20}
-                          />
-                          <TextField
-                            name={`routineExercises.${i}.targetReps`}
-                            label="Reps"
-                            placeholder="8-12"
-                          />
-                        </div>
-                        <div className="grid grid-cols-3 gap-3">
-                          <NumberField
-                            name={`routineExercises.${i}.targetWeight`}
-                            label="Peso (kg)"
-                            min={0}
-                            step="0.5"
-                          />
-                          <NumberField
-                            name={`routineExercises.${i}.targetRir`}
-                            label="RIR"
-                            min={0}
-                            max={10}
-                          />
-                          <NumberField
-                            name={`routineExercises.${i}.restSeconds`}
-                            label="Desc. (s)"
-                            min={0}
-                            max={900}
-                          />
-                        </div>
-                        <TextField
-                          name={`routineExercises.${i}.notes`}
-                          label="Notas"
-                          placeholder="Opcional"
-                        />
-                      </div>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="self-start"
-                      onClick={() =>
-                        routineExercises.append({
-                          exerciseName: "",
-                          exerciseRef: "",
-                          sets: 3,
-                          targetReps: "",
-                          targetWeight: undefined,
-                          targetRir: undefined,
-                          restSeconds: undefined,
-                          notes: "",
-                        })
-                      }
-                    >
-                      <Plus className="size-4" /> Agregar ejercicio
-                    </Button>
-                  </div>
-                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="self-start"
+                  onClick={() => {
+                    const newIdx = routinesList.fields.length
+                    routinesList.append({ name: "", groups: [] })
+                    setExpandedRoutines((prev) => new Set([...prev, newIdx]))
+                  }}
+                >
+                  <Plus className="size-4" /> Agregar rutina
+                </Button>
 
-                {/* MODO ADAPTATIVO: volumen por músculo */}
-                {(w.routineMode ?? "personalized") === "adaptive" && (
-                  <div className="flex flex-col gap-3">
-                    <p className="text-xs text-muted-foreground">
-                      Definí cuántos ejercicios y series por músculo. El cliente
-                      elegirá los ejercicios concretos después de comprar.
-                    </p>
-                    {routineGroups.fields.map((f, i) => (
-                      <div
-                        key={f.id}
-                        className="flex flex-col gap-3 rounded-xl border bg-background/40 p-3"
-                      >
-                        <div className="flex items-start gap-2">
-                          <div className="flex-1">
-                            <SelectField
-                              name={`routineGroups.${i}.muscleGroup`}
-                              label="Grupo muscular"
-                              options={MUSCLE_GROUP_OPTIONS}
-                            />
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="mt-6 shrink-0 text-muted-foreground"
-                            onClick={() => routineGroups.remove(i)}
-                            aria-label="Quitar grupo"
+                {/* Planificación */}
+                {routinesList.fields.length > 0 && (
+                  <>
+                    <div className="flex flex-col gap-0.5 pt-2">
+                      <p className="text-sm font-medium">Planificación</p>
+                      <p className="text-xs text-muted-foreground">
+                        Asignale una rutina a cada día o bloque del programa.
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {planningList.fields.map((pField, pi) => {
+                        const routineOptions = (w.routines ?? []).map((r, idx) => ({
+                          value: String(idx),
+                          label: (r.name ?? "").trim() || `Rutina ${idx + 1}`,
+                        }))
+                        return (
+                          <div
+                            key={pField.id}
+                            className="flex items-end gap-2 rounded-xl border bg-background/40 p-3"
                           >
-                            <X className="size-4" />
-                          </Button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <NumberField
-                            name={`routineGroups.${i}.exerciseCount`}
-                            label="N° ejercicios"
-                            min={1}
-                            max={10}
-                          />
-                          <NumberField
-                            name={`routineGroups.${i}.sets`}
-                            label="Series c/u"
-                            min={1}
-                            max={20}
-                          />
-                        </div>
-                        <TextField
-                          name={`routineGroups.${i}.notes`}
-                          label="Notas"
-                          placeholder="Opcional"
-                        />
-                      </div>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="self-start"
-                      onClick={() =>
-                        routineGroups.append({
-                          muscleGroup: "",
-                          exerciseCount: 3,
-                          sets: 3,
-                          notes: "",
-                        })
-                      }
-                    >
-                      <Plus className="size-4" /> Agregar grupo muscular
-                    </Button>
-                  </div>
+                            <div className="flex-1">
+                              <TextField
+                                name={`routinePlanning.${pi}.label`}
+                                label="Día / bloque"
+                                placeholder="Ej: Lunes, Día 1…"
+                              />
+                            </div>
+                            <div className="w-40 shrink-0">
+                              <SelectField
+                                name={`routinePlanning.${pi}.routineIndex`}
+                                label="Rutina"
+                                options={routineOptions}
+                              />
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="mb-0.5 shrink-0 text-muted-foreground"
+                              onClick={() => planningList.remove(pi)}
+                              aria-label="Quitar día"
+                            >
+                              <X className="size-4" />
+                            </Button>
+                          </div>
+                        )
+                      })}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="self-start"
+                        onClick={() =>
+                          planningList.append({ label: "", routineIndex: 0 })
+                        }
+                      >
+                        <Plus className="size-4" /> Agregar día
+                      </Button>
+                    </div>
+                  </>
                 )}
               </CardContent>
             </Card>
           )}
 
-          {/* Material entregable: bloques de texto (funcional) */}
+          {/* Info rutina personalizada */}
+          {w.routineMode === "personalized" && (
+            <Card>
+              <CardContent className="flex flex-col gap-2 pt-6 pb-5">
+                <div className="flex items-center gap-2">
+                  <Dumbbell className="size-4 text-muted-foreground" />
+                  <p className="text-sm font-medium">Rutina personalizada</p>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Cuando un cliente se suscriba a esta asesoría, encontrarás
+                  la opción de crearle su rutina y planificación a medida
+                  dentro de su ficha en la sección{" "}
+                  <span className="font-medium text-foreground">Clientes</span>.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Material entregable: bloques de texto */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
               <div className="flex items-center gap-2">
@@ -808,7 +1032,7 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </CardContent>
           </Card>
 
-          {/* Nutrición / planificación (texto libre + adjuntos placeholder) */}
+          {/* Nutrición / planificación */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
               <div className="flex items-center gap-2">
@@ -820,6 +1044,7 @@ export function ProductForm({ productType, program, plan, content, routineTempla
                 label=""
                 placeholder="Pautas de alimentación, planificación general…"
               />
+              <NutritionCommandsPanel intakeFields={w.intakeForm ?? []} />
               <ContentSlot
                 icon={FileUp}
                 title="Adjuntar documento"
@@ -828,7 +1053,7 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </CardContent>
           </Card>
 
-          {/* Material multimedia (slots placeholder) */}
+          {/* Material multimedia */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
               <p className="text-sm font-medium">Material multimedia</p>
@@ -838,13 +1063,13 @@ export function ProductForm({ productType, program, plan, content, routineTempla
               <ContentSlot icon={Film} title="Videos" description="Demostraciones y clases" />
               <ContentSlot
                 icon={CalendarRange}
-                title="Rutina + planificación"
-                description="Personalizada o adaptativa (próxima etapa)"
+                title="PDF de rutina"
+                description="Adjuntá un archivo de planificación"
               />
             </CardContent>
           </Card>
 
-          {/* Formulario para el cliente (funcional) */}
+          {/* Formulario para el cliente */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
               <div className="flex items-center gap-2">
@@ -914,22 +1139,31 @@ export function ProductForm({ productType, program, plan, content, routineTempla
                   </div>
                 </div>
               ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="self-start"
-                onClick={() =>
-                  intake.append({
-                    id: crypto.randomUUID(),
-                    label: "",
-                    type: "text",
-                    required: false,
-                  })
-                }
-              >
-                <Plus className="size-4" /> Agregar campo
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    intake.append({
+                      id: crypto.randomUUID(),
+                      label: "",
+                      type: "text",
+                      required: false,
+                    })
+                  }
+                >
+                  <Plus className="size-4" /> Agregar campo
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addFormulaFields}
+                >
+                  <Apple className="size-4" /> Campos para /tmb y /tdee
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -952,5 +1186,83 @@ export function ProductForm({ productType, program, plan, content, routineTempla
         </div>
       </form>
     </Form>
+  )
+}
+
+/**
+ * Subcomponente para los grupos musculares de una rutina.
+ * Separado para mantener el form principal limpio.
+ */
+function GroupsForRoutine({
+  routineIndex,
+  form,
+}: {
+  routineIndex: number
+  form: ReturnType<typeof useForm<ProductValues>>
+}) {
+  const groups = useFieldArray({
+    control: form.control,
+    name: `routines.${routineIndex}.groups`,
+  })
+
+  return (
+    <>
+      {groups.fields.map((gf, gi) => (
+        <div
+          key={gf.id}
+          className="flex flex-col gap-3 rounded-xl border bg-background/60 p-3"
+        >
+          <div className="flex items-start gap-2">
+            <div className="flex-1">
+              <SelectField
+                name={`routines.${routineIndex}.groups.${gi}.muscleGroup`}
+                label="Grupo muscular"
+                options={MUSCLE_GROUP_OPTIONS}
+              />
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="mt-6 shrink-0 text-muted-foreground"
+              onClick={() => groups.remove(gi)}
+              aria-label="Quitar grupo"
+            >
+              <X className="size-4" />
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <NumberField
+              name={`routines.${routineIndex}.groups.${gi}.exerciseCount`}
+              label="N° ejercicios"
+              min={1}
+              max={10}
+            />
+            <NumberField
+              name={`routines.${routineIndex}.groups.${gi}.sets`}
+              label="Series c/u"
+              min={1}
+              max={20}
+            />
+          </div>
+          <TextField
+            name={`routines.${routineIndex}.groups.${gi}.notes`}
+            label="Notas"
+            placeholder="Opcional"
+          />
+        </div>
+      ))}
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="self-start"
+        onClick={() =>
+          groups.append({ muscleGroup: "", exerciseCount: 3, sets: 3, notes: "" })
+        }
+      >
+        <Plus className="size-4" /> Agregar músculo
+      </Button>
+    </>
   )
 }

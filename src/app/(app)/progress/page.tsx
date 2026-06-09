@@ -3,12 +3,14 @@ import { redirect } from "next/navigation"
 import { TrendingUp } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/server"
+import { getCachedUser } from "@/lib/supabase/auth"
 import {
   getBodyReviews,
   getExerciseProgressData,
   getMuscleTimeSeriesData,
 } from "@/lib/db/progress"
 import { ProgressTabs } from "@/features/progress/progress-charts"
+import { PageHeader } from "@/components/ui/page-header"
 
 export const metadata: Metadata = {
   title: "Progreso — EPHA",
@@ -16,9 +18,7 @@ export const metadata: Metadata = {
 
 export default async function ProgressPage() {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
   if (!user) redirect("/login")
 
   // Fetch paralelo
@@ -30,18 +30,11 @@ export default async function ProgressPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-5 px-4 py-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="flex size-10 items-center justify-center rounded-2xl bg-muted">
-          <TrendingUp className="size-5" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Progreso</h1>
-          <p className="text-sm text-muted-foreground">
-            Revisiones, fuerza y volumen
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={TrendingUp}
+        title="Progreso"
+        description="Revisiones, fuerza y volumen"
+      />
 
       {/* Tabs con datos */}
       <ProgressTabs

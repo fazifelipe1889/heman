@@ -10,6 +10,7 @@ import {
   readIncludes,
   getYouTubeEmbedUrl,
   formatMoney,
+  readCategories,
 } from "@/lib/domain/coaching"
 import { COACHING_CATEGORY_LABELS } from "@/lib/domain/labels"
 import { Badge } from "@/components/ui/badge"
@@ -76,10 +77,12 @@ export default async function ProgramLandingPage({ params }: Props) {
       <div className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-6 pb-28">
         {/* Encabezado */}
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-[11px]">
-              {COACHING_CATEGORY_LABELS[data.category]}
-            </Badge>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {readCategories(data.category).map((cat) => (
+              <Badge key={cat} variant="secondary" className="text-[11px]">
+                {COACHING_CATEGORY_LABELS[cat]}
+              </Badge>
+            ))}
             {data.level && (
               <span className="text-xs text-muted-foreground">{data.level}</span>
             )}

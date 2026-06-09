@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PageHeader — demo</title>
+<style>
+  /* Tokens reales del tema oscuro EPHA (globals.css) */
+  :root {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --primary: oklch(0.720 0.155 75);          /* dorado EPHA */
+    --primary-foreground: oklch(0.10 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --radius-2xl: calc(0.625rem * 1.8);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 28rem;            /* max-w-md */
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .demo-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .note {
+    font-size: 0.7rem;
+    color: var(--muted-foreground);
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* ── PageHeader ───────────────────────────── */
+  .page-header { display: flex; flex-direction: column; gap: 0.75rem; }
+  .ph-back {
+    display: inline-flex; align-items: center; gap: 0.25rem; width: fit-content;
+    font-size: 0.875rem; color: var(--muted-foreground); text-decoration: none;
+  }
+  .ph-row { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .ph-icon {
+    flex-shrink: 0;
+    width: 2.75rem; height: 2.75rem;          /* size-11 */
+    border-radius: var(--radius-2xl);          /* rounded-2xl */
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ph-icon.muted   { background: var(--muted);   color: var(--foreground); }
+  .ph-icon.primary { background: var(--primary); color: var(--primary-foreground); }
+  .ph-icon svg { width: 1.5rem; height: 1.5rem; }   /* size-6 */
+  .ph-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .ph-title {
+    font-size: 1.5rem; line-height: 2rem; font-weight: 700;
+    letter-spacing: -0.025em;                  /* tracking-tight */
+  }
+  .ph-desc { font-size: 0.875rem; color: var(--muted-foreground); }
+  .ph-action { flex-shrink: 0; align-self: center; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    border-radius: 0.5rem; padding: 0.375rem 0.75rem;
+    font-size: 0.875rem; font-weight: 500;
+    background: var(--primary); color: var(--primary-foreground);
+  }
+  .btn-primary svg { width: 1rem; height: 1rem; }
+  .ph-back svg { width: 1rem; height: 1rem; }
+
+  /* separador visual entre demos */
+  .case { display: flex; flex-direction: column; gap: 0.5rem; }
+  .case > .tag {
+    font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--muted-foreground); opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="demo-label">Demo · componente PageHeader</p>
+
+    <!-- 1. ícono muted + título + bajada -->
+    <div class="case">
+      <span class="tag">1 · básico (ícono + título + bajada)</span>
+      <div class="page-header">
+        <div class="ph-row">
+          <div class="ph-icon muted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          </div>
+          <div class="ph-text">
+            <span class="ph-title">Entrenar</span>
+            <span class="ph-desc">¿Qué vas a entrenar hoy?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. otro básico -->
+    <div class="case">
+      <span class="tag">2 · básico</span>
+      <div class="page-header">
+        <div class="ph-row">
+          <div class="ph-icon muted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="ph-text">
+            <span class="ph-title">Progreso</span>
+            <span class="ph-desc">Revisiones, fuerza y volumen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. sin descripción -->
+    <div class="case">
+      <span class="tag">3 · sin bajada (cuando no aporta)</span>
+      <div class="page-header">
+        <div class="ph-row">
+          <div class="ph-icon muted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
+          </div>
+          <div class="ph-text">
+            <span class="ph-title">Rutinas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. con acción a la derecha -->
+    <div class="case">
+      <span class="tag">4 · con acción (botón)</span>
+      <div class="page-header">
+        <div class="ph-row">
+          <div class="ph-icon muted">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
+          </div>
+          <div class="ph-text">
+            <span class="ph-title">Suplementación</span>
+            <span class="ph-desc">Registrá tu consumo diario.</span>
+          </div>
+          <div class="ph-action">
+            <span class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Agregar
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. back-link + ícono primary -->
+    <div class="case">
+      <span class="tag">5 · back-link + ícono destacado</span>
+      <div class="page-header">
+        <a class="ph-back" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          Entrenar
+        </a>
+        <div class="ph-row">
+          <div class="ph-icon primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+          </div>
+          <div class="ph-text">
+            <span class="ph-title">Mi semana</span>
+            <span class="ph-desc">Asigná una rutina a cada día.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">Demo estático con los tokens reales del tema oscuro (dorado EPHA #D4A830). Replica el componente <code>PageHeader</code> tal cual quedó en la app. Archivo temporal — se borra al terminar la revisión.</p>
+  </div>
+</body>
+</html>

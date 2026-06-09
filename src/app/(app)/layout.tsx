@@ -2,8 +2,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Settings } from "lucide-react"
 
-import { createClient } from "@/lib/supabase/server"
-import { getProfile } from "@/lib/db/profiles"
+import { getCachedUser, getCachedProfile } from "@/lib/supabase/auth"
 import { WorkoutBanner } from "@/features/train/workout-banner"
 import { EphaLogoButton } from "@/components/epha-logo-button"
 import { BackButton } from "@/components/back-button"
@@ -13,17 +12,15 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
   let user = null
   try {
-    const { data } = await supabase.auth.getUser()
-    user = data.user
+    user = await getCachedUser()
   } catch {
     redirect("/login")
   }
   if (!user) redirect("/login")
 
-  const profile = await getProfile(supabase, user.id).catch(() => null)
+  const profile = await getCachedProfile(user.id)
   if (!profile?.onboarding_completed) redirect("/onboarding")
 
   return (
@@ -35,6 +32,7 @@ export default async function AppLayout({
         </div>
         <Link
           href="/settings"
+          data-tour="settings"
           className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           aria-label="Configuración"
         >

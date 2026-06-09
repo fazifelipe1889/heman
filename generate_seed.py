@@ -1,6 +1,7 @@
 """Genera supabase/migrations/0010_exercises.sql y supabase/seed.sql"""
 
 import re, os, sys
+from exercise_slug import image_url
 
 # ── Leer los ejercicios del script existente ──────────────────────────────────
 with open("create_exercises.py", encoding="utf-8") as f:
@@ -141,12 +142,12 @@ lines = [
     "-- Generado automáticamente por generate_seed.py",
     "",
     "insert into public.exercises",
-    "  (name, primary_muscle_group, secondary_muscle_groups, equipment, movement_type, difficulty, instructions)",
+    "  (name, primary_muscle_group, secondary_muscle_groups, equipment, movement_type, difficulty, instructions, image_url)",
     "values",
 ]
 
 rows = []
-for ex in exercises:
+for i, ex in enumerate(exercises, start=1):
     name      = esc(ex[0])
     primary   = esc(ex[1])
     secondary = arr(ex[2])
@@ -154,8 +155,9 @@ for ex in exercises:
     movement  = esc(ex[4])
     diff      = esc(ex[5])
     instr     = esc(ex[6]) if len(ex) > 6 else ""
+    img       = esc(image_url(i, ex[0]))
     rows.append(
-        f"  ('{name}', '{primary}', {secondary}, '{equipment}', '{movement}', '{diff}', '{instr}')"
+        f"  ('{name}', '{primary}', {secondary}, '{equipment}', '{movement}', '{diff}', '{instr}', '{img}')"
     )
 
 lines.append(",\n".join(rows) + ";")

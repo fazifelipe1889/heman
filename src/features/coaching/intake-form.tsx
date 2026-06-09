@@ -62,6 +62,19 @@ export function IntakeForm({
               onChange={(e) => setValue(field.id, e.target.value)}
               rows={3}
             />
+          ) : field.type === "select" && field.options?.length ? (
+            <select
+              value={answers[field.id] ?? ""}
+              onChange={(e) => setValue(field.id, e.target.value)}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              <option value="">Seleccioná una opción</option>
+              {field.options.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
           ) : (
             <Input
               type={field.type === "number" ? "number" : "text"}

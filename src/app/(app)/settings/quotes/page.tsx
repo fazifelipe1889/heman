@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/server"
+import { getCachedUser } from "@/lib/supabase/auth"
 import { getQuotePreferences } from "@/lib/db/quote-preferences"
 import { QuoteSettingsForm } from "@/features/quotes/quote-settings-form"
 
@@ -12,9 +13,7 @@ export const metadata: Metadata = {
 
 export default async function QuoteSettingsPage() {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
 
   const preferences = user
     ? await getQuotePreferences(supabase, user.id)

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, CalendarDays, Play } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/server"
+import { getCachedUser } from "@/lib/supabase/auth"
 import { listRoutines } from "@/lib/db/routines"
 import { getActivePlan } from "@/lib/db/plans"
 import { todayWeekdayIndex, WEEKDAYS } from "@/lib/domain/training"
@@ -32,9 +33,7 @@ export default async function TrainTypePage({
   if (type !== "musculacion" && type !== "cardio") notFound()
 
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
 
   const [allRoutines, plan] = await Promise.all([
     listRoutines(supabase),

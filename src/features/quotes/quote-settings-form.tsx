@@ -2,13 +2,13 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { Loader2 } from "lucide-react"
 
 import {
   QUOTE_CATEGORY_LIST,
   type QuoteCategory,
 } from "@/lib/domain/quotes"
 import type { QuotePreferences } from "@/lib/db/quote-preferences"
+import { Spinner } from "@/components/ui/spinner"
 import { saveQuotePreferencesAction } from "./actions"
 
 type Props = {
@@ -152,7 +152,7 @@ export function QuoteSettingsForm({ preferences }: Props) {
         onClick={handleSave}
         className="flex items-center justify-center gap-2 rounded-xl bg-primary py-3 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
       >
-        {isPending && <Loader2 className="size-4 animate-spin" />}
+        {isPending && <Spinner />}
         Guardar preferencias
       </button>
     </div>

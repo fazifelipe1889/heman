@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ejercicios — Ilustraciones SVG</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #09090b;
+      color: #e4e4e7;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+    header {
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f4f4f5;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+      color: #71717a;
+      margin-top: 4px;
+    }
+    .legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #a1a1aa;
+    }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover {
+      border-color: #3f3f46;
+      transform: translateY(-2px);
+    }
+    .card-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: #0f0f1a;
+    }
+    .card-img img {
+      width: 180px;
+      height: 180px;
+      display: block;
+    }
+    .card-info {
+      padding: 12px 14px;
+      border-top: 1px solid #27272a;
+    }
+    .card-number {
+      font-size: 0.72rem;
+      color: #52525b;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+    .card-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #e4e4e7;
+      line-height: 1.3;
+    }
+    .card-meta {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .badge-muscle { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .badge-equip  { background: rgba(113,113,122,0.2); color: #a1a1aa; border: 1px solid rgba(113,113,122,0.25); }
+    .badge-diff-p { background: rgba(52,211,153,0.12); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.2); }
+    .badge-diff-i { background: rgba(251,191,36,0.12); color: #fcd34d; border: 1px solid rgba(251,191,36,0.2); }
+    .badge-diff-a { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Base de Ilustraciones — Ejercicios</h1>
+    <p class="subtitle">Lote 1 · Pecho (ejercicios #1–10) · SVG line art</p>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:rgba(239,68,68,0.7)"></div>
+        Músculo primario destacado en rojo
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#fbbf24"></div>
+        Indicador de variante (agarre / ruta / pausa)
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#16a34a"></div>
+        Bandas elásticas
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#ca8a04"></div>
+        Cadenas
+      </div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-img"><img src="01-press-de-banca-plano.svg" alt="Press de Banca Plano"/></div>
+      <div class="card-info">
+        <div class="card-number">#01</div>
+        <div class="card-name">Press de Banca Plano</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-i">Intermedio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="02-press-de-banca-inclinado.svg" alt="Press de Banca Inclinado"/></div>
+      <div class="card-info">
+        <div class="card-number">#02</div>
+        <div class="card-name">Press de Banca Inclinado</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-i">Intermedio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="03-press-de-banca-declinado.svg" alt="Press de Banca Declinado"/></div>
+      <div class="card-info">
+        <div class="card-number">#03</div>
+        <div class="card-name">Press de Banca Declinado</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-i">Intermedio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="04-press-de-banca-agarre-estrecho.svg" alt="Press de Banca Agarre Estrecho"/></div>
+      <div class="card-info">
+        <div class="card-number">#04</div>
+        <div class="card-name">Press de Banca Agarre Estrecho</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Tríceps</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-i">Intermedio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="05-press-guillotina.svg" alt="Press Guillotina"/></div>
+      <div class="card-info">
+        <div class="card-number">#05</div>
+        <div class="card-name">Press Guillotina (Neck Press)</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-a">Avanzado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="06-floor-press.svg" alt="Floor Press con Barra"/></div>
+      <div class="card-info">
+        <div class="card-number">#06</div>
+        <div class="card-name">Floor Press con Barra</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-i">Intermedio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="07-press-de-banca-con-pausa.svg" alt="Press de Banca con Pausa"/></div>
+      <div class="card-info">
+        <div class="card-number">#07</div>
+        <div class="card-name">Press de Banca con Pausa</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-a">Avanzado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="08-press-de-banca-con-cadenas.svg" alt="Press de Banca con Cadenas"/></div>
+      <div class="card-info">
+        <div class="card-number">#08</div>
+        <div class="card-name">Press de Banca con Cadenas</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-a">Avanzado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="09-press-de-banca-con-bandas.svg" alt="Press de Banca con Bandas"/></div>
+      <div class="card-info">
+        <div class="card-number">#09</div>
+        <div class="card-name">Press de Banca con Bandas</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Barra</span>
+          <span class="badge badge-diff-a">Avanzado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img"><img src="10-svend-press.svg" alt="Svend Press"/></div>
+      <div class="card-info">
+        <div class="card-number">#10</div>
+        <div class="card-name">Svend Press</div>
+        <div class="card-meta">
+          <span class="badge badge-muscle">Pecho</span>
+          <span class="badge badge-equip">Peso Corporal</span>
+          <span class="badge badge-diff-p">Principiante</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
