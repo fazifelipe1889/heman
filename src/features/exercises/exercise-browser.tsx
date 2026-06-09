@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Search, SlidersHorizontal, X } from "lucide-react"
+import { Dumbbell, Search, SlidersHorizontal, X } from "lucide-react"
 
 import type { Exercise, DifficultyEs } from "@/lib/domain/exercises"
 import {
@@ -39,44 +39,71 @@ type Filters = {
 
 // ─── Tarjeta de ejercicio ────────────────────────────────────────────────────
 
+function ExerciseThumb({ ex }: { ex: Exercise }) {
+  const [failed, setFailed] = React.useState(false)
+  const showImage = ex.image_url && !failed
+
+  return (
+    <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted/40">
+      {showImage ? (
+        <img
+          src={ex.image_url!}
+          alt={ex.name}
+          loading="lazy"
+          className="size-full object-cover"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <Dumbbell className="size-6 text-muted-foreground/60" />
+      )}
+    </div>
+  )
+}
+
 function ExerciseCard({ ex }: { ex: Exercise }) {
   const diffColor =
     DIFFICULTY_COLORS[ex.difficulty as DifficultyEs] ??
     "bg-muted text-muted-foreground border-border"
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 transition-colors active:bg-muted/50">
-      <div className="flex items-start justify-between gap-2">
-        <span className="text-sm font-medium leading-snug">{ex.name}</span>
-        <span
-          className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium ${diffColor}`}
-        >
-          {ex.difficulty}
-        </span>
+    <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4 transition-colors active:bg-muted/50">
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        {/* Nombre + nivel debajo */}
+        <div className="flex flex-col items-start gap-1">
+          <span className="text-sm font-medium leading-snug">{ex.name}</span>
+          <span
+            className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${diffColor}`}
+          >
+            {ex.difficulty}
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5">
+          <Badge variant="outline" className="rounded-full text-[11px] text-primary border-primary/30">
+            {ex.primary_muscle_group}
+          </Badge>
+          <Badge variant="outline" className="rounded-full text-[11px] text-muted-foreground">
+            {ex.equipment}
+          </Badge>
+        </div>
+
+        {ex.secondary_muscle_groups.length > 0 && (
+          <p className="text-[11px] text-muted-foreground">
+            Secundarios:{" "}
+            {ex.secondary_muscle_groups.slice(0, 3).join(", ")}
+            {ex.secondary_muscle_groups.length > 3 && " …"}
+          </p>
+        )}
+
+        {ex.instructions && (
+          <p className="line-clamp-2 text-[11px] leading-relaxed text-muted-foreground">
+            {ex.instructions}
+          </p>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        <Badge variant="outline" className="rounded-full text-[11px] text-primary border-primary/30">
-          {ex.primary_muscle_group}
-        </Badge>
-        <Badge variant="outline" className="rounded-full text-[11px] text-muted-foreground">
-          {ex.equipment}
-        </Badge>
-      </div>
-
-      {ex.secondary_muscle_groups.length > 0 && (
-        <p className="text-[11px] text-muted-foreground">
-          Secundarios:{" "}
-          {ex.secondary_muscle_groups.slice(0, 3).join(", ")}
-          {ex.secondary_muscle_groups.length > 3 && " …"}
-        </p>
-      )}
-
-      {ex.instructions && (
-        <p className="line-clamp-2 text-[11px] leading-relaxed text-muted-foreground">
-          {ex.instructions}
-        </p>
-      )}
+      {/* Imagen del ejercicio como ícono, a la derecha */}
+      <ExerciseThumb ex={ex} />
     </div>
   )
 }
@@ -260,15 +287,17 @@ export function ExerciseBrowser({ exercises }: { exercises: Exercise[] }) {
               </Button>
             }
           />
-          <SheetContent side="right" className="w-full max-w-xs overflow-y-auto">
+          <SheetContent side="right" className="w-full max-w-xs">
             <SheetHeader className="mb-4">
               <SheetTitle>Filtros</SheetTitle>
             </SheetHeader>
+            <div className="flex-1 overflow-y-auto">
             <FiltersPanel
               filters={filters}
               onChange={setFilter}
               onClear={clearFilters}
             />
+            </div>
           </SheetContent>
         </Sheet>
       </div>

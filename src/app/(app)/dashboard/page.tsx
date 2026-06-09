@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/server"
+import { getCachedUser, getCachedProfile } from "@/lib/supabase/auth"
 import { getQuotePreferences } from "@/lib/db/quote-preferences"
 import { getUserActiveSubscription, getCoachProfile } from "@/lib/db/coaching"
 import { filterQuotes, type QuoteCategory } from "@/lib/domain/quotes"
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { QuoteCard } from "@/features/quotes/quote-card"
+import { TourLauncher } from "@/features/onboarding-tour/tour-launcher"
 
 export const metadata: Metadata = {
   title: "Inicio — EPHA",
@@ -24,6 +26,8 @@ type Section = {
   title: string
   description: string
   href?: string
+  /** Identificador para el tour de bienvenida (data-tour="..."). */
+  tourId?: string
 }
 
 const SECTIONS: Section[] = [
@@ -31,36 +35,51 @@ const SECTIONS: Section[] = [
     title: "Rutinas",
     description: "Creá y organizá tus rutinas de entrenamiento.",
     href: "/routines",
+    tourId: "rutinas",
   },
   {
     title: "Entrenar",
     description: "Seguí tu plan o elegí una rutina.",
     href: "/train",
+    tourId: "entrenar",
   },
   {
     title: "Progreso",
     description: "Seguí tu evolución de fuerza y volumen.",
     href: "/progress",
+    tourId: "progreso",
   },
   {
     title: "Wiki Gym",
     description: "Biblioteca de entrenamiento y nutrición.",
     href: "/wiki",
+    tourId: "wiki",
   },
   {
     title: "Suplementación",
     description: "Registrá tu constancia diaria de suplementos.",
     href: "/supplements",
+    tourId: "supplements",
+  },
+  {
+    title: "Ejercicios",
+    description: "Catálogo de 252 ejercicios con imágenes y filtros.",
+    href: "/exercises",
+    tourId: "ejercicios",
   },
 ]
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tour?: string }>
+}) {
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCachedUser()
+  const { tour } = await searchParams
 
-  const [quotePrefs, activeSub, coachProfile] = await Promise.all([
+  const [profile, quotePrefs, activeSub, coachProfile] = await Promise.all([
+    user ? getCachedProfile(user.id).catch(() => null) : null,
     user ? getQuotePreferences(supabase, user.id).catch(() => null) : null,
     user ? getUserActiveSubscription(supabase, user.id).catch(() => null) : null,
     user ? getCoachProfile(supabase, user.id).catch(() => null) : null,
@@ -77,6 +96,7 @@ export default async function DashboardPage() {
       title: "Asesorías y planes",
       description: "Entrená con un coach profesional.",
       href: "/c",
+      tourId: "asesorias",
     },
     coachProfile
       ? {
@@ -102,7 +122,9 @@ export default async function DashboardPage() {
 
       {/* Frase motivacional */}
       {quotesAvailable && (
-        <QuoteCard activeCategories={activeCategories} />
+        <div data-tour="frases">
+          <QuoteCard activeCategories={activeCategories} />
+        </div>
       )}
 
       {/* Mi Asesoría (destacado) */}
@@ -145,18 +167,28 @@ export default async function DashboardPage() {
           )
 
           return s.href ? (
-            <Link key={s.title} href={s.href} className="rounded-xl">
+            <Link
+              key={s.title}
+              href={s.href}
+              className="rounded-xl"
+              data-tour={s.tourId}
+            >
               <Card className="transition-colors hover:border-primary/50">
                 {inner}
               </Card>
             </Link>
           ) : (
-            <Card key={s.title} className="opacity-90">
+            <Card key={s.title} className="opacity-90" data-tour={s.tourId}>
               {inner}
             </Card>
           )
         })}
       </div>
+
+      <TourLauncher
+        alreadyCompleted={!!profile?.tour_completed_at}
+        forceOpen={tour === "1"}
+      />
     </div>
   )
 }
