@@ -3,6 +3,63 @@ import type { Exercise, ExerciseFilters } from "@/lib/domain/exercises"
 
 const PAGE_SIZE = 40
 
+// ─── Ejercicios custom (propios del usuario) ───────────────────────────────────
+// Los ejercicios custom NO usan una tabla aparte: viven en la misma tabla
+// `exercises` con `created_by = auth.uid()`. El catálogo global tiene
+// `created_by IS NULL`. La RLS (migración 0010) ya garantiza que cada usuario
+// solo vea/modifique los suyos, por lo que el picker y `getExercises` los
+// incluyen automáticamente sin lógica de merge adicional.
+
+/** Datos mínimos para crear un ejercicio custom desde el picker. */
+export type NewCustomExercise = {
+  name: string
+  primaryMuscleGroup?: string
+  equipment?: string
+  instructions?: string
+}
+
+/**
+ * Crea un ejercicio custom propiedad del usuario (created_by = ownerId).
+ * Completa con defaults sensatos las columnas NOT NULL que el form liviano no pide.
+ * Devuelve la fila creada para hacer optimistic update en el picker.
+ */
+export async function createCustomExercise(
+  supabase: SupabaseClient,
+  ownerId: string,
+  data: NewCustomExercise,
+): Promise<Exercise> {
+  const { data: row, error } = await supabase
+    .from("exercises")
+    .insert({
+      name: data.name.trim(),
+      primary_muscle_group: data.primaryMuscleGroup?.trim() || "Variable",
+      secondary_muscle_groups: [],
+      equipment: data.equipment?.trim() || "Peso Corporal",
+      movement_type: "Personalizado",
+      difficulty: "Intermedio",
+      instructions: data.instructions?.trim() ?? "",
+      tags: [],
+      created_by: ownerId,
+    })
+    .select("*")
+    .single()
+
+  if (error) throw error
+  return row as Exercise
+}
+
+/**
+ * Elimina un ejercicio custom. La RLS de DELETE garantiza que solo se borren
+ * los propios (created_by = auth.uid()); el catálogo global es inmutable.
+ */
+export async function deleteCustomExercise(
+  supabase: SupabaseClient,
+  id: string,
+): Promise<void> {
+  const { error } = await supabase.from("exercises").delete().eq("id", id)
+  if (error) throw error
+}
+
 /**
  * Lista ejercicios con filtros opcionales y paginación.
  * Devuelve ejercicios globales (created_by IS NULL) y los creados por el usuario.

@@ -638,6 +638,43 @@ export async function updateProduct(
   }
 }
 
+/** Producto para la grilla/workspace del coach: program + plan representativo. */
+export type CoachProductCard = CoachingProgram & {
+  /** Plan visible más barato (o el primero si ninguno es visible). */
+  plan: CoachingPlan | null
+  /** Cuántos planes visibles tiene (para habilitar publicación). */
+  visiblePlanCount: number
+}
+
+/**
+ * Lista los productos del coach con su plan representativo embebido, en una
+ * sola query (program + planes). Para el master-detail desktop de "Productos".
+ */
+export async function listCoachProductCards(
+  supabase: Client,
+  coachId: string
+): Promise<CoachProductCard[]> {
+  const { data, error } = await supabase
+    .from("coaching_program")
+    .select(`*, plans:coaching_plan(*)`)
+    .eq("coach_id", coachId)
+    .order("position", { ascending: true })
+    .order("created_at", { ascending: false })
+  if (error) throw error
+
+  return (data ?? []).map((row) => {
+    const { plans: rawPlans, ...prog } = row as unknown as CoachingProgram & {
+      plans: CoachingPlan[] | null
+    }
+    const plans = rawPlans ?? []
+    const visible = plans.filter((p) => p.is_visible)
+    const pool = visible.length > 0 ? visible : plans
+    const plan =
+      [...pool].sort((a, b) => a.price_cents - b.price_cents)[0] ?? null
+    return { ...prog, plan, visiblePlanCount: visible.length }
+  })
+}
+
 // =============================================================================
 // TRANSFORMACIONES (prueba social: casos antes/después)
 // =============================================================================
@@ -1119,6 +1156,32 @@ export async function listCoachClientsForProgram(
 
   const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]))
 
+  return clients.map((c) => ({
+    ...c,
+    user: profileMap.get(c.user_id) ?? null,
+  }))
+}
+
+/**
+ * Lista los clientes del coach (todas sus asesorías) enriquecidos con el nombre
+ * del perfil. Reutiliza `listCoachClients` y resuelve los perfiles en una sola
+ * query. Para el panel desktop (master-detail de Clientes) y atajos del dashboard.
+ */
+export async function listCoachClientsWithUser(
+  supabase: Client,
+  coachId: string,
+  filters: { status?: SubscriptionStatus } = {}
+): Promise<CoachClientWithUser[]> {
+  const clients = await listCoachClients(supabase, coachId, filters)
+  if (clients.length === 0) return []
+
+  const userIds = [...new Set(clients.map((c) => c.user_id))]
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, full_name")
+    .in("id", userIds)
+
+  const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]))
   return clients.map((c) => ({
     ...c,
     user: profileMap.get(c.user_id) ?? null,

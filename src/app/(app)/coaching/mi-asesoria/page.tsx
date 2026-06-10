@@ -76,13 +76,13 @@ export default async function MiAsesoriaPage() {
 
         {history.length === 0 ? (
           <Card>
-            <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
+            <CardContent className="flex flex-col items-center gap-2 py-10 text-center">
               <p className="text-sm text-muted-foreground">
                 Todavía no contrataste ninguna asesoría.
               </p>
-              <Link href="/c" className={buttonVariants()}>
-                Explorar asesorías
-              </Link>
+              <p className="text-sm text-muted-foreground">
+                Ingresá el link que te compartió tu coach para empezar.
+              </p>
             </CardContent>
           </Card>
         ) : (
@@ -119,13 +119,6 @@ export default async function MiAsesoriaPage() {
                 </Card>
               ))}
             </div>
-
-            <Link
-              href="/c"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              Explorar más asesorías
-            </Link>
           </>
         )}
       </div>

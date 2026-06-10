@@ -78,6 +78,44 @@ const ACCENT_COLORS = [
   { value: "#f59e0b", label: "Ámbar" },
 ]
 
+/** Pestañas del editor en desktop. Mobile mantiene el scroll completo. */
+const PRODUCT_FORM_TABS = [
+  { id: "info", label: "Info" },
+  { id: "tarjeta", label: "Tarjeta" },
+  { id: "contenido", label: "Contenido" },
+  { id: "rutina", label: "Rutina" },
+  { id: "formulario", label: "Formulario" },
+] as const
+
+type ProductFormTab = (typeof PRODUCT_FORM_TABS)[number]["id"]
+
+/** Mapea un campo (o field array) del form a la pestaña donde se edita. */
+function fieldTabId(name: string): ProductFormTab {
+  if (
+    [
+      "coverUrl",
+      "title",
+      "slug",
+      "tagline",
+      "shortDescription",
+      "description",
+      "categories",
+      "level",
+      "introVideoUrl",
+    ].includes(name)
+  )
+    return "info"
+  if (
+    ["includes", "price", "durationDays", "priceUsd", "discountPct", "accentColor", "faq"].includes(
+      name,
+    )
+  )
+    return "tarjeta"
+  if (["routines", "routinePlanning"].includes(name)) return "rutina"
+  if (name === "intakeForm") return "formulario"
+  return "contenido"
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -408,10 +446,52 @@ export function ProductForm({ productType, program, plan, content, routineTempla
   const price = w.price ?? 0
   const discountedPrice = discountPct > 0 ? price * (1 - discountPct / 100) : null
 
+  // Pestaña activa (solo aplica en desktop; en mobile se ve todo en scroll).
+  const [tab, setTab] = React.useState<ProductFormTab>("info")
+  const errorKeys = Object.keys(form.formState.errors)
+  const tabHasError = (id: ProductFormTab) =>
+    errorKeys.some((k) => fieldTabId(k) === id)
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <div className="flex flex-col gap-5 pb-28">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, (errs) => {
+          const first = Object.keys(errs)[0]
+          if (first) setTab(fieldTabId(first))
+        })}
+        noValidate
+      >
+        {/* Tabs — solo desktop. Mobile mantiene el scroll completo. */}
+        <div className="sticky top-14 z-10 mb-5 hidden border-b bg-background/95 backdrop-blur lg:flex lg:max-w-3xl lg:items-center lg:gap-1">
+          {PRODUCT_FORM_TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={cn(
+                "relative -mb-px border-b-2 px-3 py-2.5 text-sm font-medium transition-colors",
+                tab === t.id
+                  ? "border-primary text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {t.label}
+              {tabHasError(t.id) && (
+                <span className="ml-1.5 inline-block size-1.5 rounded-full bg-destructive align-middle" />
+              )}
+            </button>
+          ))}
+          <Button type="submit" size="sm" disabled={isPending} className="ml-auto">
+            {isPending
+              ? "Guardando…"
+              : isEdit
+                ? "Guardar cambios"
+                : `Crear ${typeLabel.toLowerCase()}`}
+          </Button>
+        </div>
+
+        <div className="flex flex-col gap-5 pb-28 lg:max-w-3xl lg:pb-12">
+          <div className={cn("flex flex-col gap-5", tab !== "info" && "lg:hidden")}>
           {/* ============================= EXPOSICIÓN ============================= */}
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -516,6 +596,8 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </CardContent>
           </Card>
 
+          </div>
+          <div className={cn("flex flex-col gap-5", tab !== "tarjeta" && "lg:hidden")}>
           {/* Checklist (qué incluye) */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
@@ -681,6 +763,8 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </CardContent>
           </Card>
 
+          </div>
+          <div className={cn("flex flex-col gap-5", tab !== "contenido" && "lg:hidden")}>
           {/* ============================= CONTENIDO ============================= */}
           <div className="flex items-center gap-2 pt-2">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -805,6 +889,15 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             />
           </div>
 
+          </div>
+          <div className={cn("flex flex-col gap-5", tab !== "rutina" && "lg:hidden")}>
+          {w.routineMode === "none" && (
+            <p className="hidden rounded-xl border border-dashed p-4 text-sm text-muted-foreground lg:block">
+              Activá una rutina (Adaptativa o Personalizada) en la pestaña{" "}
+              <span className="font-medium text-foreground">Contenido</span> para
+              configurarla acá.
+            </p>
+          )}
           {/* Builder de rutinas adaptativas */}
           {w.routineMode === "adaptive" && (
             <Card>
@@ -979,6 +1072,8 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </Card>
           )}
 
+          </div>
+          <div className={cn("flex flex-col gap-5", tab !== "contenido" && "lg:hidden")}>
           {/* Material entregable: bloques de texto */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
@@ -1069,6 +1164,8 @@ export function ProductForm({ productType, program, plan, content, routineTempla
             </CardContent>
           </Card>
 
+          </div>
+          <div className={cn("flex flex-col gap-5", tab !== "formulario" && "lg:hidden")}>
           {/* Formulario para el cliente */}
           <Card>
             <CardContent className="flex flex-col gap-3 pt-6">
@@ -1166,9 +1263,10 @@ export function ProductForm({ productType, program, plan, content, routineTempla
               </div>
             </CardContent>
           </Card>
+          </div>
         </div>
 
-        <div className="fixed inset-x-0 bottom-0 z-10 border-t bg-background/95 backdrop-blur">
+        <div className="fixed inset-x-0 bottom-0 z-10 border-t bg-background/95 backdrop-blur lg:hidden">
           <div className="mx-auto w-full max-w-md px-4 py-3">
             <Button
               type="submit"

@@ -85,23 +85,21 @@ export default async function DashboardPage({
     quotePrefs?.enabled !== false && filterQuotes(activeCategories).length > 0
 
   // Entradas de coaching según el estado del usuario.
+  // El catálogo público se desactivó: los clientes llegan a una asesoría por
+  // link directo, así que el dashboard ya no ofrece un CTA al marketplace.
   const coachingSections: Section[] = [
-    {
-      title: "Asesorías y planes",
-      description: "Entrená con un coach profesional.",
-      href: "/c",
-      tourId: "asesorias",
-    },
     coachProfile
       ? {
           title: "Panel de coach",
           description: "Gestioná tus asesorías y clientes.",
           href: "/coach",
+          tourId: "asesorias",
         }
       : {
           title: "Ser coach",
           description: "Vendé tus asesorías en la plataforma.",
           href: "/coach/apply",
+          tourId: "asesorias",
         },
   ]
   const sections = [...SECTIONS, ...coachingSections]

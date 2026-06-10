@@ -56,8 +56,8 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "asesorias",
     target: "asesorias",
-    title: "Asesorías y planes",
-    body: "Entrená con un coach profesional o, si sos coach, vendé tus asesorías en la plataforma.",
+    title: "Asesorías",
+    body: "Si tu coach te pasó un link, entrás directo a su asesoría. Y si sos coach, gestionás y compartís las tuyas desde acá.",
   },
   {
     id: "frases",

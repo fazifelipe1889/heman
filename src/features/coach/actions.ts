@@ -208,6 +208,26 @@ export async function applyAsCoachAction(
   redirect("/coach/pending")
 }
 
+export async function updateCoachAvatarAction(
+  avatarUrl: string
+): Promise<ActionResult> {
+  const { supabase, coach } = await requireCoach()
+
+  const parsed = coachProfileSchema.shape.avatarUrl.safeParse(avatarUrl)
+  if (!parsed.success) return { error: "URL de imagen inválida." }
+
+  try {
+    await updateCoachProfile(supabase, coach.id, {
+      avatar_url: avatarUrl || null,
+    })
+  } catch {
+    return { error: "No se pudo actualizar la foto de perfil." }
+  }
+
+  revalidatePath("/coach/settings")
+  return {}
+}
+
 export async function updateCoachProfileAction(
   values: CoachProfileValues
 ): Promise<ActionResult> {

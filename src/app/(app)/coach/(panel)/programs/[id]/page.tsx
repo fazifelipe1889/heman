@@ -4,7 +4,6 @@ import { notFound } from "next/navigation"
 import {
   ArrowLeft,
   Plus,
-  Eye,
   Pencil,
   MessageCircle,
   Video,
@@ -31,7 +30,7 @@ import { cn } from "@/lib/utils"
 import { ProgramStatusControl } from "@/features/coach/program-status-control"
 import { TransformationsList } from "@/features/coach/transformations-list"
 import { DeleteProgramButton } from "@/features/coach/delete-program-button"
-import { ShareLinkButton } from "@/features/coach/share-link-button"
+import { ProgramShareActions } from "@/features/coach/program-share-actions"
 
 export const metadata: Metadata = { title: "Producto — EPHA" }
 
@@ -151,29 +150,20 @@ export default async function ProductDetailPage({
         </CardContent>
       </Card>
 
-      {/* Estado de publicación */}
+      {/* Estado de publicación + link para compartir */}
       <Card>
         <CardContent className="flex flex-col gap-3 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-sm font-medium">Estado</span>
-            {program.status === "published" && (
-              <div className="flex items-center gap-1">
-                <ShareLinkButton
-                  path={`/c/${coach.handle}/${program.slug}`}
-                  label="Compartir"
-                  shareTitle={program.title}
-                  variant="ghost"
-                  size="sm"
-                />
-                <Link
-                  href={`/c/${coach.handle}/${program.slug}`}
-                  className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
-                >
-                  <Eye className="size-4" /> Ver
-                </Link>
-              </div>
-            )}
-          </div>
+          <span className="text-sm font-medium">Estado</span>
+          {program.status === "published" && (
+            <div className="flex flex-col gap-1.5">
+              <ProgramShareActions
+                path={`/c/${coach.handle}/${program.slug}`}
+              />
+              <p className="text-xs text-muted-foreground">
+                Compartí este link con tus clientes para que contraten la asesoría.
+              </p>
+            </div>
+          )}
           <ProgramStatusControl
             programId={id}
             status={program.status}

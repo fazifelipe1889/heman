@@ -4,6 +4,8 @@ import * as React from "react"
 import { toast } from "sonner"
 import { Trash2 } from "lucide-react"
 
+import { isRedirectError } from "next/dist/client/components/redirect-error"
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -25,8 +27,9 @@ export function DeleteProgramButton({ programId }: { programId: string }) {
     startTransition(async () => {
       try {
         await deleteProgramAction(programId)
-        // deleteProgramAction redirige; si no, cerramos.
-      } catch {
+        setOpen(false)
+      } catch (err) {
+        if (isRedirectError(err)) throw err
         toast.error("No se pudo eliminar la asesoría.")
         setOpen(false)
       }
